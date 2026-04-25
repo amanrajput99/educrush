@@ -1,16 +1,18 @@
 import Features from '@/components/home/Features'
-import MarqueeText from '@/components/home/MarqueeText'
+import ImageGallery from '@/components/home/Image-gallery'
+// import MarqueeText from '@/components/home/MarqueeText'
 import FAQ from '@/components/home/FAQ'
-
+import Testimonials from '@/components/ui/Testimonials'
 
 export default function Home() {
   return (
     <>
       <Features />
-      <MarqueeText />
+      
+      <ImageGallery />
+      <Testimonials />
+      {/* <MarqueeText /> */}
       <FAQ />
-      
-      
     </>
   )
 }
