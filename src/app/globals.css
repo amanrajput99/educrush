@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+html {
+  background: #000;
+}
+
+body {
+  background: #000;
+  color: #fff;
+}
+
+/* Custom global styles can be added here */   
+/* for scrolling marquee  */
