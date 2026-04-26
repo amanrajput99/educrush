@@ -2,12 +2,14 @@
 
 html {
   background: #000;
+  overflow-x: hidden;
 }
 
 body {
   background: #000;
   color: #fff;
+  overflow-x: hidden;
 }
 
-/* Custom global styles can be added here */   
+/* Custom global styles can be added here */
 /* for scrolling marquee  */
