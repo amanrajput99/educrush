@@ -1,10 +1,10 @@
-// Suppress Vercel build error - v1
+// Suppress Vercel build error - v2
 import { supabase } from '@/lib/supabase'
 import type { Project } from '@/data/projects'
 
 export async function getProjectsFromSupabase() {
   const { data, error } = await supabase
-    .from('projects')
+    .from<'projects', Project>('projects') // Providing both arguments
     .select('*')
 
   if (error) {
