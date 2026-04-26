@@ -15,6 +15,7 @@ export async function getProjectsFromSupabase() {
     })
     return []
   }
+  
   return (data as unknown as Project[]) || []
 }
 
