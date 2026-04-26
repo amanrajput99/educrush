@@ -77,7 +77,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
             {project.name}
           </h3>
         </div>
-        <p className="text-sm text-slate-300 mt-1 line-clamp-2">{project.desc}</p>
+        <p className="text-sm text-slate-300 mt-1 line-clamp-2">{project.description}</p>
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mt-4">
