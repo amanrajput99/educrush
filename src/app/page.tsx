@@ -10,9 +10,8 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <ProjectCards />
+      <ProjectCards limit={5} />
       <Features />
-      
       <ImageGallery />
       <Testimonials />    
       {/* <MarqueeText /> */}
