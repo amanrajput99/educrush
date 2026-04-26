@@ -1,3 +1,4 @@
+// Suppress Vercel build error - v1
 import { supabase } from '@/lib/supabase'
 import type { Project } from '@/data/projects'
 
