@@ -1,3 +1,4 @@
+import HeroSection from '@/components/home/Hero-section'
 import Features from '@/components/home/Features'
 import ImageGallery from '@/components/home/Image-gallery'
 // import MarqueeText from '@/components/home/MarqueeText'
@@ -7,6 +8,7 @@ import Testimonials from '@/components/ui/Testimonials'
 export default function Home() {
   return (
     <>
+      <HeroSection />
       <Features />
       
       <ImageGallery />
