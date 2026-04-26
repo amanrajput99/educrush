@@ -5,10 +5,14 @@ export async function getProjectsFromSupabase() {
   const { data, error } = await supabase
     .from('projects')
     .select('*')
-    .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching projects:', error)
+    console.error('Supabase Error:', {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code
+    })
     return []
   }
   return (data as unknown as Project[]) || []
