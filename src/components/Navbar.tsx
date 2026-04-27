@@ -119,7 +119,7 @@ const Navbar = () => {
                             <div className="flex flex-col pl-4">
                                 <a href="landing-pages" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Landing Pages</a>
                                 <a href="about-pages" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">About Pages</a>
-                                <a href="contact-pages" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Contact Pages</a>
+                                <a href="/contact" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Contact Pages</a>
                                 <a href="blog-pages" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Blog Pages</a>
                             </div>
                         )}
