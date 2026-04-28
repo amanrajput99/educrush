@@ -50,7 +50,8 @@ const TestimonialCard = ({ card }: { card: TestimonialCard }) => (
 
 export default function Testimonials() {
   return (
-    <section className="py-8 px-4 bg-black text-slate-100">
+    <section className="py-10 px-4 bg-black text-slate-100">
+      
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 text-center">
           <p className="text-sm uppercase tracking-[0.3em] text-green-500">What people are saying</p>

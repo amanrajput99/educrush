@@ -10,11 +10,19 @@ export default function ImageGallery() {
                     font-family: 'Poppins', sans-serif;
                 }
             `}</style>
-            
+                                  <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30 my-6" />
+{/* 
             <h1 className="text-3xl font-semibold text-center mx-auto">Our Latest Creations</h1>
             <p className="text-sm text-slate-500 text-center mt-2 max-w-lg mx-auto">A visual collection of our most recent works -
                 each piece crafted with intention, emotion, and style.</p>
-            
+             */}
+             <div className="py-4 px-4 bg-black flex flex-col justify-center items-center gap-6">
+          <button className='px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg'>Creations</button>
+                <h1 className="text-3xl md:text-[40px]/12 font-medium text-gray-100 max-w-lg text-center leading-tight">Our Latest Creations.</h1>
+                <p className='text-base/7 text-gray-200 max-w-xl text-center'>A visual collection of our most recent works -
+                each piece crafted with intention, emotion, and style.</p>
+        </div>
+
             <div className="flex items-center gap-6 h-[400px] w-full max-w-5xl mt-10 mx-auto">
                 <div className="relative group flex-grow transition-all w-56 h-[400px] duration-500 hover:w-full">
                     <img className="h-full w-full object-cover object-center"
@@ -49,7 +57,9 @@ export default function ImageGallery() {
             
                     </div>
                 </div>
+                
             </div>
+
         </>
     );
 };

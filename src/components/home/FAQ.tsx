@@ -45,6 +45,7 @@ const FAQ = () => {
                 `}
             </style>
             <section className='bg-black w-full flex flex-col items-center justify-center py-10 px-4'>
+                
                 <div className='w-full max-w-5xl'>
                     <div className='mb-12'>
                         <h2 className='text-5xl font-medium text-neutral-50 text-center'>FAQ&apos;s</h2>

@@ -9,7 +9,7 @@ export default function CTA() {
                     font-family: 'Poppins', sans-serif;
                 }
             `}</style>
-            
+
 <div className="max-w-5xl pt-16 pb-0 md:w-full mx-2 md:mx-auto flex flex-col items-center justify-center text-center bg-gradient-to-b from-[#0D542B] to-black rounded-2xl p-10 text-white">
                 <p className="px-6 py-2 rounded-full text-sm border border-[#0D542B] bg-gradient-to-r from-[#A992F2] to-[#DFAB9B] bg-clip-text text-transparent">
                     Commnunity & Support

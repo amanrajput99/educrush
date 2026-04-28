@@ -260,10 +260,12 @@ const NoteCards = ({ limit }: { limit?: number }) => {
 
   return (
     <>
-      <section className="bg-[#0a0a0a] text-slate-100 py-8">
+      <section className="bg-black text-slate-100 py-8 ">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 mb-5">
-          <h2 className="text-xl font-semibold text-white tracking-tight">My Notes</h2>
+        <div className="py-4 px-4 bg-black flex flex-col justify-center items-center gap-6">
+          <button className='px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg'>Notes</button>
+                <h1 className="text-3xl md:text-[40px]/12 font-medium text-gray-100 max-w-lg text-center leading-tight">Our latest notes.</h1>
+                <p className='text-base/7 text-gray-200 max-w-xl text-center'>Carefully curated notes covering all important topics for your academic success.</p>
         </div>
 
         {/* ── DESKTOP: horizontal scroll, no scrollbar ── */}
@@ -295,6 +297,7 @@ const NoteCards = ({ limit }: { limit?: number }) => {
 
       {/* Detail Modal */}
       {selected && <NoteDetailModal note={selected} onClose={() => setSelected(null)} />}
+        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30 my-6" />
     </>
   )
 }

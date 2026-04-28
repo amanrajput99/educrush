@@ -112,7 +112,7 @@ const ViewMoreCard = () => {
           Visit the projects page to see all our creations.
         </p>
       </div>
-      
+
       {/* Background Glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
     </Link>
@@ -164,13 +164,15 @@ const ProjectCards = ({ limit }: { limit?: number }) => {
   }
 
   return (
-    <section className="bg-black text-slate-100 py-16 px-6">
+    <section className="bg-black text-slate-100  px-6">
       <div className="text-center mb-11">
+        <button className='px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg'>Notes</button>
+
         <h1 className="text-[42px] font-medium text-white tracking-tighter">
           {limit ? 'Our Latest Projects' : 'All Projects'}
         </h1>
         <p className="text-base/6 text-slate-300 max-w-md mx-auto mt-1">
-          {limit 
+          {limit
             ? 'A collection of creative web projects — each crafted with code, design, and attention to detail.'
             : 'Explore our complete portfolio of web applications, experiments, and creative designs.'}
         </p>

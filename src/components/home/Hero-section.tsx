@@ -1,88 +1,88 @@
 'use client'
 
-import { useState } from 'react'
+// import { useState } from 'react'
 
-export default function HeroSection() {
-  const [mobileOpen, setMobileOpen] = useState(false)
-    const companyLogos = ["slack", "framer", "netflix", "google", "linkedin", "instagram", "facebook"];
+// export default function HeroSection() {
+//   const [mobileOpen, setMobileOpen] = useState(false)
+//     const companyLogos = ["slack", "framer", "netflix", "google", "linkedin", "instagram", "facebook"];
 
-  return (
-    <>      
-      <style>
-        {`
-            @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-            *{
-              font-family: "Poppins", sans-serif;
-            }
+//   return (
+//     <>      
+//       <style>
+//         {`
+//             @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+//             *{
+//               font-family: "Poppins", sans-serif;
+//             }
 
 
-            
-         .marquee-inner {
-                    animation: marqueeScroll linear infinite;
-                }
 
-                @keyframes marqueeScroll {
-                    0% {
-                        transform: translateX(0%);
-                    }
+//          .marquee-inner {
+//                     animation: marqueeScroll linear infinite;
+//                 }
 
-                    100% {
-                        transform: translateX(-50%);
-                    }
-                }
-            `}
-      </style>
+//                 @keyframes marqueeScroll {
+//                     0% {
+//                         transform: translateX(0%);
+//                     }
 
-      <section className='flex flex-col items-center bg-black bg-[url("https://assets.prebuiltui.com/images/components/hero-section/hero-galaxy-bg.png")] bg-cover bg-center bg-no-repeat text-white pb-40 px-4' >
-        
+//                     100% {
+//                         transform: translateX(-50%);
+//                     }
+//                 }
+//             `}
+//       </style>
 
-        <div className="flex flex-wrap items-center justify-center gap-2 px-3 py-2 mt-32 rounded-full bg-linear-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/10">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles-icon lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
-          <span className="text-xs text-gray-50">FREE LEARNING RESOURCES</span>
-        </div>
+//       <section className='flex flex-col items-center bg-black bg-[url("https://assets.prebuiltui.com/images/components/hero-section/hero-galaxy-bg.png")] bg-cover bg-center bg-no-repeat text-white pb-40 px-4' >
 
-        <h2 className="text-3xl md:text-6xl/19 text-center max-w-3xl mt-8 text-white font-medium bg-clip-text leading-tight">
-            Everything You Need
-to Learn & Build
-        </h2>
-        <p className="text-sm text-white/80 text-center max-w-[474px] mt-4">
-            From class notes to web projects — EduCrush is your one-stop platform to learn, create, and grow.
 
-        </p>
+//         <div className="flex flex-wrap items-center justify-center gap-2 px-3 py-2 mt-32 rounded-full bg-linear-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/10">
+//           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles-icon lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
+//           <span className="text-xs text-gray-50">FREE LEARNING RESOURCES</span>
+//         </div>
 
-        <div className='flex gap-3 mt-10'>
-            <button className='bg-gradient-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/15 hover:border-white/30 flex items-center gap-3 px-2 py-1 pr-4 rounded-full transition duration-200 cursor-pointer'>
-                <div className='w-10 h-10 rounded-full border-2 border-[#7E69B5] flex items-center justify-center'>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles-icon lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
-                </div>
-                <span className="text-slate-100 text-sm">Browse Notes</span>
-            </button>
-            <button className='bg-linear-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/15 hover:border-white/30 flex items-center gap-3 px-2 py-1 pr-4 rounded-full transition-cursor cursor-pointer'>
-                <div className='size-10 rounded-full border-2 border-[#7E69B5] flex items-center justify-center'>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone-call-icon lucide-phone-call"><path d="M13 2a9 9 0 0 1 9 9"/><path d="M13 6a5 5 0 0 1 5 5"/><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg>
-                </div>
-                <span className="text-slate-100 text-sm">View Projects</span>
-            </button>
-        </div>
+//         <h2 className="text-3xl md:text-6xl/19 text-center max-w-3xl mt-8 text-white font-medium bg-clip-text leading-tight">
+//             Everything You Need
+// to Learn & Build
+//         </h2>
+//         <p className="text-sm text-white/80 text-center max-w-[474px] mt-4">
+//             From class notes to web projects — EduCrush is your one-stop platform to learn, create, and grow.
 
-        <p className='mt-16 text-sm text-white/60'>JOIN 1000+ STUDENTS ALREADY LEARNING:</p>
+//         </p>
 
-         <div className="overflow-hidden w-full relative max-w-5xl mx-auto select-none">
-                <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-gradient-to-r from-white to-transparent" />
-                <div className="marquee-inner flex will-change-transform min-w-[200%]" style={{ animationDuration: "15s" }}>
-                    <div className="flex">
-                        {[...companyLogos, ...companyLogos].map((company, index) => (
-                            <img key={index} src={`https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/companyLogo/${company}.svg`}
-                                alt={company} className="w-full h-full object-cover mx-6" draggable={false} />
-                        ))}
-                    </div>
-                </div>
-                <div className="absolute right-0 top-0 h-full w-20 md:w-40 z-10 pointer-events-none bg-gradient-to-l from-white to-transparent" />
-            </div>
-      </section>
-    </>
-  )
-}
+//         <div className='flex gap-3 mt-10'>
+//             <button className='bg-gradient-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/15 hover:border-white/30 flex items-center gap-3 px-2 py-1 pr-4 rounded-full transition duration-200 cursor-pointer'>
+//                 <div className='w-10 h-10 rounded-full border-2 border-[#7E69B5] flex items-center justify-center'>
+//                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles-icon lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
+//                 </div>
+//                 <span className="text-slate-100 text-sm">Browse Notes</span>
+//             </button>
+//             <button className='bg-linear-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/15 hover:border-white/30 flex items-center gap-3 px-2 py-1 pr-4 rounded-full transition-cursor cursor-pointer'>
+//                 <div className='size-10 rounded-full border-2 border-[#7E69B5] flex items-center justify-center'>
+//                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone-call-icon lucide-phone-call"><path d="M13 2a9 9 0 0 1 9 9"/><path d="M13 6a5 5 0 0 1 5 5"/><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg>
+//                 </div>
+//                 <span className="text-slate-100 text-sm">View Projects</span>
+//             </button>
+//         </div>
+
+//         <p className='mt-16 text-sm text-white/60'>JOIN 1000+ STUDENTS ALREADY LEARNING:</p>
+
+//          <div className="overflow-hidden w-full relative max-w-5xl mx-auto select-none">
+//                 <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-gradient-to-r from-white to-transparent" />
+//                 <div className="marquee-inner flex will-change-transform min-w-[200%]" style={{ animationDuration: "15s" }}>
+//                     <div className="flex">
+//                         {[...companyLogos, ...companyLogos].map((company, index) => (
+//                             <img key={index} src={`https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/companyLogo/${company}.svg`}
+//                                 alt={company} className="w-full h-full object-cover mx-6" draggable={false} />
+//                         ))}
+//                     </div>
+//                 </div>
+//                 <div className="absolute right-0 top-0 h-full w-20 md:w-40 z-10 pointer-events-none bg-gradient-to-l from-white to-transparent" />
+//             </div>
+//       </section>
+//     </>
+//   )
+// }
 
 
 
@@ -103,3 +103,259 @@ to Learn & Build
                 <path d="M89.8685 8.18625C90.4383 8.18625 90.9074 7.88999 90.9707 7.50724L91.5332 1.14508C91.5332 0.516239 90.7966 0 89.8703 0C88.945 0 88.209 0.516237 88.209 1.14519L88.7712 7.50724C88.8331 7.88988 89.3021 8.18625 89.8705 8.18625H89.8685ZM86.43 10.1735C86.7158 9.6806 86.6943 9.12667 86.393 8.88059L81.1637 5.21232C80.6199 4.89745 79.8047 5.27645 79.3421 6.07885C78.8778 6.88022 78.9601 7.77524 79.5023 8.09022L85.2928 10.7863C85.6547 10.9205 86.1483 10.6622 86.4318 10.1697L86.43 10.1735ZM93.3101 10.17C93.5955 10.6626 94.0865 10.9209 94.4488 10.7866L100.239 8.09057C100.785 7.77569 100.862 6.88056 100.402 6.07919C99.9375 5.27759 99.1208 4.89779 98.5786 5.21266L93.3489 8.88093C93.0499 9.12667 93.0277 9.68105 93.3119 10.1738L93.3101 10.17ZM89.8685 16.1336C90.4383 16.1336 90.9074 16.4273 90.9707 16.8104L91.5332 23.1717C91.5332 23.8025 90.7966 24.3175 89.8703 24.3175C88.945 24.3175 88.209 23.8025 88.209 23.1717L88.7712 16.8104C88.8331 16.4273 89.3021 16.1336 89.8705 16.1336H89.8685ZM93.3101 14.1459C93.5955 13.652 94.0865 13.396 94.4488 13.5317L100.239 16.226C100.785 16.5412 100.862 17.4371 100.402 18.2392C99.9375 19.0381 99.1208 19.419 98.5786 19.1045L93.3489 15.4397C93.0499 15.192 93.0277 14.6373 93.3119 14.1449H93.3097M86.43 14.1452C86.7158 14.6373 86.6943 15.192 86.393 15.4401L81.1637 19.1049C80.6199 19.4193 79.8047 19.0385 79.3421 18.2395C78.8778 17.4374 78.9601 16.5415 79.5023 16.2263L85.2928 13.5321C85.6547 13.3963 86.1483 13.6524 86.4318 14.1464H86.43" fill="white" fillOpacity="0.4"/><path d="M56.8817 15.4271C56.8817 15.6224 56.8644 15.8237 56.8109 16.0006C56.5891 16.7351 55.8286 17.3562 54.8772 17.3562C54.0839 17.3562 53.4538 16.9056 53.4538 15.9538C53.4538 14.4971 55.0571 14.0949 56.8822 14.105L56.8817 15.427V15.4271ZM59.7444 12.8886C59.7444 10.4866 58.7181 8.37311 55.2502 8.37311C53.47 8.37311 52.0572 8.87312 51.286 9.31875L51.8508 11.2498C52.5556 10.8048 53.6789 10.4365 54.7419 10.4365C56.5009 10.4316 56.789 11.4326 56.789 12.0733V12.2249C52.9546 12.2192 50.5307 13.547 50.5307 16.2516C50.5307 17.9043 51.7652 19.4522 53.9112 19.4522C55.2298 19.4522 56.3343 18.9259 56.9952 18.082H57.0605C57.0605 18.082 57.4979 19.9142 59.9123 19.2132C59.7863 18.4512 59.7449 17.6378 59.7449 16.6597L59.7445 12.8886M0 5.10202C0 5.10202 2.50571 15.3693 2.90582 17.0356C3.37257 18.9806 4.21379 19.6966 6.63799 19.2132L8.20248 12.8479C8.5992 11.266 8.86469 10.1382 9.12031 8.53066H9.16481C9.34427 10.1552 9.59887 11.2709 9.92532 12.8531C9.92532 12.8531 10.5619 15.743 10.8884 17.2604C11.2153 18.7773 12.1252 19.734 14.5001 19.2132L18.2281 5.10156H15.219L13.9457 11.203C13.6033 12.9783 13.293 14.3671 13.0535 15.9908H13.0109C12.7933 14.3814 12.5163 13.0492 12.1686 11.3191L10.8439 5.10156H7.70815L6.29043 11.1624C5.88917 13.0046 5.51289 14.4916 5.27452 16.0613H5.23116C4.98644 14.5832 4.66067 12.7136 4.30811 10.9311C4.30811 10.9311 3.46644 6.59591 3.17041 5.10156L0 5.10202ZM23.9202 15.4271C23.9202 15.6224 23.9028 15.8237 23.8485 16.0006C23.6272 16.7351 22.8662 17.3562 21.9148 17.3562C21.1214 17.3562 20.4922 16.9056 20.4922 15.9538C20.4922 14.4971 22.095 14.0949 23.9205 14.105L23.9202 15.427V15.4271ZM26.7825 12.8886C26.7825 10.4866 25.7562 8.37311 22.2889 8.37311C20.5083 8.37311 19.0943 8.87312 18.3236 9.31875L18.8877 11.2498C19.5924 10.8048 20.7157 10.4365 21.779 10.4365C23.5393 10.4316 23.8274 11.4326 23.8274 12.0733V12.2249C19.9914 12.2192 17.5687 13.547 17.5687 16.2516C17.5687 17.9043 18.8025 19.4522 20.9469 19.4522C22.2674 19.4522 23.3711 18.9259 24.0329 18.082H24.0973C24.0973 18.082 24.5359 19.9142 26.9498 19.2132C26.8236 18.4512 26.7825 17.6378 26.7825 16.6597V12.8886ZM31.5596 16.2177V5.10202H28.6935V19.2137H31.5596V16.2177ZM69.0534 5.10202V15.5119C69.0534 16.9478 69.3241 17.9527 69.9013 18.5677C70.4071 19.1054 71.2381 19.4534 72.2347 19.4534C73.0824 19.4534 73.9158 19.2916 74.3091 19.1458L74.2721 16.9067C73.9794 16.9782 73.6435 17.0361 73.1835 17.0361C72.2069 17.0361 71.8803 16.4104 71.8803 15.122V11.139H74.3762V8.43861H71.8803V5.10202H69.0534ZM61.6556 8.6125V19.2137H64.6121V13.7857C64.6121 13.4922 64.6298 13.2366 64.6763 13.0028C64.895 11.8652 65.7645 11.139 67.0134 11.139C67.3558 11.139 67.6008 11.1762 67.8663 11.2139V8.43861C67.6435 8.39422 67.4923 8.37345 67.2151 8.37345C66.1118 8.37345 64.8565 9.08538 64.3297 10.6125H64.2498V8.6125H61.6556ZM33.5665 8.6125V19.2137H36.447V12.9971C36.447 12.7054 36.4813 12.3969 36.5823 12.1295C36.821 11.5036 37.4035 10.7705 38.333 10.7705C39.4959 10.7705 40.039 11.7532 40.039 13.1714V19.2129H42.9172V12.9206C42.9172 12.6423 42.9552 12.3068 43.0375 12.0614C43.2738 11.349 43.9013 10.7697 44.7656 10.7697C45.9439 10.7697 46.5095 11.7351 46.5095 13.4044V19.2125H49.3897V12.9684C49.3897 9.67585 47.7177 8.37243 45.8301 8.37243C44.9949 8.37243 44.3349 8.58163 43.7381 8.94735C43.237 9.2561 42.7875 9.69356 42.3953 10.2686H42.3527C41.8976 9.12613 40.8266 8.373 39.431 8.373C37.6381 8.373 36.8323 9.28186 36.3436 10.0526H36.3007V8.61216H33.5665" fill="white" fillOpacity="0.4"/>
             </svg>
         </div> */}
+
+//'use client'
+
+export default function HeroSection() {
+
+  const companyLogos = [
+    { name: "React", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+    { name: "Python", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
+    { name: "Java", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
+    { name: "Next.js", url: "https://cdn.worldvectorlogo.com/logos/nextjs-2.svg" },
+{
+  name: "Tailwind",
+  url: "https://www.svgrepo.com/show/374118/tailwind.svg"
+},
+    { name: "Supabase", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" },
+    { name: "Framer", url: "https://cdn.worldvectorlogo.com/logos/framer-motion.svg" }
+  ];
+
+  return (
+    <>
+      <style>
+        {`s
+        
+/* =========================
+   GLOBAL (font optional)
+========================= */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+* { font-family: "Poppins", sans-serif; }
+
+/* =========================
+   MARQUEE CORE (NO GAP LOOP)
+   - 3x content
+   - move 33.333%
+========================= */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 3.5rem;                 /* base gap */
+  animation: marquee-scroll 25s linear infinite;
+  will-change: transform;
+}
+
+/* hover pause */
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* seamless scroll */
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+/* =========================
+   RESPONSIVE SPEED
+   (mobile slow → desktop fast)
+========================= */
+@media (min-width: 768px) {
+  .marquee-track { animation-duration: 20s; gap: 4rem; }
+}
+@media (min-width: 1024px) {
+  .marquee-track { animation-duration: 15s; gap: 5rem; }
+}
+
+/* =========================
+   GLASS STRIP (container)
+   - use on wrapper div
+========================= */
+.marquee-glass {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  padding: 1.5rem 1.25rem;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 0 60px rgba(139,92,246,0.25);
+  perspective: 1000px; /* for 3D hover */
+}
+
+/* top/bottom glow lines (optional helper classes) */
+.marquee-glow-top,
+.marquee-glow-bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent, rgba(167,139,250,0.7), transparent);
+  opacity: 0.4;
+}
+.marquee-glow-top { top: 0; }
+.marquee-glow-bottom { bottom: 0; }
+
+/* =========================
+   EDGE FADE (SOFT, NOT HARD BLACK)
+   - add two divs with these classes
+========================= */
+.marquee-fade-left,
+.marquee-fade-right {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 7rem;                 /* adjust as needed */
+  z-index: 10;
+  pointer-events: none;
+}
+
+.marquee-fade-left {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.85),
+    rgba(0,0,0,0.45),
+    rgba(0,0,0,0)
+  );
+}
+
+.marquee-fade-right {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(0,0,0,0.85),
+    rgba(0,0,0,0.45),
+    rgba(0,0,0,0)
+  );
+}
+
+/* =========================
+   LOGO STYLING
+========================= */
+.marquee-item {
+  height: 3.5rem;             /* mobile */
+  width: auto;
+  object-fit: contain;
+  opacity: 0.7;
+  transition: transform 0.35s ease, opacity 0.3s ease, filter 0.3s ease;
+  transform: translateZ(0);
+  filter: drop-shadow(0 0 10px rgba(139,92,246,0.25));
+}
+
+/* responsive logo size */
+@media (min-width: 768px) {
+  .marquee-item { height: 4rem; }
+}
+@media (min-width: 1024px) {
+  .marquee-item { height: 5rem; }
+}
+
+/* 3D hover */
+.marquee-item:hover {
+  opacity: 1;
+  transform: translateZ(40px) scale(1.15);
+  filter: drop-shadow(0 0 16px rgba(139,92,246,0.45));
+}
+
+/* =========================
+   BLUR TRAIL (subtle)
+========================= */
+/* when hovering the strip, non-hovered logos get slight blur */
+.marquee-track:hover .marquee-item {
+  filter: blur(0.8px) drop-shadow(0 0 10px rgba(139,92,246,0.25));
+}
+.marquee-track:hover .marquee-item:hover {
+  filter: blur(0px) drop-shadow(0 0 16px rgba(139,92,246,0.45));
+}
+
+/* =========================
+   OPTIONAL: MASK-BASED FADE (extra smooth)
+   - apply to the same wrapper as .marquee-glass
+========================= */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+          mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+  `}
+      </style>
+
+      <section className='flex flex-col items-center bg-black bg-[url("https://assets.prebuiltui.com/images/components/hero-section/hero-galaxy-bg.png")] bg-cover bg-center bg-no-repeat text-white  px-4'>
+
+        {/* Badge */}
+        <div className="flex flex-wrap items-center justify-center gap-2 px-4 py-2 mt-32 rounded-full bg-gradient-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/10">
+          <span className="text-xs text-gray-50 tracking-widest">FREE LEARNING RESOURCES</span>
+        </div>
+
+        {/* Heading */}
+        <h2 className="text-4xl md:text-6xl text-center max-w-3xl mt-8 font-medium leading-tight">
+          Everything You Need <br className="hidden md:block" /> Learn & Build
+        </h2>
+
+        {/* Subtext */}
+        <p className="text-sm text-white/70 text-center max-w-[480px] mt-5 leading-relaxed">
+          From class notes to web projects — EduCrush is your one-stop platform to learn, create, and grow.
+        </p>
+
+        {/* Buttons */}
+        <div className="flex gap-4 mt-10 flex-wrap justify-center">
+          <button className="px-6 py-2 rounded-full border border-white/20 hover:border-white/40 transition">
+            Browse Notes
+          </button>
+
+          <button className="px-6 py-2 rounded-full border border-white/20 hover:border-white/40 transition">
+            View Projects
+          </button>
+        </div>
+
+        {/* Label */}
+        <p className="mt-10 mb-2 text-xs text-white/40 tracking-[0.2em] uppercase">
+          Join 1000+ Students Already Learning
+        </p>
+
+      
+<div className="relative w-full py-8">
+
+  <div className="
+    relative overflow-hidden
+    bg-gradient-to-r from-white/10 via-white/5 to-white/10
+    backdrop-blur-2xl
+    border border-white/20
+    rounded-2xl
+    shadow-[0_0_60px_rgba(139,92,246,0.25)]
+    px-6 py-8
+  ">
+
+    {/* Shine */}
+    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-20 pointer-events-none" />
+
+    {/* Fade */}
+    <div className="absolute left-0 top-0 h-full w-32 z-20 pointer-events-none 
+      bg-gradient-to-r from-black/30 via-transparent to-transparent" />
+
+    <div className="absolute right-0 top-0 h-full w-32 z-20 pointer-events-none 
+      bg-gradient-to-l from-black/30 via-transparent to-transparent" />
+
+    {/* Marquee */}
+    <div className="marquee-track flex items-center gap-14">
+      {[...companyLogos, ...companyLogos, ...companyLogos].map((logo, index) => (
+        <img
+          key={index}
+          src={logo.url}
+          alt={logo.name}
+          className="h-14 md:h-16 lg:h-20 opacity-80 hover:opacity-100 transition"
+        />
+      ))}
+    </div>
+
+  </div>
+</div>
+      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30 my-6" />
+
+      </section>
+    </>
+  )
+}
