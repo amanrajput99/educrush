@@ -166,7 +166,7 @@ const ProjectCards = ({ limit }: { limit?: number }) => {
   return (
     <section className="bg-black text-slate-100  px-6">
       <div className="text-center mb-11">
-        <button className='px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg'>Notes</button>
+        <button className='px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg'>projects</button>
 
         <h1 className="text-[42px] font-medium text-white tracking-tighter">
           {limit ? 'Our Latest Projects' : 'All Projects'}
