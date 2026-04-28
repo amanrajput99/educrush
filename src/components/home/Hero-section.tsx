@@ -113,10 +113,10 @@ export default function HeroSection() {
     { name: "Python", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
     { name: "Java", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
     { name: "Next.js", url: "https://cdn.worldvectorlogo.com/logos/nextjs-2.svg" },
-{
-  name: "Tailwind",
-  url: "https://www.svgrepo.com/show/374118/tailwind.svg"
-},
+    {
+      name: "Tailwind",
+      url: "https://www.svgrepo.com/show/374118/tailwind.svg"
+    },
     { name: "Supabase", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" },
     { name: "Framer", url: "https://cdn.worldvectorlogo.com/logos/framer-motion.svg" }
   ];
@@ -301,30 +301,25 @@ export default function HeroSection() {
         </p>
 
         {/* Buttons */}
-         <div className='flex gap-3 mt-10'>
-//             <button className='bg-gradient-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/15 hover:border-white/30 flex items-center gap-3 px-2 py-1 pr-4 rounded-full transition duration-200 cursor-pointer'>
-//                 <div className='w-10 h-10 rounded-full border-2 border-[#7E69B5] flex items-center justify-center'>
-//                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles-icon lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
-//                 </div>
-//                 <span className="text-slate-100 text-sm">Browse Notes</span>
-//             </button>
-//             <button className='bg-linear-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/15 hover:border-white/30 flex items-center gap-3 px-2 py-1 pr-4 rounded-full transition-cursor cursor-pointer'>
-//                 <div className='size-10 rounded-full border-2 border-[#7E69B5] flex items-center justify-center'>
-//                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone-call-icon lucide-phone-call"><path d="M13 2a9 9 0 0 1 9 9"/><path d="M13 6a5 5 0 0 1 5 5"/><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg>
-//                 </div>
-//                 <span className="text-slate-100 text-sm">View Projects</span>
-//             </button>
-//         </div>
+        <div className='flex gap-3 mt-10'>
+          <button className='bg-gradient-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/15 hover:border-white/30 flex items-center gap-3 px-2 py-1 pr-4 rounded-full transition duration-200 cursor-pointer'>
+            <div className='w-10 h-10 rounded-full border-2 border-[#7E69B5] flex items-center justify-center'>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles-icon lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></svg>
+            </div>                <span className="text-slate-100 text-sm">Browse Notes</span>            </button>            <button className='bg-linear-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/15 hover:border-white/30 flex items-center gap-3 px-2 py-1 pr-4 rounded-full transition-cursor cursor-pointer'>
+            <div className='size-10 rounded-full border-2 border-[#7E69B5] flex items-center justify-center'>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone-call-icon lucide-phone-call"><path d="M13 2a9 9 0 0 1 9 9" /><path d="M13 6a5 5 0 0 1 5 5" /><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></svg>
+            </div>               <span className="text-slate-100 text-sm">View Projects</span>
+          </button>         </div>
 
         {/* Label */}
         <p className="mt-10 mb-2 text-xs text-white/40 tracking-[0.2em] uppercase">
           Join 1000+ Students Already Learning
         </p>
 
-      
-<div className="relative w-full py-8">
 
-  <div className="
+        <div className="relative w-full py-8">
+
+          <div className="
     relative overflow-hidden
     bg-gradient-to-r from-white/10 via-white/5 to-white/10
     backdrop-blur-2xl
@@ -334,31 +329,31 @@ export default function HeroSection() {
     px-6 py-8
   ">
 
-    {/* Shine */}
-    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-20 pointer-events-none" />
+            {/* Shine */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-20 pointer-events-none" />
 
-    {/* Fade */}
-    <div className="absolute left-0 top-0 h-full w-32 z-20 pointer-events-none 
+            {/* Fade */}
+            <div className="absolute left-0 top-0 h-full w-32 z-20 pointer-events-none 
       bg-gradient-to-r from-black/30 via-transparent to-transparent" />
 
-    <div className="absolute right-0 top-0 h-full w-32 z-20 pointer-events-none 
+            <div className="absolute right-0 top-0 h-full w-32 z-20 pointer-events-none 
       bg-gradient-to-l from-black/30 via-transparent to-transparent" />
 
-    {/* Marquee */}
-    <div className="marquee-track flex items-center gap-14">
-      {[...companyLogos, ...companyLogos, ...companyLogos].map((logo, index) => (
-        <img
-          key={index}
-          src={logo.url}
-          alt={logo.name}
-          className="h-14 md:h-16 lg:h-20 opacity-80 hover:opacity-100 transition"
-        />
-      ))}
-    </div>
+            {/* Marquee */}
+            <div className="marquee-track flex items-center gap-14">
+              {[...companyLogos, ...companyLogos, ...companyLogos].map((logo, index) => (
+                <img
+                  key={index}
+                  src={logo.url}
+                  alt={logo.name}
+                  className="h-14 md:h-16 lg:h-20 opacity-80 hover:opacity-100 transition"
+                />
+              ))}
+            </div>
 
-  </div>
-</div>
-      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30 my-6" />
+          </div>
+        </div>
+        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30 my-6" />
 
       </section>
     </>
