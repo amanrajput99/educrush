@@ -1,4 +1,5 @@
 'use client'
+import Link from "next/link";
 export default function CTA() {
     return (
         <>
@@ -19,9 +20,11 @@ export default function CTA() {
                     <span className="bg-gradient-to-r from-[#A992F2] to-[#DFAB9B] bg-clip-text text-transparent">in the AI Community</span>
                 </h1>
                 <p className="text-white text-sm mt-2">Unlock all our free resources instantly.</p>
-                <button className="px-12 py-2.5 mt-6 rounded-full text-sm border border-[#0D542B] active:scale-95 transition-all bg-gradient-to-r from-[#A992F2] to-[#DFAB9B] bg-clip-text text-transparent">
-                    Get Started
-                </button>
+                <Link href="/ai">
+      <button className="px-12 py-2.5 mt-6 rounded-full text-sm border border-[#0D542B] active:scale-95 transition-all bg-gradient-to-r from-[#A992F2] to-[#DFAB9B] bg-clip-text text-transparent">
+        Get Started
+      </button>
+    </Link>
             </div>
         </>
     );
