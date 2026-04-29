@@ -21,18 +21,20 @@ function getModel(provider: AIProvider) {
   switch (provider) {
     case "anthropic":
       return anthropic("claude-sonnet-4-20250514");
+    
 case "gemini":
-   return google("gemini-1.5-flash-latest");
+   return google("gemini-2.0-flash");
     case "groq":
       return groq("llama-3.1-8b-instant");
     default:
-      return groq("llama-3.1-8b-instant");
+      return google("gemini-1.5-flash");
   }
 }
 
 export async function POST(req: Request) {
   const { messages, provider } = await req.json();
-const aiProvider: AIProvider = provider ?? "groq"; // gemini → groq
+  const aiProvider: AIProvider = provider ?? "gemini";
+
   const result = await streamText({
     model: getModel(aiProvider),
     system: SYSTEM_PROMPT,
