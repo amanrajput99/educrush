@@ -47,7 +47,7 @@ const Features = () => {
             </style>
 
             <section className="py-8 px-4 bg-black flex flex-col justify-center items-center gap-6">
-                      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30 my-6" />
+                      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-700/40 to-transparent my-6" />
 
                 <button className='px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg'>Features</button>
                 <h2 className="text-3xl md:text-[40px]/12 font-medium text-gray-100 max-w-lg text-center leading-tight">AI Agents That Automate and Accelerate Growth.</h2>

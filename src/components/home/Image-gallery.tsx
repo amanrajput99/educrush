@@ -10,7 +10,7 @@ export default function ImageGallery() {
                     font-family: 'Poppins', sans-serif;
                 }
             `}</style>
-                                  <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30 my-6" />
+                      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-700/40 to-transparent my-6" />
 {/* 
             <h1 className="text-3xl font-semibold text-center mx-auto">Our Latest Creations</h1>
             <p className="text-sm text-slate-500 text-center mt-2 max-w-lg mx-auto">A visual collection of our most recent works -

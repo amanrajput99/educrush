@@ -286,9 +286,11 @@ export default function HeroSection() {
       <section className='flex flex-col items-center bg-black bg-[url("https://assets.prebuiltui.com/images/components/hero-section/hero-galaxy-bg.png")] bg-cover bg-center bg-no-repeat text-white  px-4'>
 
         {/* Badge */}
-        <div className="flex flex-wrap items-center justify-center gap-2 px-4 py-2 mt-32 rounded-full bg-gradient-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/10">
-          <span className="text-xs text-gray-50 tracking-widest">FREE LEARNING RESOURCES</span>
-        </div>
+      
+         <div className="flex flex-wrap items-center justify-center gap-2 px-3 py-2 mt-32 rounded-full bg-linear-to-r from-[#0000FF]/20 to-[#800080]/10 border border-white/10">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles-icon lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
+         <span className="text-xs text-gray-50">FREE LEARNING RESOURCES</span>
+                </div>
 
         {/* Heading */}
         <h2 className="text-4xl md:text-6xl text-center max-w-3xl mt-8 font-medium leading-tight">
@@ -353,8 +355,9 @@ export default function HeroSection() {
 
           </div>
         </div>
-        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30 my-6" />
-
+{/* ── Bottom divider glow ── */}
+        <div className="mt-20 w-full h-px bg-gradient-to-r from-transparent via-emerald-700/40 to-transparent" />
+      
 
       </section>
     </>

@@ -297,7 +297,7 @@ const NoteCards = ({ limit }: { limit?: number }) => {
 
       {/* Detail Modal */}
       {selected && <NoteDetailModal note={selected} onClose={() => setSelected(null)} />}
-        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30 my-6" />
+        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-700/40 to-transparent my-6" />
     </>
   )
 }
