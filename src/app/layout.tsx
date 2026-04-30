@@ -3,6 +3,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import CTA from '@/components/home/CTA'
+import AiButton from '@/components/ui/AiButton'
 
 
 export const metadata: Metadata = {
@@ -27,7 +28,9 @@ export default function RootLayout({
           {children}
         </main>
         <CTA />
+        
         <Footer />
+<AiButton />
       </body>
     </html>
   )

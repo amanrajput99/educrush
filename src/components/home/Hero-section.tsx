@@ -355,6 +355,7 @@ export default function HeroSection() {
         </div>
         <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30 my-6" />
 
+
       </section>
     </>
   )
