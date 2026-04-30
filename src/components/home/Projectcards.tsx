@@ -20,7 +20,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
   return (
     <motion.a
       ref={cardRef}
-      href={project.link}
+href={`/projects/${project.slug}`}
       target="_blank"
       rel="noreferrer"
       onMouseMove={handleMouseMove}

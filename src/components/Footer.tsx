@@ -67,9 +67,9 @@ const Footer = () => {
                             <div>
                                 <h3 className="font-medium text-sm mb-4">Learning</h3>
                                 <ul className="space-y-3 text-sm text-neutral-300">
-                                    <li><a href="#" className="hover:text-neutral-400">Notes</a></li>
-                                    <li><a href="#" className="hover:text-neutral-400">Projects</a></li>
-                                    <li><a href="#" className="hover:text-neutral-400">Tutorials</a></li>
+                                    <li><a href="/notes" className="hover:text-neutral-400">Notes</a></li>
+                                    <li><a href="/projects" className="hover:text-neutral-400">Projects</a></li>
+                                    <li><a href="/tutorials" className="hover:text-neutral-400">Tutorials</a></li>
                                 </ul>
                             </div>
 
@@ -77,11 +77,11 @@ const Footer = () => {
                             <div>
                                 <h3 className="font-medium text-sm mb-4">Resources</h3>
                                 <ul className="space-y-3 text-sm text-neutral-300">
-                                    <li><a href="#" className="hover:text-neutral-400">Free Resources</a></li>
-                                    <li><a href="#" className="hover:text-neutral-400">Study Materials</a></li>
-                                    <li><a href="#" className="hover:text-neutral-400">Coding Practice</a></li>
-                                    <li><a href="#" className="hover:text-neutral-400">Community</a></li>
-                                    <li><a href="#" className="hover:text-neutral-400">Blogs</a></li>
+                                    <li><a href="/free-resources" className="hover:text-neutral-400">Free Resources</a></li>
+                                    <li><a href="/study-materials" className="hover:text-neutral-400">Study Materials</a></li>
+                                    <li><a href="/coding-practice" className="hover:text-neutral-400">Coding Practice</a></li>
+                                    <li><a href="/community" className="hover:text-neutral-400">Community</a></li>
+                                    <li><a href="/blogs" className="hover:text-neutral-400">Blogs</a></li>
                                 </ul>
                             </div>
 
@@ -89,13 +89,13 @@ const Footer = () => {
                             <div className="col-span-2 md:col-span-1">
                                 <h3 className="font-medium text-sm mb-4">Company</h3>
                                 <ul className="space-y-3 text-sm text-neutral-300">
-                                    <li><a href="#" className="hover:text-neutral-400">About</a></li>
-                                    <li><a href="#" className="hover:text-neutral-400">Vision</a></li>
-                                    <li><a href="#" className="hover:text-neutral-400">Privacy policy</a></li>
-                                    <li><a href="#" className="hover:text-neutral-400">Terms & Conditions</a></li>
-                                    <li><a href="#" className="hover:text-neutral-400">Contact Us</a></li>
+                                    <li><a href="/about" className="hover:text-neutral-400">About</a></li>
+                                    <li><a href="/vision" className="hover:text-neutral-400">Vision</a></li>
+                                    <li><a href="/privacy-policy" className="hover:text-neutral-400">Privacy policy</a></li>
+                                    <li><a href="/terms-and-conditions" className="hover:text-neutral-400">Terms & Conditions</a></li>
+                                    <li><a href="/contact" className="hover:text-neutral-400">Contact Us</a></li>
                                     <li className="flex items-center gap-2">
-                                        <a href="#" className="hover:text-neutral-400">Careers</a>
+                                        <a href="/careers" className="hover:text-neutral-400">Careers</a>
                                         <span className="text-[11px] px-2 py-0.5 rounded-full bg-green-950 border border-green-300 text-green-300">HIRING</span>
                                     </li>
                                 </ul>
