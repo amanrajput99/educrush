@@ -5,6 +5,7 @@ export type Note = {
   subject: string
   image: string
   link: string
+  driveLink?: string    // Google Drive PDF link — used in detail page viewer
   course?: string       // e.g. 'BTech', 'Class 10', 'BCA', 'Diploma'
   year?: string         // e.g. '1st Year', '2nd Year', 'Year 1' OR 'Class 10', 'Class 12'
   semester?: string     // optional: '1st Sem', '2nd Sem' etc.
@@ -15,7 +16,7 @@ export const COURSE_YEARS: Record<string, string[]> = {
   'BTech':    ['1st Year', '2nd Year', '3rd Year', '4th Year'],
   'BCA':      ['1st Year', '2nd Year', '3rd Year'],
   'Diploma':  ['1st Year', '2nd Year', '3rd Year'],
-  'Class 10': [],   // no year sub-filter for school classes
+  'Class 10': [],
   'Class 11': [],
   'Class 12': [],
   'MCA':      ['1st Year', '2nd Year'],
@@ -36,6 +37,7 @@ export const notes: Note[] = [
     year: '1st Year',
     image: '',
     link: '/notes/engg-maths-1',
+    driveLink: 'https://drive.google.com/file/d/1C2jlSxU2cmwDGfzFPrIfKjztxAdDILgP/view?usp=sharing',  // 🔗 Add Google Drive link: https://drive.google.com/file/d/FILE_ID/view
   },
   {
     title: 'Basic Electrical Engineering',
@@ -45,6 +47,7 @@ export const notes: Note[] = [
     year: '1st Year',
     image: '',
     link: '/notes/bee',
+    driveLink: 'https://drive.google.com/file/d/1C2jlSxU2cmwDGfzFPrIfKjztxAdDILgP/view?usp=sharing',
   },
   {
     title: 'Data Structures & Algorithms',
@@ -54,6 +57,7 @@ export const notes: Note[] = [
     year: '2nd Year',
     image: '',
     link: '/notes/dsa',
+    driveLink: 'https://drive.google.com/file/d/1C2jlSxU2cmwDGfzFPrIfKjztxAdDILgP/view?usp=sharing',
   },
   {
     title: 'Operating Systems',
@@ -63,6 +67,7 @@ export const notes: Note[] = [
     year: '3rd Year',
     image: '',
     link: '/notes/os',
+    driveLink: 'https://drive.google.com/file/d/1C2jlSxU2cmwDGfzFPrIfKjztxAdDILgP/view?usp=sharing',
   },
   {
     title: 'Machine Learning',
@@ -72,6 +77,7 @@ export const notes: Note[] = [
     year: '4th Year',
     image: '',
     link: '/notes/ml',
+    driveLink: '',
   },
 
   // ── BCA ────────────────────────────────────────────────────────────────────
@@ -83,6 +89,7 @@ export const notes: Note[] = [
     year: '1st Year',
     image: '',
     link: '/notes/c-programming',
+    driveLink: '',
   },
   {
     title: 'Database Management System',
@@ -92,6 +99,7 @@ export const notes: Note[] = [
     year: '2nd Year',
     image: '',
     link: '/notes/dbms',
+    driveLink: '',
   },
   {
     title: 'Web Development',
@@ -101,6 +109,7 @@ export const notes: Note[] = [
     year: '3rd Year',
     image: '',
     link: '/notes/web-dev',
+    driveLink: '',
   },
 
   // ── Diploma ────────────────────────────────────────────────────────────────
@@ -112,6 +121,7 @@ export const notes: Note[] = [
     year: '1st Year',
     image: '',
     link: '/notes/engg-drawing',
+    driveLink: '',
   },
   {
     title: 'Applied Mechanics',
@@ -121,6 +131,7 @@ export const notes: Note[] = [
     year: '2nd Year',
     image: '',
     link: '/notes/applied-mechanics',
+    driveLink: '',
   },
   {
     title: 'Industrial Management',
@@ -130,6 +141,7 @@ export const notes: Note[] = [
     year: '3rd Year',
     image: '',
     link: '/notes/industrial-mgmt',
+    driveLink: '',
   },
 
   // ── Class 10 ───────────────────────────────────────────────────────────────
@@ -140,6 +152,7 @@ export const notes: Note[] = [
     course: 'Class 10',
     image: '',
     link: '/notes/newton-laws',
+    driveLink: '',
   },
   {
     title: 'Quadratic Formula',
@@ -148,6 +161,7 @@ export const notes: Note[] = [
     course: 'Class 10',
     image: '',
     link: '/notes/quadratic-formula',
+    driveLink: '',
   },
   {
     title: 'Photosynthesis',
@@ -156,6 +170,7 @@ export const notes: Note[] = [
     course: 'Class 10',
     image: '',
     link: '/notes/photosynthesis',
+    driveLink: '',
   },
   {
     title: 'French Revolution',
@@ -164,6 +179,7 @@ export const notes: Note[] = [
     course: 'Class 10',
     image: '',
     link: '/notes/french-revolution',
+    driveLink: '',
   },
 
   // ── Class 11 ───────────────────────────────────────────────────────────────
@@ -174,6 +190,7 @@ export const notes: Note[] = [
     course: 'Class 11',
     image: '',
     link: '/notes/thermodynamics',
+    driveLink: '',
   },
   {
     title: 'Organic Chemistry Basics',
@@ -182,6 +199,7 @@ export const notes: Note[] = [
     course: 'Class 11',
     image: '',
     link: '/notes/organic-chem',
+    driveLink: '',
   },
   {
     title: 'Permutations & Combinations',
@@ -190,6 +208,7 @@ export const notes: Note[] = [
     course: 'Class 11',
     image: '',
     link: '/notes/pnc',
+    driveLink: '',
   },
 
   // ── Class 12 ───────────────────────────────────────────────────────────────
@@ -200,6 +219,7 @@ export const notes: Note[] = [
     course: 'Class 12',
     image: '',
     link: '/notes/electrostatics',
+    driveLink: '',
   },
   {
     title: 'Integration',
@@ -208,6 +228,7 @@ export const notes: Note[] = [
     course: 'Class 12',
     image: '',
     link: '/notes/integration',
+    driveLink: '',
   },
   {
     title: 'Genetics & Evolution',
@@ -216,6 +237,7 @@ export const notes: Note[] = [
     course: 'Class 12',
     image: '',
     link: '/notes/genetics',
+    driveLink: '',
   },
   {
     title: 'World War II',
@@ -224,5 +246,6 @@ export const notes: Note[] = [
     course: 'Class 12',
     image: '',
     link: '/notes/world-war-2',
+    driveLink: '',
   },
 ]

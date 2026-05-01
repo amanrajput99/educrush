@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import type { Note } from '@/data/Notes'
+import { notes as localNotes } from '@/data/Notes'
 
 export async function getNotesFromSupabase(): Promise<Note[]> {
   const { data, error } = await supabase
@@ -14,10 +15,23 @@ export async function getNotesFromSupabase(): Promise<Note[]> {
       hint: error.hint,
       code: error.code,
     })
-    return []
+    // Supabase fail → sirf local notes return karo
+    return localNotes
   }
 
-  return (data as unknown as Note[]) || []
+  const supabaseNotes = (data as unknown as Note[]) || []
+
+  if (supabaseNotes.length === 0) {
+    // Supabase empty hai → sirf local notes
+    return localNotes
+  }
+
+  // Supabase notes upar, local notes neeche
+  // Duplicate avoid karo — same link wale local notes skip karo
+  const supabaseSlugs = new Set(supabaseNotes.map((n) => n.link))
+  const filteredLocal = localNotes.filter((n) => !supabaseSlugs.has(n.link))
+
+  return [...supabaseNotes, ...filteredLocal]
 }
 
 export async function addNoteToSupabase(note: Note) {
