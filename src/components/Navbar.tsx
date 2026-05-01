@@ -35,7 +35,7 @@ const Navbar = () => {
                             </button>
                             <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-zinc-200 rounded-xl shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                                 <a href="#" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Landing Pages</a>
-                                <a href="#" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">About Pages</a>
+                                <a href="/about" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">About Pages</a>
                                 <a href="/contact" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Contact Pages</a>
                                 <a href="#" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Blog Pages</a>
                             </div>
@@ -46,10 +46,10 @@ const Navbar = () => {
                                 <svg className="transition-transform group-hover:rotate-180" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                             </button>
                             <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-zinc-200 rounded-xl shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                                <a href="#" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">About Pages</a>
+                                <a href="/about" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">About Pages</a>
                                 <a href="/contact" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Contact Pages</a>
 
-                                <a href="#" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Blog Pages</a>
+                                <a href="/blog" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Blog Pages</a>
                             </div>
                         </div>
 
@@ -117,21 +117,21 @@ const Navbar = () => {
                         {dropdownOpen1 && (
                             <div className="flex flex-col pl-4">
                                 <a href="/landing-pages" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Landing Pages</a>
-                                <a href="/about-pages" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">About Pages</a>
+                                <a href="/about" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">About Pages</a>
                                 <a href="/contact" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Contact Pages</a>
-                                <a href="/blog-pages" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Blog Pages</a>
+                                <a href="/blog" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Blog Pages</a>
                             </div>
                         )}
                         <button onClick={() => setDropdownOpen2(!dropdownOpen2)} className="flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm text-zinc-800 hover:bg-zinc-50 bg-transparent border-0 cursor-pointer font-bold">
-                            All Tools
+                            All pages
                             <svg className={`transition-transform ${dropdownOpen2 ? 'rotate-180' : ''}`} width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                         </button>
                         {dropdownOpen2 && (
                             <div className="flex flex-col pl-4">
                                 <a href="/landing-pages" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Landing Pages</a>
-                                <a href="/about-pages" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">About Pages</a>
+                                <a href="/about" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">About Pages</a>
                                 <a href="/contact" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Contact Pages</a>
-                                <a href="/blog-pages" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Blog Pages</a>
+                                <a href="/blog" className="px-4 font-bold py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Blog Pages</a>
                             </div>
                         )}
 

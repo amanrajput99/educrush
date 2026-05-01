@@ -260,7 +260,7 @@ const NoteCards = ({ limit }: { limit?: number }) => {
 
   return (
     <>
-      <section className="bg-black text-slate-100 py-8 ">
+      <section className="bg-black text-slate-100 py-8 " id='notes'>
         {/* Header */}
         <div className="py-4 px-4 bg-black flex flex-col justify-center items-center gap-6">
           <button className='px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg'>Notes</button>
