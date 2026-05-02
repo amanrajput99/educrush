@@ -92,7 +92,7 @@ const Footer = () => {
                                     <li><a href="/about" className="hover:text-neutral-400">About</a></li>
                                     <li><a href="/vision" className="hover:text-neutral-400">Vision</a></li>
                                     <li><a href="/privacy-policy" className="hover:text-neutral-400">Privacy policy</a></li>
-                                    <li><a href="/terms-and-conditions" className="hover:text-neutral-400">Terms & Conditions</a></li>
+                                    <li><a href="/terms" className="hover:text-neutral-400">Terms & Conditions</a></li>
                                     <li><a href="/contact" className="hover:text-neutral-400">Contact Us</a></li>
                                     <li className="flex items-center gap-2">
                                         <a href="/careers" className="hover:text-neutral-400">Careers</a>
