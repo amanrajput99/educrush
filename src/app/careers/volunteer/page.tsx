@@ -1,0 +1,282 @@
+'use client'
+
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+
+function FadeUp({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+const Divider = () => (
+  <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-700/30 to-transparent" />
+)
+
+const Label = ({ text }: { text: string }) => (
+  <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default">
+    {text}
+  </button>
+)
+
+const contributionTypes = [
+  {
+    icon: '📝',
+    title: 'Notes Upload Karo',
+    desc: 'Tumhare handwritten ya digital notes hain? Upload karo aur hazaro students ki help karo. BTech, BCA, Diploma — sab subjects welcome hain.',
+    tag: 'Most Needed',
+    tagColor: 'bg-green-950 border-green-400 text-green-300',
+  },
+  {
+    icon: '💻',
+    title: 'Projects Share Karo',
+    desc: 'Apne college projects — mini projects, final year projects, web dev projects — share karo taaki doosre students inspire ho sakein.',
+    tag: 'Popular',
+    tagColor: 'bg-blue-950 border-blue-400 text-blue-300',
+  },
+  {
+    icon: '✍️',
+    title: 'Blog / Article Likho',
+    desc: 'Tech articles, study tips, career advice — agar tumhara perspective helpful hai toh EduCrush blog pe publish karo (credit tumhara rahega).',
+    tag: 'Open',
+    tagColor: 'bg-purple-950 border-purple-400 text-purple-300',
+  },
+  {
+    icon: '🐛',
+    title: 'Bug Report / Feedback',
+    desc: 'Platform mein koi issue mila? Feedback dena chahte ho? Contributor ke roop mein tumhari report ko priority milti hai.',
+    tag: 'Always Open',
+    tagColor: 'bg-orange-950 border-orange-400 text-orange-300',
+  },
+]
+
+const perks = [
+  { title: 'Contributor Credit', desc: 'Har uploaded note aur project pe tumhara naam — forever.' },
+  { title: 'Community Badge', desc: 'Platform pe verified Contributor badge milega.' },
+  { title: 'Early Access', desc: 'Naye features pehle tumhe milenge.' },
+  { title: 'Team Discord', desc: 'Core team ke saath directly baatein karo.' },
+  { title: 'Portfolio Building', desc: 'EduCrush contribution resume aur portfolio mein add karo.' },
+  { title: 'Reference Letter', desc: 'Top contributors ke liye recommendation letter available.' },
+]
+
+const steps = [
+  { step: '01', title: 'Choose karo kya contribute karna hai', desc: 'Notes, projects, blogs — kuch bhi.' },
+  { step: '02', title: 'Interest form fill karo', desc: 'Bata do kya share karna chahte ho.' },
+  { step: '03', title: 'Review aur onboarding', desc: 'Team 2-3 days mein respond karti hai.' },
+  { step: '04', title: 'Submit aur shine!', desc: 'Content publish hota hai, credit tumhara!' },
+]
+
+export default function VolunteerPage() {
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Poppins', sans-serif; }
+      `}</style>
+
+      <div className="bg-black min-h-screen text-white overflow-x-hidden">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-[700px] h-[700px] bg-green-500/[0.10] rounded-full blur-[200px] z-0" />
+
+        {/* ── HERO ── */}
+        <section className="relative z-10 pt-36 pb-20 px-6">
+          <div className="max-w-5xl mx-auto">
+            <Divider />
+            <div className="mt-10">
+              <FadeUp>
+                <div className="flex items-center gap-3 mb-5">
+                  <Link href="/careers" className="text-slate-500 text-xs hover:text-slate-300 transition flex items-center gap-1">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                    Careers
+                  </Link>
+                  <span className="text-slate-700 text-xs">/</span>
+                  <span className="text-slate-400 text-xs">Volunteer</span>
+                </div>
+                <Label text="Volunteer & Contributor Program" />
+              </FadeUp>
+
+              <FadeUp delay={0.08}>
+                <div className="mb-6">
+                  <span className="text-xs px-3 py-1 rounded-full bg-blue-950 border border-blue-400 text-blue-300 font-semibold tracking-wide">ALWAYS OPEN</span>
+                </div>
+                <h1 className="text-[38px] sm:text-[52px] md:text-[62px] font-medium tracking-tight leading-[1.05] max-w-3xl">
+                  Apna knowledge{' '}
+                  <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
+                    share karo
+                  </span>
+                  , lakho students ki help karo
+                </h1>
+              </FadeUp>
+
+              <FadeUp delay={0.16}>
+                <p className="mt-6 text-sm/7 text-slate-400 max-w-lg">
+                  EduCrush ek community-powered platform hai. Agar tumhare paas notes hain, projects hain, ya koi skill hai — toh contribute karo aur ek lasting impact chhodo. Credit, badge, aur recognition guaranteed.
+                </p>
+              </FadeUp>
+
+              <FadeUp delay={0.22}>
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <Link href="/careers/contact?role=volunteer"
+                    className="flex items-center gap-2 bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white px-7 py-3 rounded-full text-sm font-medium transition duration-300">
+                    Contributor Bano
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                  </Link>
+                  <Link href="/careers"
+                    className="flex items-center gap-2 border border-white/15 hover:border-green-700/60 bg-white/5 text-white px-7 py-3 rounded-full text-sm font-medium transition duration-300">
+                    All Programs
+                  </Link>
+                </div>
+              </FadeUp>
+            </div>
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ── CONTRIBUTION TYPES ── */}
+        <section className="relative z-10 py-24 px-6">
+          <div className="max-w-5xl mx-auto">
+            <FadeUp className="mb-12">
+              <Label text="Ways to Contribute" />
+              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight">
+                Kaise{' '}
+                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">contribute karein?</span>
+              </h2>
+              <p className="text-slate-500 text-sm mt-3 max-w-md">Ek tarike se contribute karo ya sab tarike se — tumhari marzi.</p>
+            </FadeUp>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {contributionTypes.map((item, i) => (
+                <FadeUp key={item.title} delay={i * 0.08}>
+                  <div className="relative border border-gray-800 rounded-2xl p-6 bg-gradient-to-b from-[#0a0a0a] to-[#0D542B]/8 hover:border-emerald-900/60 hover:-translate-y-1 transition-all duration-300 h-full">
+                    <div className="flex items-start justify-between mb-4">
+                      <span className="text-3xl">{item.icon}</span>
+                      <span className={`text-[10px] px-2.5 py-1 rounded-full border font-semibold tracking-wider ${item.tagColor}`}>
+                        {item.tag}
+                      </span>
+                    </div>
+                    <h3 className="text-white font-medium text-sm mb-2">{item.title}</h3>
+                    <p className="text-slate-500 text-xs leading-relaxed">{item.desc}</p>
+                  </div>
+                </FadeUp>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ── PERKS ── */}
+        <section className="relative z-10 py-24 px-6">
+          <div className="max-w-5xl mx-auto">
+            <FadeUp className="mb-12">
+              <Label text="Benefits" />
+              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight">
+                Tumhe kya{' '}
+                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">milega</span>
+              </h2>
+            </FadeUp>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {perks.map((perk, i) => (
+                <FadeUp key={perk.title} delay={i * 0.07}>
+                  <div className="border border-gray-800 rounded-2xl p-6 bg-gradient-to-b from-[#0a0a0a] to-black hover:border-emerald-900/60 hover:-translate-y-1 transition-all duration-300 h-full">
+                    <div className="w-8 h-8 rounded-lg bg-[#0D542B]/30 border border-emerald-900/50 flex items-center justify-center mb-4">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="m9 12 2 2 4-4" /><circle cx="12" cy="12" r="10" />
+                      </svg>
+                    </div>
+                    <h3 className="text-white font-medium text-sm mb-1.5">{perk.title}</h3>
+                    <p className="text-slate-500 text-xs leading-relaxed">{perk.desc}</p>
+                  </div>
+                </FadeUp>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ── STEPS ── */}
+        <section className="relative z-10 py-24 px-6">
+          <div className="max-w-5xl mx-auto">
+            <FadeUp className="mb-14">
+              <Label text="How It Works" />
+              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight">
+                4 simple{' '}
+                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">steps</span>
+              </h2>
+            </FadeUp>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {steps.map((item, i) => (
+                <FadeUp key={item.step} delay={i * 0.08}>
+                  <div className="border border-gray-800 rounded-2xl p-6 bg-gradient-to-b from-[#0a0a0a] to-black h-full">
+                    <span className="text-4xl font-black text-emerald-900/60 leading-none block mb-4">{item.step}</span>
+                    <h3 className="text-white font-medium text-sm mb-2">{item.title}</h3>
+                    <p className="text-slate-500 text-xs leading-relaxed">{item.desc}</p>
+                  </div>
+                </FadeUp>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ── OPEN CALL BANNER ── */}
+        <section className="relative z-10 py-16 px-6">
+          <div className="max-w-5xl mx-auto">
+            <FadeUp>
+              <div className="border border-emerald-900/60 rounded-2xl bg-gradient-to-r from-[#0D542B]/20 to-black p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div>
+                  <p className="text-green-400 text-xs font-semibold uppercase tracking-wider mb-3">Open Call</p>
+                  <h3 className="text-white font-semibold text-2xl md:text-3xl mb-2">Notes Contributors Chahiye!</h3>
+                  <p className="text-slate-400 text-sm max-w-md">BTech 1st–4th year ke notes upload karo — especially CSE, ECE, ME branches. Tumhare notes se hazaro students ka fayda hoga.</p>
+                </div>
+                <Link href="/careers/contact?role=volunteer"
+                  className="shrink-0 flex items-center gap-2 bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white px-8 py-3.5 rounded-full text-sm font-medium transition duration-300 whitespace-nowrap">
+                  Contribute Notes
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                </Link>
+              </div>
+            </FadeUp>
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ── CTA ── */}
+        <section className="relative z-10 py-24 px-6 text-center overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-[500px] h-[200px] bg-green-500/15 rounded-full blur-[120px]" />
+          </div>
+          <FadeUp>
+            <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg mb-8 cursor-default">
+              Join the community
+            </button>
+            <h2 className="text-3xl md:text-5xl font-semibold leading-tight bg-gradient-to-r from-white via-green-100 to-green-400 bg-clip-text text-transparent max-w-2xl mx-auto mb-6">
+              Teri contribution matter karti hai
+            </h2>
+            <p className="text-slate-400 text-sm max-w-md mx-auto mb-10">
+              Ek note upload karo aur dekho kitne students ka kaam aasaan ho jaata hai.
+            </p>
+            <Link href="/careers/contact?role=volunteer"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white px-10 py-4 rounded-full text-sm font-medium transition duration-300">
+              Contributor Bano — It's Free
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+            </Link>
+          </FadeUp>
+        </section>
+
+      </div>
+    </>
+  )
+}
