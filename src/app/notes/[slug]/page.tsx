@@ -26,9 +26,9 @@ const getSubjectStyle = (subject: string) =>
 
 const getSlug = (link: string) => link.split('/').pop() ?? ''
 
-function getDriveEmbedUrl(driveLink: string): string | null {
-  const fileMatch = driveLink.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
-  const openMatch = driveLink.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+function getDriveEmbedUrl(drivelink: string): string | null {
+  const fileMatch = drivelink.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+  const openMatch = drivelink.match(/[?&]id=([a-zA-Z0-9_-]+)/)
   const id = fileMatch?.[1] ?? openMatch?.[1]
   if (!id) return null
   return `https://drive.google.com/file/d/${id}/preview`
@@ -93,7 +93,7 @@ const ReadingProgress = ({ color }: { color: string }) => {
 
 // ── Book / PDF Viewer ─────────────────────────────────────────────────────────
 const BookViewer = ({ note }: { note: Note }) => {
-  const embedUrl = getDriveEmbedUrl(note.driveLink ?? note.link)
+  const embedUrl = getDriveEmbedUrl(note.drivelink ?? note.link)
   const [loaded, setLoaded] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
   const viewerRef = useRef<HTMLDivElement>(null)
@@ -178,7 +178,7 @@ const BookViewer = ({ note }: { note: Note }) => {
             )}
           </button>
           <a
-            href={note.driveLink ?? note.link}
+            href={note.drivelink ?? note.link}
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
@@ -519,7 +519,7 @@ export default function NoteDetailPage() {
                 {/* Action buttons */}
                 <div className="flex flex-wrap gap-2">
                   <a
-                    href={note.driveLink ?? note.link}
+                    href={note.drivelink ?? note.link}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"
@@ -635,7 +635,7 @@ export default function NoteDetailPage() {
                 </div>
                 <div className="px-4 pb-4 space-y-2">
                   <a
-                    href={note.driveLink ?? note.link}
+                    href={note.drivelink ?? note.link}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all"
@@ -647,7 +647,7 @@ export default function NoteDetailPage() {
                     Download PDF
                   </a>
                   <a
-                    href={note.driveLink ?? note.link}
+                    href={note.drivelink ?? note.link}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-semibold border border-slate-700 text-slate-400 hover:border-slate-500 hover:text-white transition-all"
