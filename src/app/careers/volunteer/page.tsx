@@ -22,7 +22,7 @@ const Divider = () => (
 )
 
 const Label = ({ text }: { text: string }) => (
-  <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default">
+  <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default tracking-wide uppercase">
     {text}
   </button>
 )
@@ -30,56 +30,56 @@ const Label = ({ text }: { text: string }) => (
 const contributionTypes = [
   {
     icon: '📝',
-    title: 'Notes Upload Karo',
-    desc: 'Tumhare handwritten ya digital notes hain? Upload karo aur hazaro students ki help karo. BTech, BCA, Diploma — sab subjects welcome hain.',
+    title: 'Upload Notes',
+    desc: 'Have handwritten or digital notes? Upload them and help thousands of students. BTech, BCA, Diploma — all subjects are welcome.',
     tag: 'Most Needed',
     tagColor: 'bg-green-950 border-green-400 text-green-300',
   },
   {
     icon: '💻',
-    title: 'Projects Share Karo',
-    desc: 'Apne college projects — mini projects, final year projects, web dev projects — share karo taaki doosre students inspire ho sakein.',
+    title: 'Share Projects',
+    desc: 'Share your college projects — mini projects, final year projects, web dev builds — so other students can learn and get inspired.',
     tag: 'Popular',
     tagColor: 'bg-blue-950 border-blue-400 text-blue-300',
   },
   {
     icon: '✍️',
-    title: 'Blog / Article Likho',
-    desc: 'Tech articles, study tips, career advice — agar tumhara perspective helpful hai toh EduCrush blog pe publish karo (credit tumhara rahega).',
+    title: 'Write a Blog or Article',
+    desc: 'Tech articles, study tips, career advice — if your perspective adds value, publish it on the EduCrush blog with full credit to you.',
     tag: 'Open',
     tagColor: 'bg-purple-950 border-purple-400 text-purple-300',
   },
   {
     icon: '🐛',
-    title: 'Bug Report / Feedback',
-    desc: 'Platform mein koi issue mila? Feedback dena chahte ho? Contributor ke roop mein tumhari report ko priority milti hai.',
+    title: 'Report Bugs or Share Feedback',
+    desc: 'Spotted an issue on the platform? Have suggestions? As a contributor, your reports receive priority attention from our team.',
     tag: 'Always Open',
     tagColor: 'bg-orange-950 border-orange-400 text-orange-300',
   },
 ]
 
 const perks = [
-  { title: 'Contributor Credit', desc: 'Har uploaded note aur project pe tumhara naam — forever.' },
-  { title: 'Community Badge', desc: 'Platform pe verified Contributor badge milega.' },
-  { title: 'Early Access', desc: 'Naye features pehle tumhe milenge.' },
-  { title: 'Team Discord', desc: 'Core team ke saath directly baatein karo.' },
-  { title: 'Portfolio Building', desc: 'EduCrush contribution resume aur portfolio mein add karo.' },
-  { title: 'Reference Letter', desc: 'Top contributors ke liye recommendation letter available.' },
+  { title: 'Contributor Credit', desc: 'Your name on every note and project you upload — permanently.' },
+  { title: 'Community Badge', desc: 'A verified Contributor badge displayed on your EduCrush profile.' },
+  { title: 'Early Access', desc: 'Be the first to try new features before they go live.' },
+  { title: 'Team Discord', desc: 'Connect directly with the core team and share your ideas.' },
+  { title: 'Portfolio Building', desc: 'Add your EduCrush contributions to your resume or portfolio with confidence.' },
+  { title: 'Reference Letter', desc: 'Top contributors are eligible for a recommendation letter from the EduCrush team.' },
 ]
 
 const steps = [
-  { step: '01', title: 'Choose karo kya contribute karna hai', desc: 'Notes, projects, blogs — kuch bhi.' },
-  { step: '02', title: 'Interest form fill karo', desc: 'Bata do kya share karna chahte ho.' },
-  { step: '03', title: 'Review aur onboarding', desc: 'Team 2-3 days mein respond karti hai.' },
-  { step: '04', title: 'Submit aur shine!', desc: 'Content publish hota hai, credit tumhara!' },
+  { step: '01', title: 'Choose What to Contribute', desc: 'Notes, projects, or articles — pick whatever suits you best.' },
+  { step: '02', title: 'Fill the Interest Form', desc: 'Tell us what you would like to share — takes under 2 minutes.' },
+  { step: '03', title: 'Review & Onboarding', desc: 'Our team gets back to you within 2–3 business days.' },
+  { step: '04', title: 'Submit & Shine!', desc: 'Your content goes live on EduCrush — with full credit to you.' },
 ]
 
 export default function VolunteerPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        * { font-family: 'Poppins', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Sora', sans-serif; }
       `}</style>
 
       <div className="bg-black min-h-screen text-white overflow-x-hidden">
@@ -106,18 +106,18 @@ export default function VolunteerPage() {
                 <div className="mb-6">
                   <span className="text-xs px-3 py-1 rounded-full bg-blue-950 border border-blue-400 text-blue-300 font-semibold tracking-wide">ALWAYS OPEN</span>
                 </div>
-                <h1 className="text-[38px] sm:text-[52px] md:text-[62px] font-medium tracking-tight leading-[1.05] max-w-3xl">
-                  Apna knowledge{' '}
+                <h1 className="text-[38px] sm:text-[52px] md:text-[62px] font-semibold tracking-tight leading-[1.05] max-w-3xl">
+                  Share your knowledge,{' '}
                   <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
-                    share karo
+                    impact thousands
                   </span>
-                  , lakho students ki help karo
                 </h1>
               </FadeUp>
 
               <FadeUp delay={0.16}>
                 <p className="mt-6 text-sm/7 text-slate-400 max-w-lg">
-                  EduCrush ek community-powered platform hai. Agar tumhare paas notes hain, projects hain, ya koi skill hai — toh contribute karo aur ek lasting impact chhodo. Credit, badge, aur recognition guaranteed.
+                  EduCrush is a community-powered platform. If you have notes, projects, or skills to share —
+                  contribute and leave a lasting impact. Credit, badges, and recognition are guaranteed.
                 </p>
               </FadeUp>
 
@@ -125,7 +125,7 @@ export default function VolunteerPage() {
                 <div className="mt-8 flex flex-wrap gap-4">
                   <Link href="/careers/contact?role=volunteer"
                     className="flex items-center gap-2 bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white px-7 py-3 rounded-full text-sm font-medium transition duration-300">
-                    Contributor Bano
+                    Become a Contributor
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                   </Link>
                   <Link href="/careers"
@@ -145,11 +145,11 @@ export default function VolunteerPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-12">
               <Label text="Ways to Contribute" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight">
-                Kaise{' '}
-                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">contribute karein?</span>
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight">
+                How would you like to{' '}
+                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">contribute?</span>
               </h2>
-              <p className="text-slate-500 text-sm mt-3 max-w-md">Ek tarike se contribute karo ya sab tarike se — tumhari marzi.</p>
+              <p className="text-slate-500 text-sm mt-3 max-w-md">Pick one way or all of them — entirely up to you.</p>
             </FadeUp>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -178,9 +178,9 @@ export default function VolunteerPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-12">
               <Label text="Benefits" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight">
-                Tumhe kya{' '}
-                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">milega</span>
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight">
+                What you{' '}
+                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">receive</span>
               </h2>
             </FadeUp>
 
@@ -209,7 +209,7 @@ export default function VolunteerPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-14">
               <Label text="How It Works" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight">
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight">
                 4 simple{' '}
                 <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">steps</span>
               </h2>
@@ -238,8 +238,11 @@ export default function VolunteerPage() {
               <div className="border border-emerald-900/60 rounded-2xl bg-gradient-to-r from-[#0D542B]/20 to-black p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
                 <div>
                   <p className="text-green-400 text-xs font-semibold uppercase tracking-wider mb-3">Open Call</p>
-                  <h3 className="text-white font-semibold text-2xl md:text-3xl mb-2">Notes Contributors Chahiye!</h3>
-                  <p className="text-slate-400 text-sm max-w-md">BTech 1st–4th year ke notes upload karo — especially CSE, ECE, ME branches. Tumhare notes se hazaro students ka fayda hoga.</p>
+                  <h3 className="text-white font-semibold text-2xl md:text-3xl mb-2">Notes Contributors Wanted</h3>
+                  <p className="text-slate-400 text-sm max-w-md">
+                    We are actively looking for BTech 1st–4th year notes — especially from CSE, ECE, and ME branches.
+                    Your notes could make a real difference for thousands of students.
+                  </p>
                 </div>
                 <Link href="/careers/contact?role=volunteer"
                   className="shrink-0 flex items-center gap-2 bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white px-8 py-3.5 rounded-full text-sm font-medium transition duration-300 whitespace-nowrap">
@@ -259,18 +262,18 @@ export default function VolunteerPage() {
             <div className="w-[500px] h-[200px] bg-green-500/15 rounded-full blur-[120px]" />
           </div>
           <FadeUp>
-            <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg mb-8 cursor-default">
-              Join the community
+            <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg mb-8 cursor-default tracking-wide uppercase">
+              Join the Community
             </button>
             <h2 className="text-3xl md:text-5xl font-semibold leading-tight bg-gradient-to-r from-white via-green-100 to-green-400 bg-clip-text text-transparent max-w-2xl mx-auto mb-6">
-              Teri contribution matter karti hai
+              Your contribution matters
             </h2>
             <p className="text-slate-400 text-sm max-w-md mx-auto mb-10">
-              Ek note upload karo aur dekho kitne students ka kaam aasaan ho jaata hai.
+              Upload a single note and watch how many students it helps. Every contribution counts.
             </p>
             <Link href="/careers/contact?role=volunteer"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white px-10 py-4 rounded-full text-sm font-medium transition duration-300">
-              Contributor Bano — It's Free
+              Become a Contributor — It's Free
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </Link>
           </FadeUp>

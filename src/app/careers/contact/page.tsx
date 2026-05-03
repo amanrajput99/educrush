@@ -27,14 +27,13 @@ const Divider = () => (
 // ── Inner form (uses useSearchParams — must be inside Suspense) ───────────────
 function CareersForm() {
   const searchParams = useSearchParams()
-  const roleParam = searchParams.get('role') // 'ambassador' | 'volunteer' | null
+  const roleParam = searchParams.get('role')
 
   const [role, setRole] = useState(roleParam === 'volunteer' ? 'Volunteer / Contributor' : 'Student Ambassador')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
-  // Sync if URL param changes after mount
   useEffect(() => {
     if (roleParam === 'volunteer') setRole('Volunteer / Contributor')
     else if (roleParam === 'ambassador') setRole('Student Ambassador')
@@ -46,21 +45,21 @@ function CareersForm() {
     setError('')
 
     const form = e.currentTarget
-    const name         = (form.elements.namedItem('name')        as HTMLInputElement).value
-    const email        = (form.elements.namedItem('email')       as HTMLInputElement).value
-    const mobile       = (form.elements.namedItem('mobile')      as HTMLInputElement).value
-    const college      = (form.elements.namedItem('college')     as HTMLInputElement).value
-    const course       = (form.elements.namedItem('course')      as HTMLInputElement).value
-    const year         = (form.elements.namedItem('year')        as HTMLSelectElement).value
-    const contribution = (form.elements.namedItem('contribution')as HTMLInputElement).value
-    const message      = (form.elements.namedItem('message')     as HTMLTextAreaElement).value
+    const name         = (form.elements.namedItem('name')         as HTMLInputElement).value
+    const email        = (form.elements.namedItem('email')        as HTMLInputElement).value
+    const mobile       = (form.elements.namedItem('mobile')       as HTMLInputElement).value
+    const college      = (form.elements.namedItem('college')      as HTMLInputElement).value
+    const course       = (form.elements.namedItem('course')       as HTMLInputElement).value
+    const year         = (form.elements.namedItem('year')         as HTMLSelectElement).value
+    const contribution = (form.elements.namedItem('contribution') as HTMLInputElement).value
+    const message      = (form.elements.namedItem('message')      as HTMLTextAreaElement).value
 
     const { error: dbError } = await supabase
       .from('careers_interest')
       .insert([{ name, email, mobile, college, course, year, role, contribution, message }])
 
     if (dbError) {
-      setError('Kuch galat hua. Please dobara try karo ya email karo.')
+      setError('Something went wrong. Please try again or reach us at educrushofficial@gmail.com.')
     } else {
       setSuccess(true)
     }
@@ -80,8 +79,11 @@ function CareersForm() {
             </svg>
           </div>
           <h3 className="text-white text-xl font-semibold mb-2">Application Received! 🎉</h3>
-          <p className="text-slate-400 text-sm mb-1">Shukriya <span className="text-green-400 font-medium">EduCrush family</span> mein interest lene ke liye.</p>
-          <p className="text-slate-500 text-xs mb-8">Hum 3-5 business days mein email pe respond karenge.</p>
+          <p className="text-slate-400 text-sm mb-1">
+            Thank you for your interest in joining the{' '}
+            <span className="text-green-400 font-medium">EduCrush team</span>.
+          </p>
+          <p className="text-slate-500 text-xs mb-8">We will get back to you within 3–5 business days via email.</p>
           <Link href="/careers"
             className="flex items-center gap-2 border border-white/15 hover:border-green-700/60 bg-white/5 text-white px-6 py-2.5 rounded-full text-sm font-medium transition duration-300">
             ← Back to Careers
@@ -113,17 +115,17 @@ function CareersForm() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className={labelClass}>Full Name *</label>
-              <input name="name" type="text" required placeholder="Aman Singh" className={inputClass} />
+              <input name="name" type="text" required placeholder="Aman Kumar Singh" className={inputClass} />
             </div>
             <div>
-              <label className={labelClass}>Email *</label>
+              <label className={labelClass}>Email Address *</label>
               <input name="email" type="email" required placeholder="you@example.com" className={inputClass} />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className={labelClass}>Mobile (Optional)</label>
+              <label className={labelClass}>Mobile <span className="text-white/40 font-normal">(Optional)</span></label>
               <input name="mobile" type="tel" placeholder="+91 98765 43210" className={inputClass} />
             </div>
             <div>
@@ -154,7 +156,7 @@ function CareersForm() {
             <label className={labelClass}>
               {role === 'Student Ambassador'
                 ? 'How will you promote EduCrush at your college? *'
-                : 'What do you want to contribute? (notes subject, project, blog, etc.) *'}
+                : 'What would you like to contribute? (subject, project, article, etc.) *'}
             </label>
             <input name="contribution" type="text" required
               placeholder={role === 'Student Ambassador'
@@ -164,7 +166,7 @@ function CareersForm() {
           </div>
 
           <div>
-            <label className={labelClass}>Anything else you want to share? (Optional)</label>
+            <label className={labelClass}>Anything else you would like to share? <span className="text-white/40 font-normal">(Optional)</span></label>
             <textarea name="message" rows={3} placeholder="Your motivation, skills, social handles, etc."
               className={inputClass + ' resize-none'} />
           </div>
@@ -195,8 +197,8 @@ export default function CareersContactPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        * { font-family: 'Poppins', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Sora', sans-serif; }
       `}</style>
 
       <div className="bg-black min-h-screen text-white">
@@ -216,24 +218,24 @@ export default function CareersContactPage() {
               <span className="text-slate-400 text-xs">Apply</span>
             </div>
 
-            <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default">
+            <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default tracking-wide uppercase">
               Interest Form
             </button>
 
-            <h1 className="font-medium text-3xl md:text-[44px] leading-[1.1] tracking-tight bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent max-w-sm mb-5">
+            <h1 className="font-semibold text-3xl md:text-[44px] leading-[1.1] tracking-tight bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent max-w-sm mb-5">
               Join the EduCrush Team
             </h1>
 
             <p className="text-sm/7 text-slate-400 mb-8">
-              Ek simple form — 2 minute mein complete. Hum har application personally review karte hain.
+              A simple form — done in under 2 minutes. Every application is personally reviewed by our team.
             </p>
 
             {/* What happens next */}
             <div className="border border-gray-800 rounded-2xl bg-gradient-to-b from-[#0a0a0a] to-[#0D542B]/8 p-6 space-y-0 mb-6">
               <p className="text-green-400 text-xs font-semibold uppercase tracking-wider mb-4">What Happens Next</p>
               {[
-                { label: 'Application submitted', value: 'Instantly', dot: 'bg-green-400' },
-                { label: 'Team review',           value: '2–5 days', dot: 'bg-emerald-400' },
+                { label: 'Application submitted', value: 'Instantly',     dot: 'bg-green-400' },
+                { label: 'Team review',           value: '2–5 days',     dot: 'bg-emerald-400' },
                 { label: 'Intro email / call',    value: 'After review', dot: 'bg-teal-400' },
               ].map((item, i) => (
                 <div key={item.label} className={`flex items-center justify-between py-3.5 ${i < 2 ? 'border-b border-gray-800/60' : ''}`}>
@@ -247,7 +249,7 @@ export default function CareersContactPage() {
             </div>
 
             <p className="text-slate-500 text-xs">
-              Questions? Email us at{' '}
+              Have questions? Email us at{' '}
               <a href="mailto:educrushofficial@gmail.com" className="text-green-400 hover:text-green-300 transition">
                 educrushofficial@gmail.com
               </a>
@@ -277,7 +279,7 @@ export default function CareersContactPage() {
                 <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
               </svg>
               <h3 className="text-white font-semibold mb-1">Email Us</h3>
-              <p className="text-slate-400 text-sm mb-3">Seedha team se baat karo</p>
+              <p className="text-slate-400 text-sm mb-3">Reach out directly to the team</p>
               <a href="mailto:educrushofficial@gmail.com" className="text-green-400 text-sm hover:text-green-300 transition">
                 educrushofficial@gmail.com
               </a>
@@ -290,7 +292,7 @@ export default function CareersContactPage() {
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
               </svg>
               <h3 className="text-white font-semibold mb-1">Ambassador Program</h3>
-              <p className="text-slate-400 text-sm mb-3">Campus pe EduCrush lead karo</p>
+              <p className="text-slate-400 text-sm mb-3">Lead EduCrush on your campus</p>
               <Link href="/careers/ambassador" className="text-green-400 text-sm hover:text-green-300 transition">
                 Learn More →
               </Link>
@@ -304,7 +306,7 @@ export default function CareersContactPage() {
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
               </svg>
               <h3 className="text-white font-semibold mb-1">Volunteer Program</h3>
-              <p className="text-slate-400 text-sm mb-3">Notes aur projects contribute karo</p>
+              <p className="text-slate-400 text-sm mb-3">Contribute notes, projects, and more</p>
               <Link href="/careers/volunteer" className="text-green-400 text-sm hover:text-green-300 transition">
                 Learn More →
               </Link>

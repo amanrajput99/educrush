@@ -22,7 +22,7 @@ const Divider = () => (
 )
 
 const Label = ({ text }: { text: string }) => (
-  <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default">
+  <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default tracking-wide uppercase">
     {text}
   </button>
 )
@@ -30,49 +30,49 @@ const Label = ({ text }: { text: string }) => (
 const responsibilities = [
   {
     icon: '📢',
-    title: 'EduCrush Promote Karo',
-    desc: 'Apne college mein EduCrush ke baare mein baat karo — classmates, juniors aur seniors ko platform ke baare mein batao.',
+    title: 'Spread the Word',
+    desc: 'Talk about EduCrush on your campus — introduce classmates, juniors, and seniors to the platform and what it offers.',
   },
   {
     icon: '🎓',
-    title: 'Student Onboarding',
-    desc: 'Naye students ko platform navigate karne mein help karo aur unhe useful resources dhundhne mein guide karo.',
+    title: 'Onboard New Students',
+    desc: 'Help new users navigate the platform and guide them toward the resources most relevant to their courses.',
   },
   {
     icon: '📋',
-    title: 'Feedback Collect Karo',
-    desc: 'Students ka feedback EduCrush team ko doh taaki platform continuously improve ho sake.',
+    title: 'Gather Feedback',
+    desc: 'Collect feedback from students and relay it to the EduCrush team so we can keep improving the platform.',
   },
   {
     icon: '🤝',
-    title: 'Events Organize Karo',
-    desc: 'Study groups, doubt-clearing sessions ya online workshops organize karo apne college community mein.',
+    title: 'Organise Events',
+    desc: 'Host study groups, doubt-clearing sessions, or online workshops within your college community.',
   },
 ]
 
 const perks = [
-  { title: 'Official Certificate', desc: 'EduCrush Student Ambassador ka signed certificate — resume mein add karo.' },
-  { title: 'Priority Support', desc: 'Direct team access aur resources pe priority.' },
-  { title: 'Community Badge', desc: 'EduCrush platform pe verified Ambassador badge.' },
-  { title: 'Letters of Recommendation', desc: 'Outstanding ambassadors ke liye LOR available hai.' },
-  { title: 'Early Feature Access', desc: 'Naye features pehle tumhare paas aayenge — beta tester bano.' },
-  { title: 'Team Discord Access', desc: 'Core team ke saath directly connect karo.' },
+  { title: 'Official Certificate', desc: 'A signed EduCrush Student Ambassador certificate — a meaningful addition to your resume.' },
+  { title: 'Priority Support', desc: 'Direct access to the core team and priority on all platform resources.' },
+  { title: 'Community Badge', desc: 'A verified Ambassador badge displayed on your EduCrush profile.' },
+  { title: 'Letter of Recommendation', desc: 'Outstanding ambassadors are eligible for a letter of recommendation from the EduCrush team.' },
+  { title: 'Early Feature Access', desc: 'Get access to new features before anyone else — and help shape them as a beta tester.' },
+  { title: 'Team Discord Access', desc: 'Connect directly with the core team and contribute to platform decisions.' },
 ]
 
 const eligibility = [
-  'Koi bhi BTech / BCA / Diploma / BSc student apply kar sakta hai',
-  'Week mein sirf 2-3 ghante ki commitment kaafi hai',
-  'Koi prior experience required nahi',
-  'Minimum 1 semester baaki hona chahiye college mein',
-  'Genuine passion for education aur helping others',
+  'Open to any BTech, BCA, Diploma, or BSc student',
+  'A commitment of just 2–3 hours per week is sufficient',
+  'No prior experience required',
+  'Must have at least one semester remaining at your institution',
+  'A genuine passion for education and helping others',
 ]
 
 export default function AmbassadorPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        * { font-family: 'Poppins', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Sora', sans-serif; }
       `}</style>
 
       <div className="bg-black min-h-screen text-white overflow-x-hidden">
@@ -99,18 +99,20 @@ export default function AmbassadorPage() {
                 <div className="mb-6">
                   <span className="text-xs px-3 py-1 rounded-full bg-green-950 border border-green-300 text-green-300 font-semibold tracking-wide">OPEN FOR APPLICATIONS</span>
                 </div>
-                <h1 className="text-[38px] sm:text-[52px] md:text-[62px] font-medium tracking-tight leading-[1.05] max-w-3xl">
-                  Apne college ka{' '}
+                <h1 className="text-[38px] sm:text-[52px] md:text-[62px] font-semibold tracking-tight leading-[1.05] max-w-3xl">
+                  Be the face of{' '}
                   <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
-                    EduCrush face
+                    EduCrush
                   </span>{' '}
-                  bano
+                  at your college
                 </h1>
               </FadeUp>
 
               <FadeUp delay={0.16}>
                 <p className="mt-6 text-sm/7 text-slate-400 max-w-lg">
-                  Student Ambassador Program ek community-driven initiative hai jahan motivated students apne campus pe EduCrush represent karte hain — aur iske badle unhe recognition, certificates aur direct team access milta hai.
+                  The Student Ambassador Program is a community-driven initiative where motivated students
+                  represent EduCrush on their campus — and in return, receive recognition, certificates,
+                  and direct access to the core team.
                 </p>
               </FadeUp>
 
@@ -138,11 +140,11 @@ export default function AmbassadorPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-12">
               <Label text="What You'll Do" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight">
-                Tumhara{' '}
-                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">kaam kya hoga</span>
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight">
+                Your{' '}
+                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">responsibilities</span>
               </h2>
-              <p className="text-slate-500 text-sm mt-3 max-w-md">Koi pressure nahi, koi targets nahi — bas apni community ki help karo.</p>
+              <p className="text-slate-500 text-sm mt-3 max-w-md">No pressure, no targets — just show up for your community.</p>
             </FadeUp>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -166,9 +168,9 @@ export default function AmbassadorPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-12">
               <Label text="What You Get" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight">
-                Tumhe{' '}
-                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">kya milega</span>
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight">
+                Your{' '}
+                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">benefits</span>
               </h2>
             </FadeUp>
 
@@ -198,9 +200,9 @@ export default function AmbassadorPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <FadeUp>
                 <Label text="Eligibility" />
-                <h2 className="text-3xl md:text-[38px] font-medium tracking-tight mb-6">
-                  Kaun apply{' '}
-                  <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">kar sakta hai?</span>
+                <h2 className="text-3xl md:text-[38px] font-semibold tracking-tight mb-6">
+                  Who can{' '}
+                  <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">apply?</span>
                 </h2>
                 <div className="space-y-3">
                   {eligibility.map((item, i) => (
@@ -218,7 +220,7 @@ export default function AmbassadorPage() {
                 <div className="border border-gray-800 rounded-2xl bg-gradient-to-b from-[#0a0a0a] to-[#0D542B]/10 p-8 space-y-0">
                   <p className="text-green-400 text-xs font-semibold mb-5 uppercase tracking-wider">Ambassador Stats</p>
                   {[
-                    { label: 'Time commitment per week', value: '2-3 hrs', dot: 'bg-green-400' },
+                    { label: 'Time commitment per week', value: '2–3 hrs', dot: 'bg-green-400' },
                     { label: 'Program duration',          value: '1 semester', dot: 'bg-emerald-400' },
                     { label: 'Colleges currently active', value: '5+', dot: 'bg-teal-400' },
                   ].map((item, i) => (
@@ -244,14 +246,14 @@ export default function AmbassadorPage() {
             <div className="w-[500px] h-[200px] bg-green-500/15 rounded-full blur-[120px]" />
           </div>
           <FadeUp>
-            <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg mb-8 cursor-default">
-              Limited spots available
+            <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg mb-8 cursor-default tracking-wide uppercase">
+              Limited Spots Available
             </button>
             <h2 className="text-3xl md:text-5xl font-semibold leading-tight bg-gradient-to-r from-white via-green-100 to-green-400 bg-clip-text text-transparent max-w-2xl mx-auto mb-6">
               Ready to lead?
             </h2>
             <p className="text-slate-400 text-sm max-w-md mx-auto mb-10">
-              Apply karo aur apne campus pe EduCrush ka pehla Ambassador bano.
+              Apply now and become EduCrush's first Ambassador at your campus.
             </p>
             <Link href="/careers/contact?role=ambassador"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white px-10 py-4 rounded-full text-sm font-medium transition duration-300">

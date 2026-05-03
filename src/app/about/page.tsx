@@ -61,7 +61,7 @@ const stats = [
 const values = [
   {
     title: 'Quality Content',
-    desc: 'Har note carefully review kiya jaata hai — accurate, clear aur exam-ready.',
+    desc: 'Every note is carefully reviewed to ensure accuracy, clarity, and exam readiness.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
@@ -70,7 +70,7 @@ const values = [
   },
   {
     title: 'Always Free',
-    desc: 'Education pe paisa nahi lagni chahiye. Hamare saare resources bilkul free hain.',
+    desc: 'Education should never come with a price tag. Every resource on EduCrush is completely free.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
@@ -79,7 +79,7 @@ const values = [
   },
   {
     title: 'Community First',
-    desc: 'Ek bada student community jahan sabh ek doosre ki help karte hain.',
+    desc: 'A thriving student community where everyone supports and learns from each other.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
@@ -89,7 +89,7 @@ const values = [
   },
   {
     title: 'Constantly Growing',
-    desc: 'Naye notes, projects aur courses regularly add hote rehte hain.',
+    desc: 'New notes, projects, and course materials are added on a regular basis.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
@@ -102,37 +102,37 @@ const team = [
   {
     name: 'Aman Kumar Singh',
     role: 'Founder & Lead Developer',
-    avatar: 'AK',
-    bio: 'BTech CSE student jo chahta hai ki koi bhi student resources ke liye struggle na kare.',
+    avatar: 'AS',
+    bio: 'A BTech CSE student on a mission to ensure no student ever struggles to find the resources they need.',
   },
   {
     name: 'Prince Kumar',
-    role: 'Co-Founder & UI/UX Designer',
+    role: 'Co-founder & Product Designer (UI/UX)',
     avatar: 'PK',
-    bio: 'Design mein believe karta hai jo learning ko fun aur simple banaye.',
+    bio: 'Designing intuitive and user-centric learning experiences that make education simple and accessible.',
   },
 ]
 
 const timeline = [
   {
     year: '2024',
-    title: 'Idea Born',
-    desc: 'Ek BTech student ke frustration se — "notes kahan milenge?" — EduCrush ka idea aaya.',
+    title: 'The Idea',
+    desc: 'Born out of frustration — one BTech student asking "where do I find good notes?" — EduCrush was conceptualized.',
   },
   {
     year: '2025',
     title: 'First Launch',
-    desc: 'Pehle 50 notes ke saath EduCrush launch hua. 500 students ne pehle mahine join kiya.',
+    desc: 'EduCrush launched with its first 50 notes. Over 500 students joined within the first month.',
   },
   {
     year: '2026',
-    title: 'Community Grows',
-    desc: '10,000+ students, projects section add hua, aur community bani.',
+    title: 'Community Growth',
+    desc: 'Crossed 10,000+ students, introduced the Projects section, and built a thriving learning community.',
   },
   {
     year: 'Now',
-    title: 'Expanding',
-    desc: 'BTech/BCA/Diploma section expand, AI integration, aur naya UI launch.',
+    title: 'Expanding Horizons',
+    desc: 'Expanding BTech, BCA & Diploma sections, integrating AI-powered tools, and launching a redesigned experience.',
   },
 ]
 
@@ -141,9 +141,9 @@ const Divider = () => (
   <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-700/30 to-transparent" />
 )
 
-// ── Section label — same style as all other pages ────────────────────────────
+// ── Section label ─────────────────────────────────────────────────────────────
 const Label = ({ text }: { text: string }) => (
-  <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default">
+  <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default tracking-wide uppercase">
     {text}
   </button>
 )
@@ -153,14 +153,14 @@ export default function AboutPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        * { font-family: 'Poppins', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Sora', sans-serif; }
       `}</style>
 
       <div className="bg-black min-h-screen text-white overflow-x-hidden">
 
         {/* Ambient glow */}
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-[700px] h-[700px] bg-green-500/[0.12] rounded-full blur-[200px] z-0" />
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-[700px] h-[700px] bg-green-500/[0.10] rounded-full blur-[200px] z-0" />
 
         {/* ══ HERO ══════════════════════════════════════════════════════════ */}
         <section className="relative z-10 pt-36 pb-24 px-6">
@@ -172,7 +172,7 @@ export default function AboutPage() {
               </FadeUp>
 
               <FadeUp delay={0.08}>
-                <h1 className="text-[38px] sm:text-[56px] md:text-[68px] font-medium tracking-tight leading-[1.05] max-w-3xl">
+                <h1 className="text-[38px] sm:text-[56px] md:text-[68px] font-semibold tracking-tight leading-[1.05] max-w-3xl">
                   We're building the platform{' '}
                   <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
                     every student deserves
@@ -182,9 +182,9 @@ export default function AboutPage() {
 
               <FadeUp delay={0.16}>
                 <p className="mt-6 text-sm/7 text-slate-400 max-w-lg">
-                  EduCrush started with one frustrated student and a Google Drive link.
-                  Today we help thousands of students find notes, build projects,
-                  and actually understand what they're studying.
+                  EduCrush began with one frustrated student and a shared Google Drive link.
+                  Today, we empower thousands of students to access quality notes, build meaningful
+                  projects, and truly understand what they're learning.
                 </p>
               </FadeUp>
 
@@ -219,7 +219,7 @@ export default function AboutPage() {
                   <p className="text-3xl md:text-4xl font-semibold text-white">
                     <Counter to={s.value} suffix={s.suffix} />
                   </p>
-                  <p className="text-slate-500 text-xs mt-2">{s.label}</p>
+                  <p className="text-slate-500 text-xs mt-2 tracking-wide">{s.label}</p>
                 </div>
               </FadeUp>
             ))}
@@ -233,7 +233,7 @@ export default function AboutPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-12">
               <Label text="The Founder" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight leading-tight">
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight leading-tight">
                 The person who{' '}
                 <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
                   started it all
@@ -267,9 +267,9 @@ export default function AboutPage() {
 
                     <blockquote className="border-l-2 border-emerald-700/50 pl-4 mb-6">
                       <p className="text-sm/7 text-slate-300 italic">
-                        "I was in my 2nd year of BTech and couldn't find good notes anywhere.
-                        I made a Google Drive folder, shared it with my class — 200 students downloaded in one day.
-                        That was the moment I knew EduCrush had to exist."
+                        "I was in my second year of BTech and couldn't find quality notes anywhere.
+                        I created a Google Drive folder and shared it with my class — 200 students
+                        downloaded it within a single day. That moment made it clear: EduCrush had to exist."
                       </p>
                     </blockquote>
 
@@ -318,20 +318,22 @@ export default function AboutPage() {
 
             <FadeUp>
               <Label text="Our Mission" />
-              <h2 className="text-3xl md:text-[38px] font-medium tracking-tight leading-tight mb-5">
+              <h2 className="text-3xl md:text-[38px] font-semibold tracking-tight leading-tight mb-5">
                 Quality education{' '}
                 <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
-                  without any barrier
+                  without barriers
                 </span>
               </h2>
               <p className="text-sm/7 text-slate-400 mb-4">
-                Bahut saare students aise hain jinke paas costly coaching nahi hoti. EduCrush unhi students ke liye bana hai — free, reliable aur exam-focused.
+                Millions of students cannot afford expensive coaching or premium resources.
+                EduCrush was built for them — free, reliable, and focused on what matters most: results.
               </p>
               <p className="text-sm/7 text-slate-400 mb-8">
-                Hamare notes toppers dwara banaye gaye hain, projects real-world experience se aate hain, aur har resource carefully curated hai.
+                Our notes are crafted by top-performing students, our projects reflect real-world
+                challenges, and every resource is curated with care before it reaches you.
               </p>
               <div className="space-y-2.5">
-                {['100% Free forever', 'Community-verified content', 'Updated regularly'].map(item => (
+                {['100% Free, forever', 'Community-verified content', 'Continuously updated'].map(item => (
                   <div key={item} className="flex items-center gap-3 text-sm text-slate-300">
                     <span className="w-5 h-5 rounded-full bg-[#0D542B]/40 border border-emerald-800/50 flex items-center justify-center shrink-0">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -380,7 +382,7 @@ export default function AboutPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-12">
               <Label text="What We Stand For" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight leading-tight">
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight leading-tight">
                 Our{' '}
                 <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
                   core values
@@ -411,7 +413,7 @@ export default function AboutPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-14">
               <Label text="Our Journey" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight leading-tight">
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight leading-tight">
                 How we{' '}
                 <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
                   got here
@@ -458,14 +460,14 @@ export default function AboutPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-12">
               <Label text="Core Team" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight leading-tight">
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight leading-tight">
                 The people{' '}
                 <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
                   behind EduCrush
                 </span>
               </h2>
               <p className="text-slate-500 text-sm mt-3 max-w-sm">
-                Hum bhi students hain — isliye hamare resources wahi cover karte hain jo actually kaam aata hai.
+                We are students ourselves — which is why every resource we create is built around what genuinely helps.
               </p>
             </FadeUp>
 
@@ -495,34 +497,33 @@ export default function AboutPage() {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-[500px] h-[200px] bg-green-500/15 rounded-full blur-[120px]" />
           </div>
-         
-            <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg mb-10">
-               joins us today
-              </button>
-            <h2 className="text-3xl md:text-5xl font-semibold leading-tight bg-gradient-to-r from-white via-green-100 to-green-400 bg-clip-text text-transparent max-w-2xl mx-auto mb-6">
-              Ready to Learn Smarter?
-            </h2>
-            <p className="text-slate-400 text-base max-w-md mx-auto mb-10">
-              10,000+ students already use EduCrush. Ab tumhari baari hai — bilkul free mein.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link
-                href="/notes"
-                className="flex items-center gap-2 bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white px-8 py-3.5 rounded-full text-sm font-medium transition duration-300"
-              >
-                Browse Notes
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </Link>
-              <Link
-                href="/contact"
-                className="flex items-center gap-2 border border-white/15 hover:border-green-700/60 bg-white/5 text-white px-8 py-3.5 rounded-full text-sm font-medium transition duration-300"
-              >
-                Get in Touch
-              </Link>
-            </div>
-        
+
+          <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg mb-10 tracking-wide uppercase cursor-default">
+            Join Us Today
+          </button>
+          <h2 className="text-3xl md:text-5xl font-semibold leading-tight bg-gradient-to-r from-white via-green-100 to-green-400 bg-clip-text text-transparent max-w-2xl mx-auto mb-6">
+            Ready to Learn Smarter?
+          </h2>
+          <p className="text-slate-400 text-base max-w-md mx-auto mb-10">
+            Over 10,000 students already rely on EduCrush. Now it's your turn — completely free, no strings attached.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href="/notes"
+              className="flex items-center gap-2 bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white px-8 py-3.5 rounded-full text-sm font-medium transition duration-300"
+            >
+              Browse Notes
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
+            <Link
+              href="/contact"
+              className="flex items-center gap-2 border border-white/15 hover:border-green-700/60 bg-white/5 text-white px-8 py-3.5 rounded-full text-sm font-medium transition duration-300"
+            >
+              Get in Touch
+            </Link>
+          </div>
         </section>
 
       </div>

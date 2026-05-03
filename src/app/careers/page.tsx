@@ -22,7 +22,7 @@ const Divider = () => (
 )
 
 const Label = ({ text }: { text: string }) => (
-  <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default">
+  <button className="px-4 h-8 border border-gray-800 text-slate-400 text-xs rounded-lg mb-5 cursor-default tracking-wide uppercase">
     {text}
   </button>
 )
@@ -38,8 +38,8 @@ const programs = [
       </svg>
     ),
     title: 'Student Ambassador',
-    subtitle: 'Apne college mein EduCrush represent karo',
-    desc: 'Apne college mein EduCrush ka chehera bano. Students ko guide karo, events organize karo, aur apni college community ko grow karne mein help karo.',
+    subtitle: 'Represent EduCrush at your college',
+    desc: 'Be the face of EduCrush on your campus. Guide fellow students, organise events, and help grow your college community around free, quality learning.',
     perks: ['Certificate of Recognition', 'Priority Access to Resources', 'Community Leadership Badge', 'Direct Team Access'],
     cta: 'Apply as Ambassador',
     glow: 'from-green-500/10',
@@ -54,9 +54,9 @@ const programs = [
         <path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
-    title: 'Volunteer / Contributor',
-    subtitle: 'Notes, content ya code contribute karo',
-    desc: 'Agar tumhare paas notes hain, projects hain, ya coding skills hain — toh EduCrush ke liye contribute karo aur lakho students ki help karo.',
+    title: 'Volunteer & Contributor',
+    subtitle: 'Contribute notes, content, or code',
+    desc: 'Have great notes, a project, or coding skills? Contribute to EduCrush and directly impact the learning of thousands of students across India.',
     perks: ['Contributor Badge on Profile', 'Notes Credit & Recognition', 'Early Feature Access', 'Team Discord Access'],
     cta: 'Join as Contributor',
     glow: 'from-blue-500/10',
@@ -64,18 +64,30 @@ const programs = [
 ]
 
 const faqs = [
-  { q: 'Kya ye paid positions hain?', a: 'Abhi ye volunteer/community roles hain. Hum ek early-stage student platform hain — future mein paid opportunities aayengi. Recognition, certificates aur perks zaroor milenge.' },
-  { q: 'Koi eligibility requirement hai?', a: 'Koi bhi student apply kar sakta hai — BTech, BCA, Diploma, ya koi bhi course. Sirf genuine interest aur thoda time chahiye.' },
-  { q: 'Kitna time dena hoga?', a: 'Ambassador ke liye week mein 2-3 ghante, Contributor ke liye apni marzi se — ek baar notes submit karo aur ho gaya.' },
-  { q: 'Apply karne ke baad kya hoga?', a: 'Humari team 3-5 business days mein email pe reply karti hai. Shortlisted candidates se ek quick intro call hoga.' },
+  {
+    q: 'Are these paid positions?',
+    a: 'Currently, these are volunteer and community roles. We are an early-stage student platform — paid opportunities will open in the future. In the meantime, you will receive recognition, certificates, and meaningful perks.',
+  },
+  {
+    q: 'Are there any eligibility requirements?',
+    a: 'Any student can apply — BTech, BCA, Diploma, or any other programme. All we ask for is genuine interest and a little time.',
+  },
+  {
+    q: 'How much time is required?',
+    a: 'Ambassadors typically commit 2–3 hours per week. Contributors can participate on their own schedule — submit notes once and you are good to go.',
+  },
+  {
+    q: 'What happens after I apply?',
+    a: 'Our team responds via email within 3–5 business days. Shortlisted candidates will be invited for a quick introductory call.',
+  },
 ]
 
 export default function CareersPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        * { font-family: 'Poppins', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Sora', sans-serif; }
       `}</style>
 
       <div className="bg-black min-h-screen text-white overflow-x-hidden">
@@ -97,7 +109,7 @@ export default function CareersPage() {
                   <span className="text-xs px-3 py-1 rounded-full bg-green-950 border border-green-300 text-green-300 font-semibold tracking-wide">HIRING</span>
                   <span className="text-slate-500 text-sm">2 programs open</span>
                 </div>
-                <h1 className="text-[38px] sm:text-[56px] md:text-[68px] font-medium tracking-tight leading-[1.05] max-w-3xl">
+                <h1 className="text-[38px] sm:text-[56px] md:text-[68px] font-semibold tracking-tight leading-[1.05] max-w-3xl">
                   Shape the future of{' '}
                   <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
                     student learning
@@ -107,7 +119,8 @@ export default function CareersPage() {
 
               <FadeUp delay={0.16}>
                 <p className="mt-6 text-sm/7 text-slate-400 max-w-lg">
-                  EduCrush ek student-built platform hai — aur hum chahte hain ki students hi ise grow karein. Ambassador bano ya Contributor — dono tarike se tum lakho students ki life better bana sakte ho.
+                  EduCrush is a platform built by students, for students — and we want students to be the ones who grow it. 
+                  Join as an Ambassador or Contributor and help make quality education accessible to millions across India.
                 </p>
               </FadeUp>
 
@@ -120,7 +133,7 @@ export default function CareersPage() {
                   </Link>
                   <Link href="/careers/volunteer"
                     className="flex items-center gap-2 border border-white/15 hover:border-green-700/60 bg-white/5 text-white px-7 py-3 rounded-full text-sm font-medium transition duration-300">
-                    Volunteer / Contribute
+                    Volunteer & Contribute
                   </Link>
                 </div>
               </FadeUp>
@@ -137,12 +150,12 @@ export default function CareersPage() {
               { value: '10K+', label: 'Students Reached' },
               { value: '50+',  label: 'Notes Available' },
               { value: '2',    label: 'Open Programs' },
-              { value: '0₹',   label: 'Cost to Join' },
+              { value: '₹0',   label: 'Cost to Join' },
             ].map((stat, i) => (
               <FadeUp key={stat.label} delay={i * 0.07}>
                 <div className="border border-gray-800 rounded-2xl p-6 bg-gradient-to-b from-[#0a0a0a] to-[#0D542B]/8 text-center">
                   <p className="text-3xl font-bold text-white mb-1">{stat.value}</p>
-                  <p className="text-slate-500 text-xs">{stat.label}</p>
+                  <p className="text-slate-500 text-xs tracking-wide">{stat.label}</p>
                 </div>
               </FadeUp>
             ))}
@@ -156,21 +169,21 @@ export default function CareersPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-14">
               <Label text="Open Programs" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight leading-tight">
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight leading-tight">
                 Choose your{' '}
                 <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
                   role
                 </span>
               </h2>
               <p className="text-slate-500 text-sm mt-3 max-w-md">
-                Dono programs bilkul free hain. Apne interest ke hisaab se choose karo.
+                Both programs are completely free. Pick the one that fits your interests and availability.
               </p>
             </FadeUp>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {programs.map((p, i) => (
                 <FadeUp key={p.title} delay={i * 0.1}>
-                  <div className={`relative border border-gray-800 rounded-2xl p-8 bg-gradient-to-b from-[#0a0a0a] to-black hover:border-emerald-900/60 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col`}>
+                  <div className="relative border border-gray-800 rounded-2xl p-8 bg-gradient-to-b from-[#0a0a0a] to-black hover:border-emerald-900/60 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
                     {/* Subtle glow */}
                     <div className={`absolute inset-0 rounded-2xl bg-gradient-to-b ${p.glow} to-transparent opacity-30 pointer-events-none`} />
 
@@ -219,18 +232,18 @@ export default function CareersPage() {
           <div className="max-w-5xl mx-auto">
             <FadeUp className="mb-14">
               <Label text="Process" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight">
-                Kaise{' '}
-                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">join karein?</span>
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight">
+                How to{' '}
+                <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">get started</span>
               </h2>
             </FadeUp>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {[
-                { step: '01', title: 'Program Choose Karo', desc: 'Ambassador ya Contributor — jo tumhe suit kare.' },
-                { step: '02', title: 'Form Fill Karo', desc: 'Ek simple interest form — 2 minute mein done.' },
-                { step: '03', title: 'Review', desc: 'Humari team 3-5 days mein respond karti hai.' },
-                { step: '04', title: 'Welcome Aboard!', desc: 'Onboarding email aur access mil jaata hai.' },
+                { step: '01', title: 'Choose a Program', desc: 'Pick Ambassador or Contributor — whichever suits you best.' },
+                { step: '02', title: 'Fill the Form', desc: 'A simple interest form — done in under 2 minutes.' },
+                { step: '03', title: 'We Review', desc: 'Our team gets back to you within 3–5 business days.' },
+                { step: '04', title: 'Welcome Aboard!', desc: 'Receive your onboarding email and get access right away.' },
               ].map((item, i) => (
                 <FadeUp key={item.step} delay={i * 0.08}>
                   <div className="relative border border-gray-800 rounded-2xl p-6 bg-gradient-to-b from-[#0a0a0a] to-black h-full">
@@ -251,7 +264,7 @@ export default function CareersPage() {
           <div className="max-w-3xl mx-auto">
             <FadeUp className="mb-12 text-center">
               <Label text="FAQ" />
-              <h2 className="text-3xl md:text-[40px] font-medium tracking-tight">
+              <h2 className="text-3xl md:text-[40px] font-semibold tracking-tight">
                 Common{' '}
                 <span className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-transparent">
                   questions
@@ -280,23 +293,23 @@ export default function CareersPage() {
             <div className="w-[500px] h-[200px] bg-green-500/15 rounded-full blur-[120px]" />
           </div>
           <FadeUp>
-            <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg mb-8 cursor-default">
-              Ready to join?
+            <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg mb-8 cursor-default tracking-wide uppercase">
+              Ready to Join?
             </button>
             <h2 className="text-3xl md:text-5xl font-semibold leading-tight bg-gradient-to-r from-white via-green-100 to-green-400 bg-clip-text text-transparent max-w-2xl mx-auto mb-6">
-              Bano EduCrush ka hissa
+              Become Part of EduCrush
             </h2>
             <p className="text-slate-400 text-sm max-w-md mx-auto mb-10">
-              Koi fees nahi, koi experience required nahi — sirf ek genuine passion for learning.
+              No fees, no prior experience required — just a genuine passion for learning and helping others grow.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/careers/ambassador"
                 className="flex items-center gap-2 bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white px-8 py-3.5 rounded-full text-sm font-medium transition duration-300">
-                Student Ambassador Apply Karo
+                Apply as Student Ambassador
               </Link>
               <Link href="/careers/contact"
                 className="flex items-center gap-2 border border-white/15 hover:border-green-700/60 bg-white/5 text-white px-8 py-3.5 rounded-full text-sm font-medium transition duration-300">
-                Koi sawaal hai? Contact Karo
+                Have Questions? Contact Us
               </Link>
             </div>
           </FadeUp>
