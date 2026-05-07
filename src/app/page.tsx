@@ -16,9 +16,10 @@ export default function Home() {
       <ProjectCards limit={5} />
       <Features />
       <ImageGallery />
+      <FAQ />
       <Testimonials />    
       {/* <MarqueeText /> */}
-      <FAQ />
+     
     </>
   )
 }

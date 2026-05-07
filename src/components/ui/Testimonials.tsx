@@ -5,28 +5,57 @@ type TestimonialCard = {
   image: string;
   name: string;
   handle: string;
+  text: string;
 };
 
 const cardsData: TestimonialCard[] = [
   {
     image: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200',
-    name: 'Briar Martin',
-    handle: '@neilstellar',
+    name: 'Rahul Verma',
+    handle: '@rahul_btech',
+    text: 'Found all my semester 3 DSA notes in minutes. Saved me hours of searching — genuinely the best resource I have used.',
   },
   {
     image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200',
-    name: 'Avery Johnson',
-    handle: '@averywrites',
+    name: 'Priya Sharma',
+    handle: '@priya_cse',
+    text: 'I was panicking before my OS exam and EduCrush had exactly what I needed. Clear, organised, and completely free.',
   },
   {
     image: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200&auto=format&fit=crop&q=60',
-    name: 'Jordan Lee',
-    handle: '@jordantalks',
+    name: 'Aryan Gupta',
+    handle: '@aryan_dev',
+    text: 'The projects section is incredible. Helped me build my first full-stack project for placement prep — with actual source code.',
   },
   {
     image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&auto=format&fit=crop&q=60',
-    name: 'Riley Harper',
-    handle: '@rileyharper',
+    name: 'Karan Mehta',
+    handle: '@karanmehta_',
+    text: 'Coming from a small town, I never had access to good coaching. EduCrush changed that completely. Every resource, free.',
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?q=80&w=200',
+    name: 'Sneha Patel',
+    handle: '@snehapatel21',
+    text: 'I uploaded my DBMS notes and hundreds of students downloaded them. Seeing your work help others is an amazing feeling.',
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200',
+    name: 'Vikram Singh',
+    handle: '@vikram_ece',
+    text: 'ECE notes were always hard to find online. EduCrush actually has them, properly organised by subject and semester.',
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200',
+    name: 'Nisha Rawat',
+    handle: '@nisharawat_',
+    text: 'The community is so supportive. Posted a doubt and got a helpful reply within hours. Feels like studying with friends.',
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=200',
+    name: 'Rohit Joshi',
+    handle: '@rohitjoshi_cs',
+    text: 'Used EduCrush throughout my final year. The notes are actually accurate and exam-focused — not just copy-paste content.',
   },
 ];
 
@@ -44,54 +73,57 @@ const TestimonialCard = ({ card }: { card: TestimonialCard }) => (
         <span className="text-xs text-slate-500">{card.handle}</span>
       </div>
     </div>
-    <p className="text-sm py-4 text-slate-700">Radiant made undercutting all of our competitors an absolute breeze.</p>
+    <p className="text-sm py-4 text-slate-700">{card.text}</p>
   </div>
 );
 
 export default function Testimonials() {
   return (
     <section className="py-10 px-4 bg-black text-slate-100">
-      
+
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 text-center">
-          <p className="text-sm uppercase tracking-[0.3em] text-green-500">What people are saying</p>
-          <h2 className="mt-4 text-3xl md:text-4xl font-semibold text-white">Real feedback from our community</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-400">Our users love how easy it is to launch campaigns, collaborate with teams, and scale their workflows using AI-powered tools.</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-green-500">What students are saying</p>
+          <h2 className="mt-4 text-3xl md:text-4xl font-semibold text-white">Loved by students across India</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-400">
+            From last-minute exam prep to final year projects — here is what real EduCrush students have to say.
+          </p>
         </div>
 
         <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+          * { font-family: 'Sora', sans-serif; }
+
           @keyframes marqueeScroll {
             0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
           }
-
           .marquee-inner {
-            animation: marqueeScroll 25s linear infinite;
+            animation: marqueeScroll 30s linear infinite;
           }
-
           .marquee-reverse {
             animation-direction: reverse;
           }
         `}</style>
 
         <div className="marquee-row w-full mx-auto overflow-hidden relative mb-8">
-          <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-gradient-to-r from-slate-950 to-transparent" />
+          <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-gradient-to-r from-black to-transparent" />
           <div className="marquee-inner flex min-w-[200%] pt-10 pb-5">
             {[...cardsData, ...cardsData].map((card, index) => (
               <TestimonialCard key={`top-${index}`} card={card} />
             ))}
           </div>
-          <div className="absolute right-0 top-0 h-full w-20 md:w-40 z-10 pointer-events-none bg-gradient-to-l from-slate-950 to-transparent" />
+          <div className="absolute right-0 top-0 h-full w-20 md:w-40 z-10 pointer-events-none bg-gradient-to-l from-black to-transparent" />
         </div>
 
         <div className="marquee-row w-full mx-auto overflow-hidden relative">
-          <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-gradient-to-r from-slate-950 to-transparent" />
+          <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-gradient-to-r from-black to-transparent" />
           <div className="marquee-inner marquee-reverse flex min-w-[200%] pt-10 pb-5">
             {[...cardsData, ...cardsData].map((card, index) => (
               <TestimonialCard key={`bottom-${index}`} card={card} />
             ))}
           </div>
-          <div className="absolute right-0 top-0 h-full w-20 md:w-40 z-10 pointer-events-none bg-gradient-to-l from-slate-950 to-transparent" />
+          <div className="absolute right-0 top-0 h-full w-20 md:w-40 z-10 pointer-events-none bg-gradient-to-l from-black to-transparent" />
         </div>
       </div>
     </section>
