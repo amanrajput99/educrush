@@ -4,31 +4,37 @@
 import type { Metadata } from 'next'
 import { projects } from '@/data/projects'
 import { getProjectBySlug } from '@/lib/projectService'
-import ProjectClient from './ProjectClient' 
+import ProjectClient from './ProjectClient'
+import { ProjectJsonLd } from '@/components/seo/JsonLd'
 
 const BASE_URL = 'https://educrush.in'
 
-// ── Pre-render all project pages at build time ────────────────────────────────
+// ── Pre-render ────────────────────────────────────────────────────────────────
 export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }))
 }
 
-// ── Dynamic meta per project ──────────────────────────────────────────────────
+// ── Helper ────────────────────────────────────────────────────────────────────
+async function getProject(slug: string) {
+  let project: (typeof projects)[number] | null | undefined =
+    projects.find((p) => p.slug === slug)
+  if (!project) {
+    try {
+      project = await getProjectBySlug(slug)
+    } catch {}
+  }
+  return project ?? null
+}
+
+// ── Dynamic metadata ──────────────────────────────────────────────────────────
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>   // ← Next.js 15: Promise
 }): Promise<Metadata> {
-  // Local data se pehle dhundo
-let project:
-  | (typeof projects)[number]
-  | null
-  | undefined = projects.find((p) => p.slug === params.slug)
-  
-  // Agar nahi mila toh Supabase se fetch karo
-  if (!project) {
-    project = await getProjectBySlug(params.slug)
-  }
+  const { slug } = await params        // ← await karo pehle
+
+  const project = await getProject(slug)
 
   if (!project) {
     return {
@@ -38,10 +44,13 @@ let project:
   }
 
   const title = `${project.name} — Free Web Dev Project`
-  const description =
-    ((project as any).longDescription ?? (project as any).longdescription ?? project.description).slice(0, 155)
+  const description = (
+    (project as any).longDescription ??
+    (project as any).longdescription ??
+    project.description
+  ).slice(0, 155)
 
-  const pageUrl = `${BASE_URL}/projects/${params.slug}`
+  const pageUrl = `${BASE_URL}/projects/${slug}`
 
   return {
     title,
@@ -61,14 +70,7 @@ let project:
       title,
       description,
       siteName: 'EduCrush',
-      images: [
-        {
-          url: project.image || '/og-image.png',
-          width: 1200,
-          height: 630,
-          alt: project.name,
-        },
-      ],
+      images: [{ url: project.image || '/og-image.png', width: 1200, height: 630, alt: project.name }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -79,7 +81,32 @@ let project:
   }
 }
 
-// ── Page — sirf ProjectClient render karta hai ────────────────────────────────
-export default function ProjectPage() {
-  return <ProjectClient />
+// ── Page ──────────────────────────────────────────────────────────────────────
+export default async function ProjectPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>   // ← Next.js 15: Promise
+}) {
+  const { slug } = await params        // ← await karo pehle
+
+  const project = await getProject(slug)
+
+  return (
+    <>
+      {project && (
+        <ProjectJsonLd
+          name={project.name}
+          description={
+            (project as any).longDescription ??
+            (project as any).longdescription ??
+            project.description
+          }
+          slug={slug}
+          tags={project.tags}
+          image={project.image}
+        />
+      )}
+      <ProjectClient />
+    </>
+  )
 }
