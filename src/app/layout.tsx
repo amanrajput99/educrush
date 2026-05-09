@@ -88,9 +88,9 @@ export const metadata: Metadata = {
   },
 
   // ── Verification (Google Search Console mein milega) ──────────────────────
-  // verification: {
-  //   google: 'YOUR_GOOGLE_VERIFICATION_CODE',
-  // },
+  verification: {
+    google: 'G-EZXY0B7JVN',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
