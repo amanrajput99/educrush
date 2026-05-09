@@ -50,13 +50,7 @@ const nextConfig: NextConfig = {
         destination: '/notes',
         permanent: true,
       },
-      // ── www → non-www (agar www pe bhi aate hain log) ───────────────────
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.educrush.in' }],
-        destination: 'https://educrush.in/:path*',
-        permanent: true,
-      },
+     
     ];
   },
 };

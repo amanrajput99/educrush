@@ -14,23 +14,52 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## dekh bhi ye domain ke bare me hai
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+this is live on vercel with domain educrush.in that is created by me Aman singh Rajput
 
-To learn more about Next.js, take a look at the following resources:
+## for codding practtice cards
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Supabase — coding_languages table mein insert karo:
+sql
+[INSERT INTO coding_languages (slug, name, icon, color, description, order_index, published)
+VALUES ('java', 'Java', '☕', '#f89820', 'Object-oriented programming — classes, OOP, data structures.', 5, true);]
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Main site — codingPractice.ts mein add karo:
+ts
+// LANGUAGE_CONFIG mein add karo
+[java: {
+  monacoLang: 'java',
+  defaultCode: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
+},]
 
-## Deploy on Vercel
+3. API route — run-code/route.ts mein add karo:
+ts
+// Paiza mein
+java: 'java',
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+// Godbolt mein
+java: { compiler: 'java2100', lang: 'java', args: '' },
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+// CodeX mein
+java: 'java',
+4. Admin — ProblemForm.tsx mein:
+ts// LANGUAGES array mein add karo
+const LANGUAGES = ['c', 'cpp', 'python', 'javascript', 'java']
+
+// LANG_LABELS mein
+java: 'Java'
+
+// DEFAULT_CODE mein
+java: `public class Main {\n    public static void main(String[] args) {\n        // Write your code here\n    }\n}`,
+5. ProblemsClient.tsx mein filter dropdown mein:
+tsx<option value="java">Java</option>
+6. Editor page mein LANGUAGES array mein add karo:
+ts{
+  slug: 'java', name: 'Java', icon: '☕', color: '#f89820',
+  default: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
+},
+
+Kaunsi language add karni hai? Batao — main uska poora ready code de dunga
