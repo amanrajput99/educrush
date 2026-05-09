@@ -136,6 +136,45 @@ const timeline = [
   },
 ]
 
+// ── Social links ──────────────────────────────────────────────────────────────
+const socialLinks = [
+  {
+    href: 'https://www.linkedin.com/in/aman-kumar-singh-4618aa344',
+    label: 'LinkedIn',
+    fill: false,
+    icon: (
+      <>
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+        <rect width="4" height="12" x="2" y="9"/>
+        <circle cx="4" cy="4" r="2"/>
+      </>
+    ),
+  },
+  {
+    href: 'https://github.com/amanrajput99',
+    label: 'GitHub',
+    fill: false,
+    icon: (
+      <>
+        <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+        <path d="M9 18c-4.51 2-5-2-7-2"/>
+      </>
+    ),
+  },
+  {
+    href: 'https://www.instagram.com/_amanrajput_99',
+    label: 'Instagram',
+    fill: false,
+    icon: (
+      <>
+        <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+      </>
+    ),
+  },
+]
+
 // ── Divider ───────────────────────────────────────────────────────────────────
 const Divider = () => (
   <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-700/30 to-transparent" />
@@ -286,13 +325,17 @@ export default function AboutPage() {
                       ))}
                     </div>
 
+                    {/* ── Social Links ── */}
                     <div className="flex items-center gap-2">
-                      {[
-                        { icon: <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>, fill: true },
-                        { icon: <><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></>, fill: false },
-                        { icon: <><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></>, fill: false },
-                      ].map((item, i) => (
-                        <a key={i} href="#" className="w-8 h-8 rounded-lg border border-gray-800 bg-[#0a0a0a] hover:border-emerald-900/60 hover:bg-[#0D542B]/20 flex items-center justify-center text-slate-500 hover:text-green-400 transition-all duration-200">
+                      {socialLinks.map((item) => (
+                        <a
+                          key={item.label}
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={item.label}
+                          className="w-8 h-8 rounded-lg border border-gray-800 bg-[#0a0a0a] hover:border-emerald-900/60 hover:bg-[#0D542B]/20 flex items-center justify-center text-slate-500 hover:text-green-400 transition-all duration-200"
+                        >
                           <svg width="14" height="14" viewBox="0 0 24 24" fill={item.fill ? 'currentColor' : 'none'} stroke={item.fill ? 'none' : 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             {item.icon}
                           </svg>
@@ -422,22 +465,16 @@ export default function AboutPage() {
             </FadeUp>
 
             <div className="relative">
-              {/* Vertical line */}
               <div className="absolute left-[19px] md:left-1/2 md:-translate-x-px top-2 bottom-2 w-px bg-gradient-to-b from-emerald-700/50 via-emerald-900/30 to-transparent" />
 
               <div className="space-y-8">
                 {timeline.map((item, i) => (
                   <FadeUp key={item.year} delay={i * 0.08}>
                     <div className={`relative flex gap-8 md:gap-0 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                      {/* Dot */}
                       <div className="absolute left-[15px] md:left-1/2 -translate-x-1/2 top-5 w-[9px] h-[9px] rounded-full bg-green-500 border-2 border-black z-10 shrink-0" />
-
-                      {/* Year */}
                       <div className={`hidden md:flex md:w-1/2 items-start pt-3.5 ${i % 2 === 0 ? 'justify-end pr-10' : 'justify-start pl-10'}`}>
                         <span className="text-slate-600 font-mono text-sm">{item.year}</span>
                       </div>
-
-                      {/* Card */}
                       <div className={`pl-10 md:pl-0 md:w-1/2 ${i % 2 === 0 ? 'md:pl-10' : 'md:pr-10'}`}>
                         <div className="border border-gray-800 rounded-xl p-5 bg-gradient-to-b from-[#0a0a0a] to-black hover:border-emerald-900/50 transition-colors duration-300">
                           <span className="text-slate-600 font-mono text-xs md:hidden">{item.year} · </span>
