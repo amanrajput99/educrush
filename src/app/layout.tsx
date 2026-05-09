@@ -89,7 +89,7 @@ export const metadata: Metadata = {
 
   // ── Verification (Google Search Console mein milega) ──────────────────────
   verification: {
-    google: 'G-EZXY0B7JVN',
+    google: 'google-site-verification=xO3Fi1Yr9Lr8Y3LcFRdT_BbxXLoLQgWr30d92zbUuHU',
   },
 }
 
