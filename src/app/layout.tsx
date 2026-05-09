@@ -5,6 +5,7 @@ import Footer from '@/components/Footer'
 import CTA from '@/components/home/CTA'
 import AiButton from '@/components/ui/AiButton'
 import { WebsiteJsonLd, OrganizationJsonLd } from '@/components/seo/JsonLd'
+import GoogleAnalytics from '@/components/Googleanalytics'
 
 
 // ── Base URL — apna domain yahan daalo ───────────────────────────────────────
@@ -97,7 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        
+        <GoogleAnalytics />
 <WebsiteJsonLd />
 <OrganizationJsonLd />
         <Navbar />
