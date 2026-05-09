@@ -3,6 +3,17 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   async redirects() {
     return [
+       // ── Typo fixes ──────────────────────────────────────────────────────
+      {
+        source: '/project',
+        destination: '/projects',
+        permanent: true,
+      },
+      {
+        source: '/note',
+        destination: '/notes',
+        permanent: true,
+      },
       // ── Purane .html pages → naye clean URLs ────────────────────────────
       {
         source: '/notes.html',
