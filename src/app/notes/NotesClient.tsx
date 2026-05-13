@@ -281,7 +281,7 @@ export default function NotesPage() {
             All Notes
           </h1>
           <p className="text-base text-slate-400 max-w-lg mx-auto mt-3 leading-relaxed">
-            Apna course select karo — BTech, BCA, Diploma, Class 10/11/12 — aur apne subject ke notes explore karo.
+           Select your course — B.Tech, BCA, Diploma, or Class 10/11/12 — and instantly access clear, subject‑wise notes designed to help you succeed.
           </p>
         </div>
 

@@ -132,7 +132,7 @@ const Navbar = () => {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap'); *{font-family:"Geist",sans-serif;}`}</style>
       <nav className="bg-white px-6 md:px-16 lg:px-24 xl:px-32 py-4 flex items-center justify-between relative">
         <div className="flex items-center gap-20">
-          <a href="https://educrush.in"><span className="text-3xl font-bold text-zinc-900">Educrush</span></a>
+          <a href="https://educrush.in"><span className="text-3xl font-bold text-zinc-900">EduCrush</span></a>
           <div className="hidden md:flex items-center gap-8">
             <a href="/notes" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Notes</a>
             <a href="/projects" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Projects</a>
