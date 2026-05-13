@@ -6,19 +6,174 @@ import Link from 'next/link'
 import { Note, notes } from '@/data/Notes'
 import { getNotesFromSupabase } from '@/lib/NoteService'
 
-// ── Subject colors ───────────────────────────────────────────────────────────
+// ── Subject colors ────────────────────────────────────────────────────────────
 const SUBJECT_COLORS: Record<string, { bg: string; dot: string }> = {
-  Physics:  { bg: '#1a1f2e', dot: '#6fa3ef' },
-  Maths:    { bg: '#1f1a2e', dot: '#a57ef5' },
-  Biology:  { bg: '#1a2e1e', dot: '#5ecf7a' },
-  History:  { bg: '#2e1f1a', dot: '#e5845a' },
-  Chemistry:{ bg: '#2e2a1a', dot: '#f5c842' },
-  English:  { bg: '#1e1e2e', dot: '#c084fc' },
+  Physics:            { bg: '#1a1f2e', dot: '#6fa3ef' },
+  Maths:              { bg: '#1f1a2e', dot: '#a57ef5' },
+  Biology:            { bg: '#1a2e1e', dot: '#5ecf7a' },
+  History:            { bg: '#2e1f1a', dot: '#e5845a' },
+  Chemistry:          { bg: '#2e2a1a', dot: '#f5c842' },
+  English:            { bg: '#1e1e2e', dot: '#c084fc' },
+  'Computer Science': { bg: '#1a2a2e', dot: '#38bdf8' },
+  Geography:          { bg: '#1e2a1a', dot: '#86efac' },
+  Drawing:            { bg: '#2a1e2e', dot: '#f0abfc' },
+  Management:         { bg: '#2e1e1e', dot: '#fca5a5' },
+}
+const getColors = (subject: string) =>
+  SUBJECT_COLORS[subject] ?? { bg: '#1a1a1a', dot: '#c8fa45' }
+
+// ── Note Card ─────────────────────────────────────────────────────────────────
+const NoteCard = ({
+  note,
+  index,
+  onSelect,
+}: {
+  note: Note
+  index: number
+  onSelect: (n: Note) => void
+}) => {
+  const [visible, setVisible] = useState(false)
+  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const cardRef = useRef<HTMLDivElement>(null)
+  const colors = getColors(note.subject)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const bounds = cardRef.current?.getBoundingClientRect()
+    if (!bounds) return
+    setPos({ x: e.clientX - bounds.left, y: e.clientY - bounds.top })
+  }
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setVisible(true)}
+      onMouseLeave={() => setVisible(false)}
+      onClick={() => onSelect(note)}
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
+      // Fixed height so all cards are equal — subject name ka size card ko affect nahi karega
+      className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 text-left shadow-lg cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-[#c8fa45]/40 hover:shadow-[#c8fa45]/5 hover:shadow-xl flex flex-col"
+      style={{ height: '280px' }}
+    >
+      {/* Cursor Glow */}
+      <motion.span
+        className="pointer-events-none absolute h-[220px] w-[220px] rounded-full bg-gradient-to-r from-emerald-400 via-lime-300 to-cyan-300 blur-2xl"
+        animate={{
+          top: pos.y - 110,
+          left: pos.x - 110,
+          opacity: visible ? 0.5 : 0,
+          scale: visible ? 1.05 : 0.95,
+        }}
+        transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+      />
+
+      <div className="relative z-10 flex flex-col h-full">
+        {/* Image / Placeholder */}
+        <div
+          className="w-full overflow-hidden rounded-t-2xl flex items-center justify-center relative shrink-0"
+          style={{ height: '160px', background: colors.bg }}
+        >
+          {note.image ? (
+            <>
+              <img
+                src={note.image}
+                alt={note.title}
+                loading="lazy"
+                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                onError={(e) => { e.currentTarget.style.display = 'none' }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-end p-3">
+                <span className="flex items-center gap-1.5 rounded-lg border border-[#c8fa45]/50 bg-[#c8fa45]/20 px-2.5 py-1.5 text-xs font-semibold text-[#c8fa45] backdrop-blur-sm">
+                  View Notes
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                    <path d="M7 17L17 7M17 7H7M17 7v10" stroke="#c8fa45" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </>
+          ) : (
+            <span className="text-[14px] font-bold text-center px-3" style={{ color: colors.dot }}>
+              {note.subject}
+            </span>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="flex flex-col flex-1 p-4 min-h-0">
+          {/* Subject badge — fixed width, truncate long names */}
+          <span
+            className="inline-block text-[10px] font-bold px-2.5 py-[3px] rounded-full mb-2 shrink-0 w-fit max-w-full truncate"
+            style={{
+              background: '#c8fa4520',
+              color: '#c8fa45',
+              border: '1px solid #c8fa4540',
+            }}
+          >
+            {note.subject}
+          </span>
+
+          {/* Title — 2 lines max */}
+          <p className="text-[13px] text-white font-medium leading-snug line-clamp-2 flex-1">
+            {note.title}
+          </p>
+
+          {/* Bottom row */}
+          <div className="flex items-center justify-between mt-2 shrink-0">
+            {note.course && (
+              <span className="text-[11px] text-slate-500 truncate max-w-[100px]">{note.course}</span>
+            )}
+            <span className="flex items-center gap-1 text-[11px] font-semibold text-[#c8fa45] ml-auto whitespace-nowrap">
+              View Notes
+              <svg width="11" height="11" viewBox="0 0 13 13" fill="none">
+                <path d="M2.5 6.5h8M7 3l3.5 3.5L7 10" stroke="#c8fa45" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
 }
 
-// ── Detail Modal ─────────────────────────────────────────────────────────────
+// ── Explore More Card ─────────────────────────────────────────────────────────
+const ExploreMoreCard = () => (
+  <Link
+    href="/notes"
+    className="group relative overflow-hidden rounded-2xl border border-dashed border-slate-700 bg-[#0d0d0d]/50 flex flex-col items-center justify-center text-center transition-all duration-300 hover:border-[#c8fa45]/50 hover:bg-slate-900/60"
+    style={{ height: '280px' }}
+  >
+    <div className="relative z-10 p-5">
+      <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[#c8fa45]/10 text-[#c8fa45] group-hover:bg-[#c8fa45]/20 group-hover:scale-110 transition-all duration-300 mx-auto">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </div>
+      <h3 className="text-base font-semibold text-white mb-1">Explore More</h3>
+      <p className="text-xs text-slate-500 max-w-[140px] mx-auto leading-relaxed">
+        Saare notes dekho — filters ke saath.
+      </p>
+    </div>
+    <div className="absolute inset-0 bg-gradient-to-br from-[#c8fa45]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+  </Link>
+)
+
+// ── Skeleton ──────────────────────────────────────────────────────────────────
+const SkeletonCard = () => (
+  <div className="rounded-2xl border border-slate-800 bg-slate-950 animate-pulse" style={{ height: '280px' }}>
+    <div className="h-[160px] rounded-t-2xl bg-slate-800/60" />
+    <div className="p-4 space-y-2.5">
+      <div className="h-3 w-16 bg-slate-800 rounded-full" />
+      <div className="h-4 w-3/4 bg-slate-800 rounded" />
+      <div className="h-4 w-1/2 bg-slate-800/60 rounded" />
+    </div>
+  </div>
+)
+
+// ── Detail Modal ──────────────────────────────────────────────────────────────
 const NoteDetailModal = ({ note, onClose }: { note: Note; onClose: () => void }) => {
-  const colors = SUBJECT_COLORS[note.subject] ?? { bg: '#1a1a1a', dot: '#888' }
+  const colors = getColors(note.subject)
   return (
     <AnimatePresence>
       <motion.div
@@ -36,7 +191,6 @@ const NoteDetailModal = ({ note, onClose }: { note: Note; onClose: () => void })
           exit={{ scale: 0.93, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 280, damping: 26 }}
         >
-          {/* X button top-right */}
           <button
             onClick={onClose}
             className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm"
@@ -45,7 +199,6 @@ const NoteDetailModal = ({ note, onClose }: { note: Note; onClose: () => void })
             ✕
           </button>
 
-          {/* Image / placeholder */}
           <div className="w-full h-[180px] flex items-center justify-center" style={{ background: colors.bg }}>
             {note.image
               ? <img src={note.image} alt={note.title} className="w-full h-full object-cover" />
@@ -53,13 +206,13 @@ const NoteDetailModal = ({ note, onClose }: { note: Note; onClose: () => void })
             }
           </div>
 
-          {/* Body */}
           <div className="p-5">
-            <p className="text-[11px] font-bold uppercase tracking-widest mb-1" style={{ color: colors.dot }}>{note.subject}</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest mb-1" style={{ color: colors.dot }}>
+              {note.subject}
+            </p>
             <h3 className="text-[17px] font-semibold text-white mb-2">{note.title}</h3>
             <p className="text-[13px] text-slate-400 leading-relaxed">{note.description}</p>
 
-            {/* Buttons */}
             <div className="flex gap-2 mt-5">
               <Link
                 href={note.link}
@@ -84,155 +237,17 @@ const NoteDetailModal = ({ note, onClose }: { note: Note; onClose: () => void })
   )
 }
 
-// ── Single Note Card ─────────────────────────────────────────────────────────
-const NoteCard = ({ note, onSelect }: { note: Note; onSelect: (n: Note) => void }) => {
-  const [visible, setVisible] = useState(false)
-  const [pos, setPos] = useState({ x: 0, y: 0 })
-  const cardRef = useRef<HTMLDivElement>(null)
-  const colors = SUBJECT_COLORS[note.subject] ?? { bg: '#1a1a1a', dot: '#888' }
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const bounds = cardRef.current?.getBoundingClientRect()
-    if (!bounds) return
-    setPos({ x: e.clientX - bounds.left, y: e.clientY - bounds.top })
-  }
-
-  return (
-    <div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => setVisible(false)}
-      onClick={() => onSelect(note)}
-      className="group relative overflow-hidden rounded-xl border border-slate-800 bg-[#141414] p-[10px] text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-[#3a3a3a] cursor-pointer"
-    >
-      {/* ── Cursor Glow — subtle, barely visible ──
-      <motion.span
-        className="pointer-events-none absolute h-[220px] w-[220px] rounded-full bg-gradient-to-r from-lime-400 via-emerald-300 to-cyan-300 blur-2xl"
-        animate={{
-          top: pos.y - 110,
-          left: pos.x - 110,
-          opacity: visible ? 0.07 : 0,
-          scale: visible ? 1.05 : 0.95,
-        }}
-        transition={{ type: 'spring', stiffness: 120, damping: 20 }}
-      /> */}
-
- {/* Cursor Glow */}
-      <motion.span
-        className="pointer-events-none absolute h-[220px] w-[220px] rounded-full bg-gradient-to-r from-emerald-400 via-lime-300 to-cyan-300 blur-2xl"
-        animate={{
-          top: pos.y - 110,
-          left: pos.x - 110,
-          opacity: visible ? .5 : 0,
-          scale: visible ? 1.05 : 0.95,
-        }}
-        transition={{ type: 'spring', stiffness: 120, damping: 20 }}
-      />
-
-
-      <div className="relative z-10 flex flex-col h-full">
-        {/* ── Top row: badge + bookmark ── */}
-        <div className="flex items-center justify-between mb-[10px]">
-          <span className="bg-[#c8fa45] text-[#111] text-[11px] font-bold px-[10px] py-[3px] rounded-full truncate max-w-[110px]">
-            {note.subject}
-          </span>
-          <div className="w-7 h-7 min-w-[28px] rounded-full border border-[#2e2e2e] bg-[#1a1a1a] flex items-center justify-center group-hover:border-[#c8fa45] transition-colors">
-            <svg width="10" height="12" viewBox="0 0 9 11" fill="none">
-              <path
-                d="M7.357.5c.303 0 .594.117.808.325s.335.491.335.786v8.334a.54.54 0 0 1-.076.277.584.584 0 0 1-.779.205L5.067 8.995a1.17 1.17 0 0 0-1.134 0l-2.578 1.432a.584.584 0 0 1-.779-.205.54.54 0 0 1-.076-.277V1.61c0-.295.12-.577.335-.786A1.16 1.16 0 0 1 1.643.5z"
-                stroke="#666"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-        </div>
-
-        {/* ── Image / Colored placeholder ── */}
-        <div
-          className="w-full h-[110px] rounded-[10px] overflow-hidden flex items-center justify-center mb-[10px] relative"
-          style={{ background: colors.bg }}
-        >
-          {note.image ? (
-            <>
-              <img
-                src={note.image}
-                alt={note.title}
-                loading="lazy"
-                className="w-full h-full object-cover"
-                onError={(e) => { e.currentTarget.style.display = 'none' }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 transition-opacity group-hover:opacity-100 flex items-end p-2">
-                <span className="flex items-center gap-1 rounded-md border border-[#c8fa45]/50 bg-[#c8fa45]/20 px-2 py-1 text-xs font-semibold text-[#c8fa45] backdrop-blur-sm">
-                  View Notes
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-                    <path d="M7 17L17 7M17 7H7M17 7v10" stroke="#c8fa45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              </div>
-            </>
-          ) : (
-            <span className="text-[13px] font-bold text-center px-2 leading-snug" style={{ color: colors.dot }}>
-              {note.subject}
-            </span>
-          )}
-        </div>
-
-        {/* ── Title ── */}
-        <p className="text-[13px] text-slate-400 mb-2 px-[2px] leading-snug min-h-[36px]">
-          {note.title}
-        </p>
-
-        {/* ── Bottom: subject + View Notes → ── */}
-        <div className="flex items-center justify-between px-[2px] mt-auto">
-          <span className="text-[13px] font-semibold text-white">{note.subject}</span>
-          <span className="flex items-center gap-1 text-[11px] font-semibold text-[#c8fa45] whitespace-nowrap">
-            View Notes
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M2.5 6.5h8M7 3l3.5 3.5L7 10" stroke="#c8fa45" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ── Explore More Card (same as ViewMoreCard) ─────────────────────────────────
-const ExploreMoreCard = () => (
-  <Link
-    href="/notes"
-    className="group relative overflow-hidden rounded-xl border border-dashed border-slate-700 bg-[#0d0d0d]/50 p-5 flex flex-col items-center justify-center text-center transition-all duration-300 hover:border-[#c8fa45] hover:bg-slate-900/50 min-h-[200px]"
-  >
-    <div className="relative z-10">
-      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#c8fa45]/10 text-[#c8fa45] group-hover:bg-[#c8fa45]/20 group-hover:scale-110 transition-all mx-auto">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M5 12h14M12 5l7 7-7 7" />
-        </svg>
-      </div>
-      <h3 className="text-xl font-semibold text-white mb-2">Explore More</h3>
-      <p className="text-sm text-slate-400">Saare notes dekho aur padhna shuru karo.</p>
-    </div>
-    <div className="absolute inset-0 bg-gradient-to-br from-[#c8fa45]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-  </Link>
-)
-
 // ── Main Component ────────────────────────────────────────────────────────────
 const NoteCards = ({ limit }: { limit?: number }) => {
   const [noteList, setNoteList] = useState<Note[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading]   = useState(true)
   const [selected, setSelected] = useState<Note | null>(null)
 
   useEffect(() => {
     async function fetchNotes() {
       try {
         const data = await getNotesFromSupabase()
-        if (data && data.length > 0) {
-          setNoteList(data)
-        } else {
-          setNoteList(notes)
-        }
+        setNoteList(data && data.length > 0 ? data : notes)
       } catch {
         setNoteList(notes)
       } finally {
@@ -243,61 +258,49 @@ const NoteCards = ({ limit }: { limit?: number }) => {
   }, [])
 
   const displayedNotes = limit ? noteList.slice(0, limit) : noteList
-  const mobileNotes = noteList.slice(0, 7)
-  const showViewMore = limit ? noteList.length > limit : false
-
-  if (loading) {
-    return (
-      <section className="bg-[#0a0a0a] text-slate-100 py-8 px-6">
-        <div className="flex gap-4 overflow-hidden">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="min-w-[200px] h-64 bg-slate-900 animate-pulse rounded-xl flex-shrink-0" />
-          ))}
-        </div>
-      </section>
-    )
-  }
+  const showViewMore   = !!limit && noteList.length > limit
 
   return (
     <>
-      <section className="bg-black text-slate-100 py-8 " id='notes'>
+      <section className="bg-black text-slate-100 py-8" id="notes">
+
         {/* Header */}
-        <div className="py-4 px-4 bg-black flex flex-col justify-center items-center gap-6">
-          <button className='px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg'>Notes</button>
-                <h1 className="text-3xl md:text-[40px]/12 font-medium text-gray-100 max-w-lg text-center leading-tight">Our latest notes.</h1>
-                <p className='text-base/7 text-gray-200 max-w-xl text-center'>Carefully curated notes covering all important topics for your academic success.</p>
+        <div className="py-4 px-4 bg-black flex flex-col justify-center items-center gap-4 mb-6">
+          <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg cursor-default">
+            Notes
+          </button>
+          <h1 className="text-3xl md:text-[40px] font-medium text-gray-100 max-w-lg text-center leading-tight">
+            Our latest notes.
+          </h1>
+          <p className="text-base/7 text-gray-200 max-w-xl text-center">
+            Carefully curated notes covering all important topics for your academic success.
+          </p>
         </div>
 
-        {/* ── DESKTOP: horizontal scroll, no scrollbar ── */}
-        <div
-          className="hidden md:flex gap-[14px] overflow-x-auto px-5 pb-1"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          <style>{`.notes-scroll::-webkit-scrollbar { display: none; }`}</style>
-          {displayedNotes.map((note, i) => (
-            <div key={i} className="flex-shrink-0 w-[200px]">
-              <NoteCard note={note} onSelect={setSelected} />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          {loading ? (
+            // Skeleton — same grid as cards
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <SkeletonCard key={i} />)}
             </div>
-          ))}
-          {showViewMore && (
-            <div className="flex-shrink-0 w-[200px]">
-              <ExploreMoreCard />
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+              {displayedNotes.map((note, i) => (
+                <NoteCard key={i} note={note} index={i} onSelect={setSelected} />
+              ))}
+              {/* Explore More card — always last */}
+              {showViewMore && <ExploreMoreCard />}
+              {/* Agar limit nahi hai ya sab show ho gaye — tab bhi explore more dikhao */}
+              {!showViewMore && !limit && <ExploreMoreCard />}
             </div>
           )}
-        </div>
-
-        {/* ── MOBILE: 2-col grid, 7 notes + explore card ── */}
-        <div className="grid grid-cols-2 gap-3 px-4 md:hidden">
-          {mobileNotes.map((note, i) => (
-            <NoteCard key={i} note={note} onSelect={setSelected} />
-          ))}
-          <ExploreMoreCard />
         </div>
       </section>
 
       {/* Detail Modal */}
       {selected && <NoteDetailModal note={selected} onClose={() => setSelected(null)} />}
-        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-700/40 to-transparent my-6" />
+
+      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-700/40 to-transparent" />
     </>
   )
 }

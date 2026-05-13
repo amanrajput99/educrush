@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <NotesSection />
+      <NotesSection limit={7}/>
       <ProjectCards limit={5} />
       <Features />
       <ImageGallery />
