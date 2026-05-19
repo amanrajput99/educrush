@@ -30,3 +30,213 @@ body {
   0%   { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
+
+
+/* ════════════════════════════════════════════════════════
+   BLOG BODY STYLES — globals.css ke BILKUL END mein paste karo
+   ════════════════════════════════════════════════════════ */
+
+/* counter reset */
+.blog-body { counter-reset: section; }
+
+/* ── H2 — numbered badge ──────────────────────────────── */
+.blog-body h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 2.8rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  counter-increment: section;
+}
+.blog-body h2::before {
+  content: counter(section, decimal-leading-zero);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 28px;
+  padding: 0 8px;
+  background: rgba(52,211,153,0.1);
+  border: 1px solid rgba(52,211,153,0.25);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #34d399;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+/* ── H3 — accent border ───────────────────────────────── */
+.blog-body h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #6ee7b7;
+  margin-top: 1.8rem;
+  margin-bottom: 0.6rem;
+  padding-left: 12px;
+  border-left: 2px solid #34d399;
+}
+
+/* ── Paragraph ────────────────────────────────────────── */
+.blog-body p {
+  color: #94a3b8;
+  line-height: 1.9;
+  font-size: 0.97rem;
+  margin-bottom: 1rem;
+}
+
+/* ── UL — card style items ────────────────────────────── */
+.blog-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.blog-body ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #94a3b8;
+  font-size: 0.97rem;
+  line-height: 1.7;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+.blog-body ul li::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  min-width: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  margin-top: 8px;
+}
+
+/* ── OL — numbered badges ─────────────────────────────── */
+.blog-body ol {
+  list-style: none;
+  padding: 0;
+  margin: 1.2rem 0;
+  counter-reset: ol-c;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.blog-body ol li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: #94a3b8;
+  font-size: 0.97rem;
+  line-height: 1.7;
+  counter-increment: ol-c;
+}
+.blog-body ol li::before {
+  content: counter(ol-c);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border-radius: 8px;
+  background: rgba(52,211,153,0.1);
+  border: 1px solid rgba(52,211,153,0.2);
+  color: #34d399;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* ── Strong ───────────────────────────────────────────── */
+.blog-body strong {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+/* ── Inline code ──────────────────────────────────────── */
+.blog-body code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.84em;
+  color: #86efac;
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.18);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+/* ── Code block ───────────────────────────────────────── */
+.blog-body pre {
+  background: #0d1117;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  position: relative;
+}
+.blog-body pre::before {
+  content: 'CODE';
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(52,211,153,0.35);
+}
+.blog-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #e2e8f0;
+  font-size: 0.82rem;
+  line-height: 1.75;
+}
+
+/* ── Blockquote ───────────────────────────────────────── */
+.blog-body blockquote {
+  background: rgba(52,211,153,0.04);
+  border: 1px solid rgba(52,211,153,0.15);
+  border-left: 3px solid #34d399;
+  border-radius: 0 12px 12px 0;
+  padding: 14px 18px;
+  margin: 1.5rem 0;
+  color: #6ee7b7;
+  font-style: italic;
+}
+
+/* ── Links ────────────────────────────────────────────── */
+.blog-body a {
+  color: #34d399;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(52,211,153,0.3);
+  transition: border-color 0.15s;
+}
+.blog-body a:hover { border-bottom-color: #34d399; }
+
+/* ── HR ───────────────────────────────────────────────── */
+.blog-body hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(52,211,153,0.3), transparent);
+  margin: 2.5rem 0;
+}
+
+/* ── Images ───────────────────────────────────────────── */
+.blog-body img {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.07);
+  margin: 1.5rem 0;
+}

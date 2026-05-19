@@ -246,6 +246,7 @@ export default function BlogSection() {
             <BlogSkeleton featured />
             <BlogSkeleton />
             <BlogSkeleton />
+            
           </>
         ) : (
           <>
