@@ -259,7 +259,7 @@ export default function HeroSection() {
 
         {/* Label */}
         <p className="mt-10 mb-2 text-xs text-white/40 tracking-[0.2em] uppercase">
-          Join 1000+ Students Already Learning
+          Join 10000+ Students Already Learning
         </p>
 
 

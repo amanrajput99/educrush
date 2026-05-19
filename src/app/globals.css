@@ -24,3 +24,9 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ── Shimmer animation — skeleton cards ke liye ── */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}

@@ -1,7 +1,7 @@
 import HeroSection from '@/components/home/Hero-section'
 import ProjectCards from '@/components/home/Projectcards'
 import NotesSection from '@/components/home/Notescards' 
-
+import BlogSection from '@/components/home/BlogSection'
 import Features from '@/components/home/Features'
 import ImageGallery from '@/components/home/Image-gallery'
 // import MarqueeText from '@/components/home/MarqueeText'
@@ -14,7 +14,9 @@ export default function Home() {
       <HeroSection />
       <NotesSection limit={7}/>
       <ProjectCards limit={5} />
+      <BlogSection />
       <Features />
+      
       <ImageGallery />
       <FAQ />
       <Testimonials />    

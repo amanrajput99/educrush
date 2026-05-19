@@ -1,0 +1,22 @@
+import { getPublishedBlogs } from '@/lib/blogService'
+import BlogsClient from './BlogsClient'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Blog — Student Tips, Tutorials & Guides',
+  description:
+    'Read articles on coding, exam prep, web development, and student life — written by students for students. Free, always.',
+  openGraph: {
+    title: 'EduCrush Blog',
+    description: 'Coding tutorials, exam tips, and student guides — all free.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+  },
+}
+
+// Har 60 sec mein revalidate (ISR)
+export const revalidate = 60
+
+export default async function BlogsPage() {
+  const blogs = await getPublishedBlogs()
+  return <BlogsClient blogs={blogs} />
+}
