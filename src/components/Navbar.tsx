@@ -136,10 +136,12 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-8">
             <a href="/notes" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Notes</a>
             <a href="/projects" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Projects</a>
-            <a href="/ai" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">EduCrush Ai</a>
+            <a href="/blogs" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Blogs</a>
             <div className="relative group">
               <button className="flex items-center gap-1.5 text-sm text-zinc-800 cursor-pointer bg-transparent border-0 py-2 font-bold">All Tools<svg className="transition-transform group-hover:rotate-180" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
               <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-zinc-200 rounded-xl shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                                <a href="/ai" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">EduCrush ai</a>
+
                 <a href="/editor" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Code Editor</a>
                 <a href="/coding-practice" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Coding Practice</a>
               </div>
