@@ -1,28 +1,41 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { submitAdmissionLead } from '@/lib/admissionService'
-
 function Particles() {
+  const [particles, setParticles] = useState<Array<{
+    width: number; height: number; left: string; top: string;
+    duration: number; delay: number; color: string;
+  }>>([])
+
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 24 }).map((_, i) => ({
+        width: Math.random() * 4 + 1,
+        height: Math.random() * 4 + 1,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        duration: 4 + Math.random() * 4,
+        delay: Math.random() * 5,
+        color: i % 3 === 0 ? '#34d399' : i % 3 === 1 ? '#6ee7b7' : '#a7f3d0',
+      }))
+    )
+  }, [])
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: 24 }).map((_, i) => (
+      {particles.map((p, i) => (
         <motion.div key={i} className="absolute rounded-full"
-          style={{
-            width: Math.random() * 4 + 1, height: Math.random() * 4 + 1,
-            left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`,
-            background: i % 3 === 0 ? '#34d399' : i % 3 === 1 ? '#6ee7b7' : '#a7f3d0',
-          }}
+          style={{ width: p.width, height: p.height, left: p.left, top: p.top, background: p.color }}
           animate={{ y: [0, -35, 0], opacity: [0.2, 0.9, 0.2], scale: [1, 1.5, 1] }}
-          transition={{ duration: 4 + Math.random() * 4, repeat: Infinity, delay: Math.random() * 5, ease: 'easeInOut' }}
+          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: 'easeInOut' }}
         />
       ))}
     </div>
   )
 }
-
 function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
   const [count, setCount] = useState(0)
   const ref = useRef(null)
