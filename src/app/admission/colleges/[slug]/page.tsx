@@ -5,11 +5,12 @@ import type { Metadata } from 'next'
 
 export const revalidate = 300
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
   const { data } = await supabase
     .from('admission_colleges')
     .select('name, city, description')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single()
   if (!data) return { title: 'College Not Found' }
   return {
@@ -18,11 +19,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function CollegeDetailPage({ params }: { params: { slug: string } }) {
+export default async function CollegeDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   const { data } = await supabase
     .from('admission_colleges')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .eq('published', true)
     .single()
 
