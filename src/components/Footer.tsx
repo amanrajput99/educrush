@@ -91,7 +91,7 @@ const Footer = () => {
                                     <li><a href="/notes" className="hover:text-neutral-400">Free Resources</a></li>
                                     <li><a href="/home" className="hover:text-neutral-400">Study Materials</a></li>
                                     <li><a href="/coding-practice" className="hover:text-neutral-400">Coding Practice</a></li>
-                                    <li><a href="/contact" className="hover:text-neutral-400">Community</a></li>
+                                    <li><a href="/admission" className="hover:text-neutral-400">Admission 2026</a></li>
                                     <li><a href="/blogs" className="hover:text-neutral-400">Blogs</a></li>
                                 </ul>
                             </div>

@@ -14,7 +14,8 @@ export const metadata: Metadata = {
 }
 
 // Har 60 sec mein revalidate (ISR)
-export const revalidate = 60
+export const revalidate = 3600 // 1 hour cache
+
 
 export default async function BlogsPage() {
   const blogs = await getPublishedBlogs()
