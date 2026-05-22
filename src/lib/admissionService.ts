@@ -16,6 +16,8 @@ export type College = {
   established?: number
   description?: string
   logo_url?: string
+  hero_image?: string  // full-width hero banner for detail page
+  images?: string[]   // gallery images for college detail page
   website?: string
   badge?: string        // "NIRF Ranked" | "Top Placement" | "Budget Friendly"
   published: boolean

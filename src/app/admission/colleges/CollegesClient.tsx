@@ -31,7 +31,9 @@ function CollegeCard({ college, index, compareList, onCompareToggle }: {
       </AnimatePresence>
 
       <div className="flex items-start justify-between mb-4">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-900/60 to-slate-900 border border-emerald-900/40 flex items-center justify-center text-2xl">🏛️</div>
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-900/60 to-slate-900 border border-emerald-900/40 flex items-center justify-center text-2xl overflow-hidden">
+          {college.logo_url ? <img src={college.logo_url} alt={college.name} className="w-full h-full object-cover rounded-xl" /> : '🏛️'}
+        </div>
         {college.badge && (
           <span className={`text-[10px] px-2.5 py-0.5 rounded-full border ${BADGE_STYLES[college.badge] ?? 'bg-slate-900 border-slate-700 text-slate-400'}`}>{college.badge}</span>
         )}
@@ -126,7 +128,7 @@ export default function CollegesClient({ colleges }: { colleges: College[] }) {
 
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="inline-flex mb-5">
           <span className="px-4 h-8 flex items-center border border-emerald-900/60 bg-emerald-950/30 text-emerald-400 text-xs rounded-full font-bold uppercase tracking-wider">
-            Uttarakhand Colleges 2025
+            Colleges 2026 — Dehradun · Delhi · Pan India
           </span>
         </motion.div>
 

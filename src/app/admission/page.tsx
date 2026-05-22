@@ -87,7 +87,7 @@ function AdmissionForm() {
   }, [inView])
 
   const courses = ['BTech CSE', 'BTech ECE', 'BTech ME', 'BCA', 'Diploma', 'MBA', 'MCA', 'B.Sc']
-  const cities = ['Patna', 'Gaya', 'Muzaffarpur', 'Bhagalpur', 'Dehradun', 'Haridwar', 'Any']
+  const cities = ['Patna', 'Gaya', 'Muzaffarpur', 'Dehradun', 'Delhi', 'Noida', 'Haridwar', 'Any']
   const states = ['Bihar', 'Jharkhand', 'UP', 'Uttarakhand', 'Other']
 
   const handleSubmit = async () => {
@@ -239,10 +239,10 @@ function AdmissionForm() {
 
 // ── College mini card ─────────────────────────────────────────────────────────
 const SAMPLE_COLLEGES = [
-  { name: 'Graphic Era University', city: 'Dehradun', courses: ['BTech', 'BCA'], fees: '80k–1.5L', badge: 'NIRF Ranked', slug: 'graphic-era-university' },
-  { name: 'DIT University', city: 'Dehradun', courses: ['BTech', 'MBA'], fees: '70k–1.2L', badge: 'Good Placement', slug: 'dit-university' },
-  { name: 'UPES Dehradun', city: 'Dehradun', courses: ['BTech', 'Law'], fees: '1L–2L', badge: 'Premium', slug: 'upes-dehradun' },
-  { name: 'Uttaranchal University', city: 'Dehradun', courses: ['BCA', 'BTech'], fees: '50k–90k', badge: 'Budget Friendly', slug: 'uttaranchal-university' },
+  { name: 'Graphic Era University', city: 'Dehradun', courses: ['BTech', 'BCA'], fees: '80k–1.5L', badge: 'NIRF Ranked', slug: 'graphic-era-university', logo_url: '' },
+  { name: 'DIT University', city: 'Dehradun', courses: ['BTech', 'MBA'], fees: '70k–1.2L', badge: 'Good Placement', slug: 'dit-university', logo_url: '' },
+  { name: 'Amity University', city: 'Noida', courses: ['BTech', 'BCA', 'MBA'], fees: '1.2L–2L', badge: 'Premium', slug: 'amity-university-noida', logo_url: '' },
+  { name: 'Sharda University', city: 'Delhi NCR', courses: ['BTech', 'BCA', 'Diploma'], fees: '80k–1.4L', badge: 'Budget Friendly', slug: 'sharda-university', logo_url: '' },
 ]
 const BADGE_STYLES: Record<string, string> = {
   'NIRF Ranked': 'bg-emerald-950/60 border-emerald-800/60 text-emerald-400',
@@ -327,7 +327,7 @@ export default function AdmissionPage() {
             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/50 border border-emerald-800/60 text-emerald-400 text-xs font-bold mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Admissions 2025 Open — Uttarakhand & Bihar
+              Admissions 2026 Open — Dehradun · Delhi · Pan India
             </motion.div>
 
             <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.7 }}
@@ -342,7 +342,7 @@ export default function AdmissionPage() {
 
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
               className="text-slate-400 mt-5 text-base md:text-lg leading-relaxed max-w-lg">
-              Compare top colleges for BTech, BCA, Diploma across Uttarakhand. Get fee details, placement records, and free counseling on WhatsApp within 24 hours.
+              Compare top colleges in Dehradun, Delhi & across India for BTech, BCA, Diploma. Get fee details, placement records, and free counseling on WhatsApp within 24 hours.
             </motion.p>
 
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}
@@ -357,7 +357,7 @@ export default function AdmissionPage() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="flex flex-wrap gap-3 mt-8">
-              {[{ icon: '🆓', text: 'Zero Cost' }, { icon: '📱', text: 'WhatsApp Support' }, { icon: '✅', text: '2025 Updated' }, { icon: '🏛️', text: 'Bihar Loan Help' }].map(t => (
+              {[{ icon: '🆓', text: 'Zero Cost' }, { icon: '📱', text: 'WhatsApp Support' }, { icon: '✅', text: '2026 Updated' }, { icon: '🏛️', text: 'Bihar Loan Help' }].map(t => (
                 <span key={t.text} className="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">{t.icon} {t.text}</span>
               ))}
             </motion.div>
@@ -441,7 +441,7 @@ export default function AdmissionPage() {
         <div className="flex items-center justify-between mb-10">
           <div>
             <span className="text-xs text-emerald-400 border border-emerald-900/60 bg-emerald-950/30 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Top Colleges</span>
-            <h2 className="text-3xl font-black mt-3">Best Colleges in Uttarakhand</h2>
+            <h2 className="text-3xl font-black mt-3">Top Colleges — Dehradun & Delhi</h2>
           </div>
           <Link href="/admission/colleges" className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors hidden sm:block font-semibold">View All →</Link>
         </div>
@@ -450,7 +450,9 @@ export default function AdmissionPage() {
             <motion.div key={col.name} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} whileHover={{ y: -4 }}
               className="bg-slate-950 border border-slate-800 hover:border-emerald-700/40 rounded-2xl p-5 transition-all duration-300 group">
               <div className="flex items-start justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-900/60 to-slate-900 border border-emerald-900/40 flex items-center justify-center text-xl">🏛️</div>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-900/60 to-slate-900 border border-emerald-900/40 flex items-center justify-center text-xl overflow-hidden">
+                  {col.logo_url ? <img src={col.logo_url} alt={col.name} className="w-full h-full object-cover rounded-xl" /> : '🏛️'}
+                </div>
                 <span className={`text-[10px] px-2 py-0.5 rounded-full border ${BADGE_STYLES[col.badge] ?? 'bg-slate-900 border-slate-700 text-slate-400'}`}>{col.badge}</span>
               </div>
               <h4 className="font-black text-white text-sm mb-1 group-hover:text-emerald-300 transition-colors">{col.name}</h4>
