@@ -23,7 +23,6 @@ export type College = {
   published: boolean
   created_at?: string
 }
-
 export type AdmissionLead = {
   id?: string
   name: string
@@ -32,9 +31,11 @@ export type AdmissionLead = {
   marks_12th: number
   preferred_course: string
   preferred_city?: string
+  student_state?: string  // ✅ YE ADD KARO
   message?: string
   status?: 'new' | 'contacted' | 'enrolled' | 'dropped'
   created_at?: string
+
 }
 
 // ── Colleges ──────────────────────────────────────────────────────────────────

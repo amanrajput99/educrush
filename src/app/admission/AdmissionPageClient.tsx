@@ -1,9 +1,12 @@
 'use client'
+// ✅ Ye file hai: app/admission/AdmissionPageClient.tsx
+// Saara client side code yahan hai — page.tsx sirf metadata export karta hai
 
 import { useState, useEffect, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { submitAdmissionLead } from '@/lib/admissionService'
+
 function Particles() {
   const [particles, setParticles] = useState<Array<{
     width: number; height: number; left: string; top: string;
@@ -36,6 +39,7 @@ function Particles() {
     </div>
   )
 }
+
 function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
   const [count, setCount] = useState(0)
   const ref = useRef(null)
@@ -52,7 +56,6 @@ function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
   return <span ref={ref}>{count}{suffix}</span>
 }
 
-// ── Bihar DRCC Banner ─────────────────────────────────────────────────────────
 function BiharBanner() {
   const [visible, setVisible] = useState(true)
   if (!visible) return null
@@ -72,7 +75,6 @@ function BiharBanner() {
   )
 }
 
-// ── Admission Form ────────────────────────────────────────────────────────────
 function AdmissionForm() {
   const [step, setStep] = useState(0)
   const [form, setForm] = useState({ name: '', phone: '', marks: '', course: '', city: '', state: 'Bihar' })
@@ -87,13 +89,20 @@ function AdmissionForm() {
   }, [inView])
 
   const courses = ['BTech CSE', 'BTech ECE', 'BTech ME', 'BCA', 'Diploma', 'MBA', 'MCA', 'Other']
-  const cities = [ 'Dehradun', 'Delhi', 'Noida', 'Any']
-  const states = ['Bihar', 'Jharkhand','Delhi', 'UP', 'Uttarakhand', 'Other']
+  const cities = ['Dehradun', 'Delhi', 'Noida', 'Any']
+  const states = ['Bihar', 'Jharkhand', 'Delhi', 'UP', 'Uttarakhand', 'Other']
 
   const handleSubmit = async () => {
     if (!form.name || !form.phone || !form.marks || !form.course) return
     setLoading(true)
-    const ok = await submitAdmissionLead({ name: form.name, phone: form.phone, marks_12th: parseInt(form.marks), preferred_course: form.course, preferred_city: form.city })
+    const ok = await submitAdmissionLead({
+      name: form.name,
+      phone: form.phone,
+      marks_12th: parseInt(form.marks),
+      preferred_course: form.course,
+      preferred_city: form.city,
+      student_state: form.state,
+    })
     setLoading(false)
     if (ok) setSubmitted(true)
   }
@@ -237,7 +246,6 @@ function AdmissionForm() {
   )
 }
 
-// ── College mini card ─────────────────────────────────────────────────────────
 const SAMPLE_COLLEGES = [
   { name: 'Graphic Era University', city: 'Dehradun', courses: ['BTech', 'BCA'], fees: '80k–1.5L', badge: 'NIRF Ranked', slug: 'graphic-era-university', logo_url: '' },
   { name: 'DIT University', city: 'Dehradun', courses: ['BTech', 'MBA'], fees: '70k–1.2L', badge: 'Good Placement', slug: 'dit-university', logo_url: '' },
@@ -251,7 +259,6 @@ const BADGE_STYLES: Record<string, string> = {
   'Budget Friendly': 'bg-slate-900 border-slate-700 text-slate-300',
 }
 
-// ── Bihar Loan Section ────────────────────────────────────────────────────────
 function BiharLoanSection() {
   return (
     <section className="px-4 py-20 max-w-5xl mx-auto">
@@ -299,8 +306,7 @@ function BiharLoanSection() {
   )
 }
 
-// ── Main Page ─────────────────────────────────────────────────────────────────
-export default function AdmissionPage() {
+export function AdmissionPageClient() {
   const statsRef = useRef(null)
   const statsInView = useInView(statsRef, { once: true })
   const stats = [
@@ -314,7 +320,6 @@ export default function AdmissionPage() {
     <main className="min-h-screen bg-black text-white overflow-x-hidden">
       <BiharBanner />
 
-      {/* ── HERO + FORM ──────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center px-4 pt-16 pb-12 overflow-hidden">
         <Particles />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(52,211,153,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(52,211,153,0.03)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
@@ -322,7 +327,6 @@ export default function AdmissionPage() {
         <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-teal-400/4 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* LEFT */}
           <div>
             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/50 border border-emerald-800/60 text-emerald-400 text-xs font-bold mb-6">
@@ -372,7 +376,6 @@ export default function AdmissionPage() {
             </motion.div>
           </div>
 
-          {/* RIGHT — Form */}
           <motion.div id="counseling-form" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.6 }} className="relative">
             <div className="absolute -inset-6 bg-emerald-500/6 rounded-3xl blur-2xl pointer-events-none" />
             <div className="relative bg-slate-950 border border-slate-800 hover:border-emerald-900/50 transition-colors duration-500 rounded-3xl p-6 md:p-8">
@@ -390,7 +393,6 @@ export default function AdmissionPage() {
         </div>
       </section>
 
-      {/* ── STATS ─────────────────────────────────────────────────────────── */}
       <section ref={statsRef} className="px-4 py-16 max-w-5xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((s, i) => (
@@ -405,10 +407,8 @@ export default function AdmissionPage() {
         </div>
       </section>
 
-      {/* ── BIHAR LOAN ────────────────────────────────────────────────────── */}
       <BiharLoanSection />
 
-      {/* ── COURSES ───────────────────────────────────────────────────────── */}
       <section className="px-4 py-16 max-w-6xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
           <span className="text-xs text-emerald-400 border border-emerald-900/60 bg-emerald-950/30 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Courses</span>
@@ -436,7 +436,6 @@ export default function AdmissionPage() {
         </div>
       </section>
 
-      {/* ── TOP COLLEGES ──────────────────────────────────────────────────── */}
       <section className="px-4 py-16 max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-10">
           <div>
@@ -472,7 +471,6 @@ export default function AdmissionPage() {
         </div>
       </section>
 
-      {/* ── WHY TRUST ─────────────────────────────────────────────────────── */}
       <section className="px-4 py-16 max-w-5xl mx-auto">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
           className="bg-gradient-to-r from-emerald-950/40 via-slate-950 to-emerald-950/40 border border-emerald-900/30 rounded-3xl p-8 md:p-12">
@@ -494,7 +492,6 @@ export default function AdmissionPage() {
         </motion.div>
       </section>
 
-      {/* ── BOTTOM CTA ────────────────────────────────────────────────────── */}
       <section className="px-4 pb-20 max-w-2xl mx-auto text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h3 className="text-2xl font-black mb-3">Still Thinking?</h3>
