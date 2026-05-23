@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     title: 'EduCrush AI — Free AI Study Assistant',
     description: 'Free AI chatbot for students. Ask anything — concepts, code, notes.',
     siteName: 'EduCrush',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'EduCrush AI' }],
+    images: [{ url: '/og-ai.png', width: 1200, height: 630, alt: 'EduCrush AI' }],
   },
-  twitter: { card: 'summary_large_image', title: 'EduCrush AI — Free Study Assistant', description: 'Free AI for Indian students.', images: ['/og-image.png'] },
+  twitter: { card: 'summary_large_image', title: 'EduCrush AI — Free Study Assistant', description: 'Free AI for Indian students.', images: ['/og-ai.png'] },
 }
 
 export default function AiPage() {

@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     title: 'Free Notes — BCA, BTech, Diploma, Class 10–12 | EduCrush',
     description: 'Free handwritten & typed notes for BCA, BTech, Diploma & Class 10–12 students.',
     siteName: 'EduCrush',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'EduCrush Free Notes' }],
+    images: [{ url: '/og-notes.png', width: 1200, height: 630, alt: 'EduCrush Free Notes' }],
   },
-  twitter: { card: 'summary_large_image', title: 'Free Notes | EduCrush', description: 'Free notes for Indian students.', images: ['/og-image.png'] },
+  twitter: { card: 'summary_large_image', title: 'Free Notes | EduCrush', description: 'Free notes for Indian students.', images: ['/og-notes.png'] },
 }
 
 export default function NotesPage() {

@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     title: 'Free Web Dev Projects with Source Code | EduCrush',
     description: 'Free HTML, CSS, JavaScript & React projects for students. Full source code download.',
     siteName: 'EduCrush',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'EduCrush Free Projects' }],
+    images: [{ url: '/og-projects.png', width: 1200, height: 630, alt: 'EduCrush Free Projects' }],
   },
-  twitter: { card: 'summary_large_image', title: 'Free Projects | EduCrush', description: 'Free projects with source code for students.', images: ['/og-image.png'] },
+  twitter: { card: 'summary_large_image', title: 'Free Projects | EduCrush', description: 'Free projects with source code for students.', images: ['/og-projects.png'] },
 }
 
 export default function ProjectsPage() {

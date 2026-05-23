@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     title: 'Free Coding Practice — Python, Java, C++, JS | EduCrush',
     description: 'Practice programming for free. Beginner to advanced with built-in editor.',
     siteName: 'EduCrush',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'EduCrush Coding Practice' }],
+    images: [{ url: '/og-coding.png', width: 1200, height: 630, alt: 'EduCrush Coding Practice' }],
   },
-  twitter: { card: 'summary_large_image', title: 'Free Coding Practice | EduCrush', description: 'Python, Java, C++ & JS problems for students.', images: ['/og-image.png'] },
+  twitter: { card: 'summary_large_image', title: 'Free Coding Practice | EduCrush', description: 'Python, Java, C++ & JS problems for students.', images: ['/og-coding.png'] },
 }
 
 export default function CodingPracticePage() {
