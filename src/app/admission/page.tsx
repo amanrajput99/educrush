@@ -86,9 +86,9 @@ function AdmissionForm() {
     if (inView) { setTimeout(() => setFocused('name'), 600); setTimeout(() => setFocused(null), 2200) }
   }, [inView])
 
-  const courses = ['BTech CSE', 'BTech ECE', 'BTech ME', 'BCA', 'Diploma', 'MBA', 'MCA', 'B.Sc']
-  const cities = ['Patna', 'Gaya', 'Muzaffarpur', 'Dehradun', 'Delhi', 'Noida', 'Haridwar', 'Any']
-  const states = ['Bihar', 'Jharkhand', 'UP', 'Uttarakhand', 'Other']
+  const courses = ['BTech CSE', 'BTech ECE', 'BTech ME', 'BCA', 'Diploma', 'MBA', 'MCA', 'Other']
+  const cities = [ 'Dehradun', 'Delhi', 'Noida', 'Any']
+  const states = ['Bihar', 'Jharkhand','Delhi', 'UP', 'Uttarakhand', 'Other']
 
   const handleSubmit = async () => {
     if (!form.name || !form.phone || !form.marks || !form.course) return
@@ -125,7 +125,7 @@ function AdmissionForm() {
           <motion.div key="s0" initial={{ x: 40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -40, opacity: 0 }} className="space-y-4">
             <div>
               <label className="text-xs text-slate-400 mb-1.5 block font-semibold">Full Name *</label>
-              <input className={inputClass('name')} placeholder="e.g. Rahul Kumar" value={form.name} onFocus={() => setFocused('name')} onBlur={() => setFocused(null)} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} autoFocus />
+              <input className={inputClass('name')} placeholder="e.g. Akhil Singh" value={form.name} onFocus={() => setFocused('name')} onBlur={() => setFocused(null)} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} autoFocus />
             </div>
             <div>
               <label className="text-xs text-slate-400 mb-1.5 block font-semibold">WhatsApp Number *</label>
