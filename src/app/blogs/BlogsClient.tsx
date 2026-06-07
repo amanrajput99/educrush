@@ -275,7 +275,7 @@ export default function BlogsClient({ blogs }: { blogs: Blog[] }) {
       </div>
 
       {/* ── Tag filters ──────────────────────────────────────────────────── */}
-      {allTags.length > 0 && (
+      {/* {allTags.length > 0 && (
         <div className="max-w-6xl mx-auto px-4 mb-10">
           <div className="flex flex-wrap justify-center gap-2">
             <button
@@ -301,7 +301,7 @@ export default function BlogsClient({ blogs }: { blogs: Blog[] }) {
             ))}
           </div>
         </div>
-      )}
+      )} */}
 
       {/* ── Divider ──────────────────────────────────────────────────────── */}
       <div className="max-w-6xl mx-auto px-4 mb-10">
