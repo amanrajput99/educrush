@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRef } from 'react'
-import { Note, notes, COURSES, COURSE_YEARS } from '@/data/Notes'
-import { getNotesFromSupabase } from '@/lib/NoteService'
+import { Note, COURSES, COURSE_YEARS } from '@/data/Notes'
 
 // ── Subject colors ────────────────────────────────────────────────────────────
 const SUBJECT_COLORS: Record<string, { bg: string; dot: string }> = {
@@ -164,28 +163,16 @@ const FilterPill = ({ label, active, onClick }: { label: string; active: boolean
   </button>
 )
 
-// ── Main Page ─────────────────────────────────────────────────────────────────
-export default function NotesPage() {
-  const [noteList, setNoteList] = useState<Note[]>([])
-  const [loading, setLoading] = useState(true)
+// ── Main Client Component ─────────────────────────────────────────────────────
+// initialNotes = server se aaya data (SSR) — Google ko ye sab dikh raha hai
+export default function NotesClient({ initialNotes }: { initialNotes: Note[] }) {
   const [search, setSearch] = useState('')
   const [activeCourse, setActiveCourse] = useState<string>('All')
   const [activeYear, setActiveYear] = useState<string>('All')
   const [activeSubject, setActiveSubject] = useState<string>('All')
 
-  useEffect(() => {
-    async function fetchNotes() {
-      try {
-        const data = await getNotesFromSupabase()
-        setNoteList(data && data.length > 0 ? data : notes)
-      } catch {
-        setNoteList(notes)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchNotes()
-  }, [])
+  // Ab koi useEffect/loading nahi — data already server se aa gaya
+  const noteList = initialNotes
 
   const handleCourseChange = (course: string) => {
     setActiveCourse(course)
@@ -198,13 +185,11 @@ export default function NotesPage() {
     setActiveSubject('All')
   }
 
-  // Year options for selected course
   const yearOptions = useMemo(() => {
     if (activeCourse === 'All') return []
     return COURSE_YEARS[activeCourse] ?? []
   }, [activeCourse])
 
-  // Subject options — based on current course + year selection
   const subjectOptions = useMemo(() => {
     const set = new Set<string>()
     noteList
@@ -217,7 +202,6 @@ export default function NotesPage() {
     return ['All', ...Array.from(set).sort()]
   }, [noteList, activeCourse, activeYear])
 
-  // Final filtered notes
   const filtered = useMemo(() => {
     return noteList.filter((n) => {
       const matchCourse  = activeCourse  === 'All' || n.course  === activeCourse
@@ -242,32 +226,6 @@ export default function NotesPage() {
 
   const hasActiveFilters = search || activeCourse !== 'All' || activeYear !== 'All' || activeSubject !== 'All'
 
-  // ── Loading skeleton ─────────────────────────────────────────────────────
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-black pt-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="h-8 w-24 bg-slate-800 animate-pulse mx-auto rounded-full mb-4" />
-            <div className="h-12 w-72 bg-slate-800 animate-pulse mx-auto rounded-xl mb-3" />
-            <div className="h-4 w-96 bg-slate-800 animate-pulse mx-auto rounded" />
-          </div>
-          <div className="h-12 bg-slate-900 animate-pulse rounded-xl mb-6" />
-          <div className="flex gap-2 mb-4">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-8 w-20 bg-slate-800 animate-pulse rounded-full" />
-            ))}
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="h-72 bg-slate-900 animate-pulse rounded-2xl" />
-            ))}
-          </div>
-        </div>
-      </main>
-    )
-  }
-
   return (
     <main className="min-h-screen bg-black pt-24 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
@@ -281,7 +239,7 @@ export default function NotesPage() {
             All Notes
           </h1>
           <p className="text-base text-slate-400 max-w-lg mx-auto mt-3 leading-relaxed">
-           Select your course — B.Tech, BCA, Diploma, or Class 10/11/12 — and instantly access clear, subject‑wise notes designed to help you succeed.
+            Select your course — B.Tech, BCA, Diploma, or Class 10/11/12 — and instantly access clear, subject‑wise notes designed to help you succeed.
           </p>
         </div>
 
@@ -332,7 +290,7 @@ export default function NotesPage() {
           </div>
         </div>
 
-        {/* ── LEVEL 2: Year Filter — slides in when course has years ── */}
+        {/* ── LEVEL 2: Year Filter ── */}
         <AnimatePresence>
           {activeCourse !== 'All' && yearOptions.length > 0 && (
             <motion.div
@@ -364,7 +322,7 @@ export default function NotesPage() {
           )}
         </AnimatePresence>
 
-        {/* ── LEVEL 3: Subject Filter — slides in always (when subjects available) ── */}
+        {/* ── LEVEL 3: Subject Filter ── */}
         <AnimatePresence>
           {subjectOptions.length > 2 && (
             <motion.div

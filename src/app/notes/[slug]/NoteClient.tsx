@@ -2,10 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { notes, Note } from '@/data/Notes'
-import { getNotesFromSupabase } from '@/lib/NoteService'
+import { Note } from '@/data/Notes'
 
 // ── Subject colors ────────────────────────────────────────────────────────────
 const SUBJECT_COLORS: Record<string, { bg: string; dot: string; glow: string; label: string }> = {
@@ -24,14 +22,19 @@ const SUBJECT_COLORS: Record<string, { bg: string; dot: string; glow: string; la
 const getSubjectStyle = (subject: string) =>
   SUBJECT_COLORS[subject] ?? { bg: '#1a1a1a', dot: '#c8fa45', glow: '#c8fa45', label: subject }
 
-const getSlug = (link: string) => link.split('/').pop() ?? ''
-
-function getDriveEmbedUrl(drivelink: string): string | null {
-  const fileMatch = drivelink.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
-  const openMatch = drivelink.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+function getDriveEmbedUrl(link: string): string | null {
+  const fileMatch = link.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+  const openMatch = link.match(/[?&]id=([a-zA-Z0-9_-]+)/)
   const id = fileMatch?.[1] ?? openMatch?.[1]
   if (!id) return null
   return `https://drive.google.com/file/d/${id}/preview`
+}
+
+// ── Props — server se data aata hai, koi fetch nahi ──────────────────────────
+interface NoteClientProps {
+  note: Note | null
+  allNotes: Note[]
+  slug: string
 }
 
 // ── AdSense Slot ──────────────────────────────────────────────────────────────
@@ -46,13 +49,8 @@ const AdSlot = ({ slot, format = 'auto', className = '' }: { slot: string; forma
   }, [])
 
   return (
-    <div
-      ref={adRef}
-      className={`overflow-hidden rounded-xl border border-slate-800/50 bg-[#0a0a0b] ${className}`}
-    >
-      <p className="text-[9px] text-slate-700 uppercase tracking-widest text-center pt-2 px-2">
-        Advertisement
-      </p>
+    <div ref={adRef} className={`overflow-hidden rounded-xl border border-slate-800/50 bg-[#0a0a0b] ${className}`}>
+      <p className="text-[9px] text-slate-700 uppercase tracking-widest text-center pt-2 px-2">Advertisement</p>
       <ins
         className="adsbygoogle block"
         style={{ display: 'block' }}
@@ -80,11 +78,7 @@ const ReadingProgress = ({ color }: { color: string }) => {
   }, [])
   return (
     <div className="fixed top-0 left-0 right-0 z-50 h-[2px] bg-slate-900">
-      <motion.div
-        className="h-full rounded-full"
-        style={{ background: color, width: `${progress}%` }}
-        transition={{ ease: 'linear', duration: 0.1 }}
-      />
+      <motion.div className="h-full rounded-full" style={{ background: color, width: `${progress}%` }} transition={{ ease: 'linear', duration: 0.1 }} />
     </div>
   )
 }
@@ -106,10 +100,7 @@ const BookViewer = ({ note }: { note: Note }) => {
   if (!embedUrl) {
     return (
       <div className="flex flex-col items-center justify-center h-[400px] rounded-2xl border border-dashed border-slate-800 bg-[#0c0c0e] text-center px-6">
-        <div
-          className="w-16 h-20 rounded-r-xl border-2 flex items-center justify-center mb-5 relative"
-          style={{ borderColor: s.dot + '40', background: s.bg }}
-        >
+        <div className="w-16 h-20 rounded-r-xl border-2 flex items-center justify-center mb-5 relative" style={{ borderColor: s.dot + '40', background: s.bg }}>
           <div className="space-y-1.5 px-2 w-full">
             {[80, 60, 75, 50].map((w, i) => (
               <div key={i} className="h-1.5 rounded-full" style={{ background: s.dot + '30', width: `${w}%` }} />
@@ -119,13 +110,7 @@ const BookViewer = ({ note }: { note: Note }) => {
         </div>
         <p className="text-white font-semibold mb-1">PDF not linked yet</p>
         <p className="text-slate-500 text-sm mb-4">Drive link hasn't been added for this note.</p>
-        <a
-          href={note.link}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all"
-          style={{ background: '#c8fa4518', border: '1px solid #c8fa4535', color: '#c8fa45' }}
-        >
+        <a href={note.link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={{ background: '#c8fa4518', border: '1px solid #c8fa4535', color: '#c8fa45' }}>
           Open Notes →
         </a>
       </div>
@@ -154,10 +139,7 @@ const BookViewer = ({ note }: { note: Note }) => {
         </div>
         <div className="flex items-center gap-2">
           <button
-            onClick={() => {
-              if (!fullscreen) viewerRef.current?.requestFullscreen?.()
-              else document.exitFullscreen?.()
-            }}
+            onClick={() => { if (!fullscreen) viewerRef.current?.requestFullscreen?.(); else document.exitFullscreen?.() }}
             className="w-8 h-8 rounded-lg border border-slate-700 bg-slate-900/80 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-500 transition-all"
           >
             {fullscreen ? (
@@ -166,13 +148,7 @@ const BookViewer = ({ note }: { note: Note }) => {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
             )}
           </button>
-          <a
-            href={note.drivelink ?? note.link}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
-            style={{ background: '#c8fa4512', border: '1px solid #c8fa4530', color: '#c8fa45' }}
-          >
+          <a href={note.drivelink ?? note.link} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: '#c8fa4512', border: '1px solid #c8fa4530', color: '#c8fa45' }}>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 0 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
             </svg>
@@ -245,7 +221,7 @@ const RelatedCard = ({ note, index }: { note: Note; index: number }) => {
             {note.year && (<><span className="text-slate-800">·</span><span className="text-slate-600 text-[10px]">{note.year}</span></>)}
           </div>
         </div>
-        <svg className="text-slate-700 group-hover:text-[#c8fa45] transition-colors shrink-0 mt-1" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
+        <svg className="text-slate-700 group-hover:text-[#c8fa45] transition-colors shrink-0 mt-1" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18 6-6-6-6"/></svg>
       </Link>
     </motion.div>
   )
@@ -280,27 +256,27 @@ const TipBox = ({ subject }: { subject: string }) => {
 }
 
 // ── Main Component ────────────────────────────────────────────────────────────
-export default function NoteClient() {
-  const params = useParams()
-  const slug = params?.slug as string
-  const [noteList, setNoteList] = useState<Note[]>(notes)
-  const [loading, setLoading] = useState(true)
+export default function NoteClient({ note, allNotes, slug }: NoteClientProps) {
   const [copyDone, setCopyDone] = useState(false)
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getNotesFromSupabase()
-        if (data && data.length > 0) setNoteList(data)
-      } catch {}
-      finally { setLoading(false) }
-    }
-    fetchData()
-  }, [])
-
-  const note = noteList.find((n) => getSlug(n.link) === slug)
   const s = note ? getSubjectStyle(note.subject) : { bg: '#1a1a1a', dot: '#c8fa45', glow: '#c8fa45', label: '' }
-  const related = noteList.filter((n) => getSlug(n.link) !== slug && (n.course === note?.course || n.subject === note?.subject)).slice(0, 5)
+
+  // ── Smart Related Notes ───────────────────────────────────────────────────
+  // Priority: same course + same year > same course > same subject
+  // BCA 1st year note khola → BCA 1st year notes aayenge related mein
+  const related = allNotes
+    .filter((n) => n.link.split('/').pop() !== slug) // current note hata do
+    .map((n) => {
+      let score = 0
+      if (note?.course && n.course === note.course) score += 10  // same course = highest priority
+      if (note?.year && n.year === note.year) score += 8          // same year = very important
+      if (note?.semester && n.semester === note.semester) score += 5 // same semester
+      if (note?.subject && n.subject === note.subject) score += 3    // same subject
+      return { note: n, score }
+    })
+    .filter(({ score }) => score > 0) // koi match nahi toh mat dikhao
+    .sort((a, b) => b.score - a.score) // highest score pehle
+    .slice(0, 5) // top 5
+    .map(({ note }) => note)
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href)
@@ -308,19 +284,7 @@ export default function NoteClient() {
     setTimeout(() => setCopyDone(false), 2000)
   }
 
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-black pt-24 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto space-y-4 animate-pulse">
-          <div className="h-5 w-28 bg-slate-800 rounded" />
-          <div className="h-10 w-2/3 bg-slate-800 rounded-xl" />
-          <div className="h-4 w-1/2 bg-slate-800/60 rounded" />
-          <div className="h-[500px] bg-slate-900 rounded-2xl mt-6" />
-        </div>
-      </main>
-    )
-  }
-
+  // ── Note not found ────────────────────────────────────────────────────────
   if (!note) {
     return (
       <main className="min-h-screen bg-black pt-24 flex items-center justify-center px-4">
@@ -336,6 +300,7 @@ export default function NoteClient() {
     )
   }
 
+  // ── Main render ───────────────────────────────────────────────────────────
   return (
     <>
       <ReadingProgress color={s.dot} />
@@ -345,12 +310,23 @@ export default function NoteClient() {
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
-          {/* Breadcrumb */}
-          <motion.nav initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-xs text-slate-600 mb-8 flex-wrap">
+          {/* Breadcrumb — Google mein bhi dikhega */}
+          <motion.nav initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-slate-600 mb-8 flex-wrap">
             <Link href="/" className="hover:text-slate-400 transition-colors">Home</Link>
             <span>/</span>
             <Link href="/notes" className="hover:text-slate-400 transition-colors">Notes</Link>
-            {note.course && (<><span>/</span><Link href={`/notes?course=${note.course}`} className="hover:text-slate-400 transition-colors">{note.course}</Link></>)}
+            {note.course && (
+              <>
+                <span>/</span>
+                <Link href={`/notes?course=${note.course}`} className="hover:text-slate-400 transition-colors">{note.course}</Link>
+              </>
+            )}
+            {note.year && (
+              <>
+                <span>/</span>
+                <span className="text-slate-500">{note.year}</span>
+              </>
+            )}
             <span>/</span>
             <span className="text-slate-400 truncate max-w-[200px]">{note.title}</span>
           </motion.nav>
@@ -368,6 +344,7 @@ export default function NoteClient() {
                   {note.semester && <span className="px-3 py-1 rounded-full border border-slate-700/60 bg-slate-900/60 text-slate-400 text-[11px]">{note.semester}</span>}
                 </div>
 
+                {/* H1 — main SEO heading */}
                 <h1 className="text-[32px] sm:text-[42px] font-semibold text-white tracking-tighter leading-[1.1] mb-3">{note.title}</h1>
                 <p className="text-slate-400 text-[15px] leading-relaxed max-w-xl mb-5">{note.description}</p>
 
@@ -448,12 +425,20 @@ export default function NoteClient() {
 
               <TipBox subject={note.subject} />
 
+              {/* Related Notes — smart filtered */}
               {related.length > 0 && (
                 <div className="rounded-2xl border border-slate-800 bg-[#0c0c0e] overflow-hidden">
                   <div className="px-4 py-3 border-b border-slate-800/60 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c8fa45" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                      <span className="text-xs font-semibold text-slate-300">Related Notes</span>
+                      <span className="text-xs font-semibold text-slate-300">
+                        {/* Smart label — BCA 1st Year khola toh "BCA 1st Year Notes" dikhega */}
+                        {note.course && note.year
+                          ? `${note.course} ${note.year} Notes`
+                          : note.course
+                          ? `More ${note.course} Notes`
+                          : 'Related Notes'}
+                      </span>
                     </div>
                     <span className="text-[10px] text-slate-600">{related.length}</span>
                   </div>
@@ -461,8 +446,11 @@ export default function NoteClient() {
                     {related.map((n, i) => <RelatedCard key={i} note={n} index={i} />)}
                   </div>
                   <div className="px-3 pb-3">
-                    <Link href="/notes" className="block text-center py-2 rounded-xl border border-slate-800 text-[12px] text-slate-500 hover:text-[#c8fa45] hover:border-slate-700 transition-all">
-                      View all notes →
+                    <Link
+                      href={note.course ? `/notes?course=${note.course}` : '/notes'}
+                      className="block text-center py-2 rounded-xl border border-slate-800 text-[12px] text-slate-500 hover:text-[#c8fa45] hover:border-slate-700 transition-all"
+                    >
+                      {note.course ? `View all ${note.course} notes →` : 'View all notes →'}
                     </Link>
                   </div>
                 </div>
