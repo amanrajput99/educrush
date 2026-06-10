@@ -258,8 +258,10 @@ export default function CareersContactPage() {
 
           {/* Right: Form */}
           <Suspense fallback={
-            <div className="w-full max-w-lg border border-white/10 rounded-2xl p-8 flex items-center justify-center min-h-[400px]">
-              <p className="text-slate-500 text-sm">Loading form...</p>
+            <div className="w-full max-w-lg backdrop-blur-sm border border-white/10 rounded-2xl p-8">
+              <FadeUp>
+                <CareersForm />
+              </FadeUp>
             </div>
           }>
             <FadeUp delay={0.1}>

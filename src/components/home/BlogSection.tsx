@@ -18,8 +18,9 @@ function formatDate(dateStr?: string) {
   })
 }
 
-function readTime(excerpt: string) {
-  const words = excerpt?.split(' ').length ?? 0
+function readTime(excerpt: string, content?: string) {
+  const text = content || excerpt || ''
+  const words = text.trim().split(/\s+/).length
   return `${Math.max(1, Math.ceil(words / 200))} min read`
 }
 
@@ -151,8 +152,8 @@ function BlogCard({ blog, index, featured = false }: { blog: Blog; index: number
           <div className="flex items-center gap-2 text-[11px] text-slate-600">
             <span>{formatDate(blog.created_at)}</span>
             <span>·</span>
-            <span>{readTime(blog.excerpt)}</span>
-          </div>
+  <span>{readTime(blog.excerpt, blog.content)}</span>
+            </div>
         </div>
       </div>
     </motion.a>

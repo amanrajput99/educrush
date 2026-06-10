@@ -80,7 +80,7 @@ const Footer = () => {
                                 <ul className="space-y-3 text-sm text-neutral-300">
                                     <li><a href="/notes" className="hover:text-neutral-400">Notes</a></li>
                                     <li><a href="/projects" className="hover:text-neutral-400">Projects</a></li>
-                                    <li><a href="/tutorials" className="hover:text-neutral-400">Tutorials</a></li>
+                                    {/* <li><a href="/tutorials" className="hover:text-neutral-400">Tutorials</a></li> */}
                                 </ul>
                             </div>
 
@@ -89,7 +89,7 @@ const Footer = () => {
                                 <h3 className="font-medium text-sm mb-4">Resources</h3>
                                 <ul className="space-y-3 text-sm text-neutral-300">
                                     <li><a href="/notes" className="hover:text-neutral-400">Free Resources</a></li>
-                                    <li><a href="/home" className="hover:text-neutral-400">Study Materials</a></li>
+                                    <li><a href="/notes" className="hover:text-neutral-400">Study Materials</a></li>
                                     <li><a href="/coding-practice" className="hover:text-neutral-400">Coding Practice</a></li>
                                     <li><a href="/admission" className="hover:text-neutral-400">Admission 2026</a></li>
                                     <li><a href="/blogs" className="hover:text-neutral-400">Blogs</a></li>
@@ -116,7 +116,7 @@ const Footer = () => {
 
                     <div className="max-w-7xl mx-auto mt-12 pt-4 border-t border-neutral-700 flex justify-between items-center">
                         <p className="text-neutral-400 text-sm">© 2026 EduCrush</p>
-                        <p className='text-sm text-neutral-400'>All right reserved.</p>
+                        <p className='text-sm text-neutral-400'>All rights reserved.</p>
                     </div>
                     <div className="relative">
                         <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-3xl h-full max-h-64 bg-green-500 rounded-full blur-[170px] pointer-events-none" />

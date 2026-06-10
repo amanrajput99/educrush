@@ -6,9 +6,14 @@ export const metadata: Metadata = {
   title: 'Blog — Student Tips, Tutorials & Guides',
   description:
     'Read articles on coding, exam prep, web development, and student life — written by students for students. Free, always.',
+  alternates: {
+    canonical: 'https://educrush.in/blogs',
+  },
   openGraph: {
     title: 'EduCrush Blog',
     description: 'Coding tutorials, exam tips, and student guides — all free.',
+    url: 'https://educrush.in/blogs',
+    siteName: 'EduCrush',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
 }

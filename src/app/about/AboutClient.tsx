@@ -6,7 +6,7 @@ import { motion, useInView } from 'framer-motion'
 
 // ── Animated counter ──────────────────────────────────────────────────────────
 function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(to)
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true })
 

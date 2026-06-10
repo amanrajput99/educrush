@@ -65,7 +65,7 @@ function CollegeMarquee() {
 
 // ── Counter ───────────────────────────────────────────────────────────────────
 function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(to)
   const ref = useRef(null)
   const inView = useInView(ref, { once: true })
   useEffect(() => {
@@ -386,7 +386,7 @@ export function AdmissionPageClient() {
               initial={{ opacity: 0, y: 20 }} animate={statsInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: i * 0.08 }}
               className="border border-white/10 hover:border-green-900 rounded-xl p-4 md:p-5 text-center transition-all bg-white/[0.02]">
               <div className="text-2xl md:text-3xl font-semibold text-green-400 mb-1">
-                {statsInView ? <Counter to={s.value} suffix={s.suffix} /> : '0'}
+                {<Counter to={s.value} suffix={s.suffix} />}
               </div>
               <div className="text-xs text-white/30">{s.label}</div>
             </motion.div>

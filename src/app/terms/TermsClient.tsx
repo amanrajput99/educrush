@@ -49,7 +49,7 @@ const sections = [
   {
     id: 'contact',
     title: 'Contact Us',
-    content: `If you have any questions about these Terms & Conditions, please reach out:\n\n📧  educrushoffical@gmail.com\n🌐  https://educrush.in\n📍  India\n\nWe aim to respond to all inquiries within 2–3 business days.`,
+    content: `If you have any questions about these Terms & Conditions, please reach out:\n\n📧  educrushofficial@gmail.com\n🌐  https://educrush.in\n📍  India\n\nWe aim to respond to all inquiries within 2–3 business days.`,
   },
 ]
 

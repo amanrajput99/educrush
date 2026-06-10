@@ -1,10 +1,8 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Project, projects } from '@/data/projects'
-import { getProjectsFromSupabase } from '@/lib/projectService'
-import { useRef } from 'react'
+import { Project } from '@/data/projects'
 
 // ─── Individual Card ──────────────────────────────────────────────────────────
 
@@ -20,7 +18,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
   }
 
   return (
-    <motion.a
+    <a
       ref={cardRef}
       href={`/projects/${project.slug}`}
       target="_blank"
@@ -28,11 +26,6 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
-      layout
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.35, delay: index * 0.05 }}
       className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 p-5 text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/50 hover:shadow-emerald-500/10 hover:shadow-xl"
     >
             {/* Cursor Glow */}
@@ -85,31 +78,17 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
           ))}
         </div>
       </div>
-    </motion.a>
+    </a>
   )
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
-export default function ProjectsPage() {
-  const [projectList, setProjectList] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
+export default function ProjectsClient({ initialProjects }: { initialProjects: Project[] }) {
   const [search, setSearch] = useState('')
   const [activeTag, setActiveTag] = useState<string>('All')
 
-  useEffect(() => {
-    async function fetchProjects() {
-      try {
-        const data = await getProjectsFromSupabase()
-        setProjectList(data && data.length > 0 ? data : projects)
-      } catch {
-        setProjectList(projects)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchProjects()
-  }, [])
+  const projectList = initialProjects
 
   // Collect all unique tags
   const allTags = useMemo(() => {
@@ -131,32 +110,6 @@ export default function ProjectsPage() {
       return matchesTag && matchesSearch
     })
   }, [projectList, activeTag, search])
-
-  // ── Loading skeleton ──────────────────────────────────────────────────────
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-black pt-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="h-8 w-24 bg-slate-800 animate-pulse mx-auto rounded-full mb-4" />
-            <div className="h-12 w-72 bg-slate-800 animate-pulse mx-auto rounded-xl mb-3" />
-            <div className="h-4 w-96 bg-slate-800 animate-pulse mx-auto rounded" />
-          </div>
-          <div className="h-12 bg-slate-900 animate-pulse rounded-xl mb-6" />
-          <div className="flex gap-2 mb-8">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-8 w-20 bg-slate-800 animate-pulse rounded-full" />
-            ))}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-80 bg-slate-900 animate-pulse rounded-2xl" />
-            ))}
-          </div>
-        </div>
-      </main>
-    )
-  }
 
   return (
     <main className="min-h-screen bg-black pt-24 pb-20 px-6">
@@ -270,16 +223,11 @@ export default function ProjectsPage() {
             </button>
           </motion.div>
         ) : (
-          <motion.div
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"
-          >
-            <AnimatePresence mode="popLayout">
-              {filtered.map((project, index) => (
-                <ProjectCard key={project.name} project={project} index={index} />
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            {filtered.map((project, index) => (
+              <ProjectCard key={project.name} project={project} index={index} />
+            ))}
+          </div>
         )}
 
         {/* ── Bottom divider glow ── */}

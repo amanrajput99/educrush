@@ -41,6 +41,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       // ── Purane /all-notes/ URLs → naye /notes/ ──────────────────────────
+      // Wildcard — saare /all-notes/*.html pages ek saath redirect
+      {
+        source: '/all-notes/:slug',
+        destination: '/notes',
+        permanent: true,
+      },
       {
         source: '/all-notes/java-1.html',
         destination: '/notes',

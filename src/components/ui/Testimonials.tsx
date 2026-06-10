@@ -2,7 +2,8 @@
 import React from 'react';
 
 type TestimonialCard = {
-  image: string;
+  initials: string;
+  color: string;
   name: string;
   handle: string;
   text: string;
@@ -10,49 +11,49 @@ type TestimonialCard = {
 
 const cardsData: TestimonialCard[] = [
   {
-    image: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200',
+    initials: 'RV', color: '#1d4ed8',
     name: 'Rahul Verma',
     handle: '@rahul_btech',
     text: 'Found all my semester 3 DSA notes in minutes. Saved me hours of searching — genuinely the best resource I have used.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200',
+    initials: 'PS', color: '#7c3aed',
     name: 'Priya Sharma',
     handle: '@priya_cse',
     text: 'I was panicking before my OS exam and EduCrush had exactly what I needed. Clear, organised, and completely free.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200&auto=format&fit=crop&q=60',
+    initials: 'AG', color: '#0d9488',
     name: 'Aryan Gupta',
     handle: '@aryan_dev',
     text: 'The projects section is incredible. Helped me build my first full-stack project for placement prep — with actual source code.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&auto=format&fit=crop&q=60',
+    initials: 'KM', color: '#b45309',
     name: 'Karan Mehta',
     handle: '@karanmehta_',
     text: 'Coming from a small town, I never had access to good coaching. EduCrush changed that completely. Every resource, free.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?q=80&w=200',
+    initials: 'SP', color: '#be185d',
     name: 'Sneha Patel',
     handle: '@snehapatel21',
     text: 'I uploaded my DBMS notes and hundreds of students downloaded them. Seeing your work help others is an amazing feeling.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200',
+    initials: 'VS', color: '#15803d',
     name: 'Vikram Singh',
     handle: '@vikram_ece',
     text: 'ECE notes were always hard to find online. EduCrush actually has them, properly organised by subject and semester.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200',
+    initials: 'NR', color: '#c2410c',
     name: 'Nisha Rawat',
     handle: '@nisharawat_',
     text: 'The community is so supportive. Posted a doubt and got a helpful reply within hours. Feels like studying with friends.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=200',
+    initials: 'RJ', color: '#1e40af',
     name: 'Rohit Joshi',
     handle: '@rohitjoshi_cs',
     text: 'Used EduCrush throughout my final year. The notes are actually accurate and exam-focused — not just copy-paste content.',
@@ -62,7 +63,9 @@ const cardsData: TestimonialCard[] = [
 const TestimonialCard = ({ card }: { card: TestimonialCard }) => (
   <div className="p-4 rounded-xl mx-4 shadow-md hover:shadow-lg transition-all duration-200 w-72 shrink-0 bg-white/90 backdrop-blur-sm">
     <div className="flex gap-3 items-center">
-      <img className="w-14 h-14 rounded-full object-cover" src={card.image} alt={card.name} />
+      <div className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0" style={{ background: card.color }}>
+        {card.initials}
+      </div>
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
           <p className="font-semibold text-slate-900">{card.name}</p>

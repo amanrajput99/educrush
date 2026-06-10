@@ -641,7 +641,7 @@ export default function PrivacyPolicy() {
               <p style={{ fontSize: 11, color: '#4ade80', fontWeight: 700, marginBottom: 5 }}>Quick Contact</p>
               <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.44)', lineHeight: 1.6 }}>
                 Privacy concerns?<br />
-                <a href="mailto:educrushoffical@gmail.com">educrushoffical@gmail.com</a>
+                <a href="mailto:educrushofficial@gmail.com">educrushofficial@gmail.com</a>
               </p>
             </div>
           </aside>
@@ -767,13 +767,13 @@ export default function PrivacyPolicy() {
                 regarding your privacy or this policy, reach out to our team directly.
               </p>
               <div className="pp-contact-btns">
-                <a href="mailto:privacy@educrush.in" className="pp-btn-primary">
+                <a href="mailto:educrushofficial@gmail.com" className="pp-btn-primary">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
                     fill="none" stroke="currentColor" strokeWidth="2">
                     <rect width="20" height="16" x="2" y="4" rx="2"/>
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                   </svg>
-                  educrushoffical@gmail.com
+                  educrushofficial@gmail.com
                 </a>
                 <a href="/contact" className="pp-btn-secondary">Contact Page →</a>
               </div>
