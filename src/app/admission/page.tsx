@@ -1,6 +1,4 @@
-// app/admission/page.tsx
-// ✅ Ye SERVER component hai — metadata export kar sakta hai
-// AdmissionPageClient mein saara 'use client' code hai
+
 
 import type { Metadata } from 'next'
 import { AdmissionPageClient } from './AdmissionPageClient'
