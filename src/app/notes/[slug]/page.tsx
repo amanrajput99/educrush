@@ -1,5 +1,3 @@
-// src/app/notes/[slug]/page.tsx
-// ⚠️ 'use client' NAHI likhna — ye Server Component hai
 
 import type { Metadata } from 'next'
 import { notes } from '@/data/Notes'
@@ -8,7 +6,7 @@ import NoteClient from './NoteClient'
 
 const BASE_URL = 'https://educrush.in'
 
-// ── Helper: slug se note nikalo ───────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 async function getAllNotes() {
   try {
     const supabaseNotes = await getNotesFromSupabase()
@@ -22,17 +20,14 @@ async function getNote(slug: string) {
   return allNotes.find((n) => n.link.split('/').pop() === slug) ?? null
 }
 
-// ── Pre-render all note slugs ─────────────────────────────────────────────────
+// ── Pre-render all slugs at build time ───────────────────────────────────────
 export async function generateStaticParams() {
   const allNotes = await getAllNotes()
-  const slugs = allNotes.map((note) => ({
-    slug: note.link.split('/').pop() ?? '',
-  }))
-  // Duplicates hata do
+  const slugs = allNotes.map((n) => ({ slug: n.link.split('/').pop() ?? '' }))
   return Array.from(new Map(slugs.map((s) => [s.slug, s])).values())
 }
 
-// ── Dynamic Metadata — har note ka apna title/description Google mein ─────────
+// ── Dynamic Metadata ──────────────────────────────────────────────────────────
 export async function generateMetadata({
   params,
 }: {
@@ -45,46 +40,65 @@ export async function generateMetadata({
     return {
       title: 'Note Not Found | EduCrush',
       description: 'This note does not exist on EduCrush.',
+      robots: { index: false },
     }
   }
 
-  // Smart title — "BCA 2nd Year DBMS Notes Free PDF | EduCrush"
-  const titleParts = [
-    note.course,
-    note.year,
-    note.semester,
-    note.subject,
-    'Notes Free PDF',
-  ].filter(Boolean)
-
-  const title = `${note.title} | ${titleParts.join(' ')} | EduCrush`
-
-  // Smart description — 155 chars max
-  const description =
-    note.description?.slice(0, 120) ||
-    `Free ${note.subject} notes for ${note.course ?? 'students'}${note.year ? ` ${note.year}` : ''}${note.semester ? ` ${note.semester}` : ''}. Download PDF for free on EduCrush — no login required.`
-
   const pageUrl = `${BASE_URL}/notes/${slug}`
-  const ogImage = note.image || '/og-notes.png'
+  const ogImage = note.image ? note.image : `${BASE_URL}/og-notes.png`
+
+  // ── Smart Title — 55-60 chars target ─────────────────────────────────────
+  // Formula: [Note Title] — Free [Course] PDF | EduCrush
+  // Example: "DSA Handwritten Notes — Free BTech PDF | EduCrush" = 51 chars ✅
+  const courseStr = note.course ? `${note.course} ` : ''
+  const yearStr = note.year ? `${note.year} ` : ''
+  const title = `${note.title} — Free ${courseStr}${yearStr}PDF | EduCrush`
+
+  // ── Smart Description — 145-155 chars target ─────────────────────────────
+  // Clean first sentence of description — professional, no emojis, no topic lists
+  const firstSentence = note.description
+    ?.split(/[.\n]/)[0]
+    ?.trim()
+    ?.slice(0, 100) ?? ''
+
+  const description = firstSentence
+    ? `${firstSentence}. Free PDF download for ${courseStr}${yearStr}students — no login required.`
+    : `Download free ${note.subject} notes for ${courseStr}${yearStr}students. Well-structured PDF available on EduCrush — no login, no paywall.`
+
+  // ── Long-tail keywords — exact match searchers aate hain ─────────────────
+  const keywords = [
+    // Most specific — highest intent
+    `${note.title.toLowerCase()}`,
+    `${note.subject} notes free PDF`,
+    `${note.subject} handwritten notes`,
+    note.course && note.year
+      ? `${note.course} ${note.year} ${note.subject} notes`
+      : null,
+    note.course && note.semester
+      ? `${note.course} ${note.semester} ${note.subject} notes`
+      : null,
+    note.course ? `${note.course} ${note.subject} notes free download` : null,
+    note.course ? `free ${note.course} notes PDF` : null,
+    note.year ? `${note.year} ${note.subject} notes` : null,
+    // Broader — backup traffic
+    `${note.subject} study material`,
+    `${note.subject} notes for students India`,
+    'free notes download India',
+    'EduCrush notes',
+  ].filter(Boolean) as string[]
 
   return {
+    // ✅ Title with primary keyword first
     title,
+
+    // ✅ Description with action word + keywords + USP
     description,
-    keywords: [
-      // Specific long-tail keywords — ye rank karte hain
-      `${note.subject} notes free PDF`,
-      `${note.course} ${note.subject} notes`,
-      `${note.course} ${note.year} ${note.subject} notes`,
-      `${note.course} ${note.semester} ${note.subject} notes`,
-      `free ${note.subject} notes for ${note.course}`,
-      `${note.title}`,
-      `${note.subject} study material`,
-      `${note.course} notes free download`,
-      'free notes download India',
-      'EduCrush notes',
-      'free study material BCA BTech',
-    ].filter(Boolean),
+
+    keywords,
+
+    // ✅ Canonical — duplicate content se bachao
     alternates: { canonical: pageUrl },
+
     openGraph: {
       type: 'article',
       url: pageUrl,
@@ -99,75 +113,145 @@ export async function generateMetadata({
           alt: `${note.title} — Free Notes on EduCrush`,
         },
       ],
+      // Article specific — Google News ke liye bhi helpful
+      authors: ['EduCrush'],
     },
+
     twitter: {
       card: 'summary_large_image',
       title,
       description,
       images: [ogImage],
     },
+
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
   }
 }
 
-// ── JSON-LD — Google ko structured data deta hai ──────────────────────────────
+// ── JSON-LD — Rich Results ke liye ───────────────────────────────────────────
+// Google "LearningResource" type ko special treatment deta hai education searches mein
 function NoteJsonLd({ note, slug }: { note: any; slug: string }) {
   const pageUrl = `${BASE_URL}/notes/${slug}`
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'LearningResource',
-    name: note.title,
-    description:
-      note.description ||
-      `Free ${note.subject} notes for ${note.course} students.`,
-    url: pageUrl,
-    image: note.image || `${BASE_URL}/og-notes.png`,
-    inLanguage: 'hi-IN',
-    isAccessibleForFree: true,
-    educationalLevel: note.year ?? note.course ?? 'Higher Education',
-    about: {
-      '@type': 'Thing',
-      name: note.subject,
-    },
-    provider: {
-      '@type': 'Organization',
-      name: 'EduCrush',
-      url: BASE_URL,
-    },
-    // BreadcrumbList — Google search mein breadcrumb dikhega
-    breadcrumb: {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: BASE_URL,
+    '@graph': [
+      // LearningResource — education searches mein special ranking
+      {
+        '@type': 'LearningResource',
+        '@id': pageUrl,
+        name: note.title,
+        description:
+          note.description?.split(/[.\n]/)[0]?.trim() ||
+          `Free ${note.subject} notes for ${note.course ?? 'students'}.`,
+        url: pageUrl,
+        image: note.image || `${BASE_URL}/og-notes.png`,
+        inLanguage: ['en-IN', 'hi-IN'],
+        isAccessibleForFree: true,
+        // educationalLevel — Google ko samajhata hai ye kiske liye hai
+        educationalLevel: note.year
+          ? `${note.course ?? ''} ${note.year}`.trim()
+          : note.course ?? 'Higher Education',
+        // learningResourceType — PDF format explicitly batao
+        learningResourceType: 'Notes',
+        // educationalAlignment — subject clearly specify karo
+        about: {
+          '@type': 'Thing',
+          name: note.subject,
         },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'Notes',
-          item: `${BASE_URL}/notes`,
+        // teaches — Google ko pata chale ye kya sikhata hai
+        teaches: note.subject,
+        // audience — exactly kiske liye hai
+        audience: {
+          '@type': 'EducationalAudience',
+          educationalRole: 'student',
+          ...(note.course && { audienceType: note.course }),
         },
-        ...(note.course
-          ? [
-              {
-                '@type': 'ListItem',
-                position: 3,
-                name: note.course,
-                item: `${BASE_URL}/notes?course=${note.course}`,
-              },
-            ]
-          : []),
-        {
-          '@type': 'ListItem',
-          position: note.course ? 4 : 3,
-          name: note.title,
-          item: pageUrl,
+        provider: {
+          '@type': 'Organization',
+          name: 'EduCrush',
+          url: BASE_URL,
         },
-      ],
-    },
+        // publisher
+        publisher: {
+          '@type': 'Organization',
+          name: 'EduCrush',
+          url: BASE_URL,
+          logo: {
+            '@type': 'ImageObject',
+            url: `${BASE_URL}/favicon.ico`,
+          },
+        },
+      },
+
+      // BreadcrumbList — Google search mein breadcrumb dikhega
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: BASE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Notes',
+            item: `${BASE_URL}/notes`,
+          },
+          ...(note.course
+            ? [
+                {
+                  '@type': 'ListItem',
+                  position: 3,
+                  name: note.course,
+                  item: `${BASE_URL}/notes?course=${note.course}`,
+                },
+                ...(note.year
+                  ? [
+                      {
+                        '@type': 'ListItem',
+                        position: 4,
+                        name: note.year,
+                        item: `${BASE_URL}/notes?course=${note.course}&year=${note.year}`,
+                      },
+                      {
+                        '@type': 'ListItem',
+                        position: 5,
+                        name: note.title,
+                        item: pageUrl,
+                      },
+                    ]
+                  : [
+                      {
+                        '@type': 'ListItem',
+                        position: 4,
+                        name: note.title,
+                        item: pageUrl,
+                      },
+                    ]),
+              ]
+            : [
+                {
+                  '@type': 'ListItem',
+                  position: 3,
+                  name: note.title,
+                  item: pageUrl,
+                },
+              ]),
+        ],
+      },
+    ],
   }
 
   return (
@@ -178,8 +262,7 @@ function NoteJsonLd({ note, slug }: { note: any; slug: string }) {
   )
 }
 
-// ── Page — Server Component ───────────────────────────────────────────────────
-// note data SERVER pe fetch hota hai — Google ko poora content milega
+// ── Page ──────────────────────────────────────────────────────────────────────
 export default async function NotePage({
   params,
 }: {
@@ -192,7 +275,6 @@ export default async function NotePage({
   return (
     <>
       {note && <NoteJsonLd note={note} slug={slug} />}
-      {/* note aur allNotes dono pass kar rahe hain client ko — no extra fetch needed */}
       <NoteClient note={note} allNotes={allNotes} slug={slug} />
     </>
   )
