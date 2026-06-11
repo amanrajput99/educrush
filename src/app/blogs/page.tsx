@@ -81,8 +81,9 @@ export const metadata: Metadata = {
   },
 }
 
-// ISR — 1 hour cache, naya blog publish hone pe bhi fresh rahega
-export const revalidate = 3600
+// Har 60 sec mein revalidate (ISR)
+export const revalidate = 3600 // 1 hour cache
+
 
 export default async function BlogsPage() {
   const blogs = await getPublishedBlogs()
