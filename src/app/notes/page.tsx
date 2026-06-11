@@ -102,7 +102,7 @@ function NotesPageJsonLd() {
 // Description: 155 chars max — action-oriented, keyword rich
 export const metadata: Metadata = {
   // ✅ 58 chars — perfect length, primary keyword "Free Notes" pehle
-  title: 'Free Notes for BCA, BTech & Diploma Students | EduCrush',
+  title: 'Free Notes for BCA, BTech & Diploma Students',
 
   // ✅ 154 chars — action word "Download", keywords: BCA, BTech, DSA, DBMS, free PDF
   description:
@@ -138,7 +138,7 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://educrush.in/notes',
     // OG title thoda longer ho sakta hai — 70-90 chars
-    title: 'Free Notes for BCA, BTech, Diploma & Class 10–12 | EduCrush',
+    title: 'Free Notes for BCA, BTech, Diploma & Class 10–12',
     description:
       'Download free handwritten notes for BCA, BTech, Diploma & Class 10–12 students. DSA, DBMS, OS, Java, Python, Web Dev & more. No login, no paywall.',
     siteName: 'EduCrush',

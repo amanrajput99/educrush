@@ -90,7 +90,7 @@ function ProjectsPageJsonLd() {
 // ── Metadata ──────────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
   // ✅ 60 chars — primary keyword "Free Projects" pehle, brand last
-  title: 'Free Web Dev Projects with Source Code | EduCrush',
+  title: 'Free Web Dev Projects with Source Code',
 
   // ✅ 155 chars — action word "Browse", keywords: HTML, CSS, JS, React, BCA, BTech
   description:

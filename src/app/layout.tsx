@@ -9,34 +9,48 @@ import GoogleAnalytics from '@/components/Googleanalytics'
 
 const BASE_URL = 'https://educrush.in'
 
-// ✅ themeColor yahan aata hai — metadata mein nahi
 export const viewport: Viewport = {
   themeColor: '#0f172a',
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
+
+  // ─── Title ───────────────────────────────────────────────
+  // default = homepage title
+  // template = har doosre page pe auto-apply hoga — | EduCrush append hoga
   title: {
     default: 'EduCrush — Free Notes, Projects & AI for Students',
     template: '%s | EduCrush',
   },
-  description:
-    'EduCrush provides free notes, web development projects, coding practice, and an AI study assistant for BCA, BTech, Class 10–12, and Diploma students.',
 
+  // ─── Description ─────────────────────────────────────────
+  description:
+    'EduCrush provides free notes, web development projects, coding practice, and an AI study assistant for BCA, BTech, Class 10–12, and Diploma students. 10,000+ students learning free.',
+
+  // ─── Keywords ────────────────────────────────────────────
   keywords: [
     'free notes', 'BCA notes', 'BTech notes', 'Class 10 notes', 'Class 12 notes',
     'Diploma notes', 'web development projects', 'HTML CSS projects', 'coding practice',
     'AI study assistant', 'EduCrush', 'free study material', 'student resources India',
+    'free education India', 'BTech notes PDF', 'BCA notes PDF', 'engineering notes free',
   ],
 
+  // ─── Author / Publisher ───────────────────────────────────
   authors: [{ name: 'EduCrush', url: BASE_URL }],
   creator: 'EduCrush',
   publisher: 'EduCrush',
 
+  // ─── Canonical ───────────────────────────────────────────
+  // Sirf homepage ka canonical yahan — baaki pages apna khud set karenge
   alternates: {
     canonical: BASE_URL,
   },
 
+  // ─── Open Graph ──────────────────────────────────────────
+  // WhatsApp, Facebook, LinkedIn share pe yahi dikhta hai
   openGraph: {
     type: 'website',
     locale: 'en_IN',
@@ -44,27 +58,35 @@ export const metadata: Metadata = {
     siteName: 'EduCrush',
     title: 'EduCrush — Free Notes, Projects & AI for Students',
     description:
-      'Free notes, web development projects, coding practice, and AI study assistant for Indian students. BCA, BTech, Class 10–12 & Diploma.',
+      'Free notes, web development projects, coding practice, and AI study assistant for Indian students. BCA, BTech, Class 10–12 & Diploma. Join 10,000+ students.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'EduCrush — Free Study Resources for Students',
+        type: 'image/png',
       },
     ],
   },
 
+  // ─── Twitter / X ─────────────────────────────────────────
   twitter: {
     card: 'summary_large_image',
     site: '@educrush',
     creator: '@educrush',
     title: 'EduCrush — Free Notes, Projects & AI for Students',
     description:
-      'Free notes, projects, coding practice & AI study assistant for Indian students.',
-    images: ['/og-image.png'],
+      'Free notes, projects, coding practice & AI study assistant for Indian students. 10,000+ students learning free.',
+    images: [
+      {
+        url: '/og-image.png',
+        alt: 'EduCrush — Free Study Resources for Students',
+      },
+    ],
   },
 
+  // ─── Robots ──────────────────────────────────────────────
   robots: {
     index: true,
     follow: true,
@@ -77,24 +99,43 @@ export const metadata: Metadata = {
     },
   },
 
+  // ─── Icons ───────────────────────────────────────────────
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
     shortcut: '/favicon.ico',
     apple: '/apple-touch-icon.png',
   },
 
+  // ─── PWA Manifest ────────────────────────────────────────
   manifest: '/manifest.json',
 
-  // ✅ themeColor yahan se hata diya — upar viewport mein hai ab
-
+  // ─── Google Verification ─────────────────────────────────
   verification: {
-    google: 'google-site-verification=xO3Fi1Yr9Lr8Y3LcFRdT_BbxXLoLQgWr30d92zbUuHU',
+    google: 'xO3Fi1Yr9Lr8Y3LcFRdT_BbxXLoLQgWr30d92zbUuHU',
+    // future mein Bing add karna ho toh:
+    // other: { 'msvalidate.01': 'BING_CODE_HERE' },
   },
+
+  // ─── Category ────────────────────────────────────────────
+  category: 'education',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en-IN">
+      {/*
+        Next.js automatically injects:
+        - charset utf-8
+        - viewport (from viewport export above)
+        - themeColor (from viewport export above)
+        - title, description, og tags (from metadata export above)
+
+        Sirf woh tags yahan daalo jo Next.js metadata API cover nahi karta.
+      */}
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
