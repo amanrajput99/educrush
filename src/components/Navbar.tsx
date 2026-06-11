@@ -207,7 +207,7 @@ const Navbar = () => {
             </div>
             <a href="/notes" className="px-4 font-bold py-2.5 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Notes</a>
             <a href="/projects" className="px-4 font-bold py-2.5 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Projects</a>
-            <a href="/ai" className="px-4 font-bold py-2.5 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Blogs</a>
+            <a href="/blogs" className="px-4 font-bold py-2.5 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Blogs</a>
             <button onClick={() => setDropdownOpen1(!dropdownOpen1)} className="flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm text-zinc-800 hover:bg-zinc-50 bg-transparent border-0 cursor-pointer font-bold">
               All Tools<svg className={`transition-transform ${dropdownOpen1 ? 'rotate-180' : ''}`} width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
