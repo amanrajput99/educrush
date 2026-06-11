@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { notFound, useParams } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { projects } from '@/data/projects'
 import type { CodeBlock } from '@/data/projects'
-import { getProjectBySlug } from '@/lib/projectService'
 import JSZip from 'jszip'
 
 const LANG_COLORS: Record<string, { bg: string; text: string; dot: string }> = {
@@ -112,37 +110,18 @@ const CodeBlockPanel = ({ block, isActive }: { block: CodeBlock; isActive: boole
   )
 }
 
-// ── Main Client Component ─────────────────────────────────────────────────────
-export default function ProjectClient() {
-  const params = useParams()
-  const slug = params?.slug as string
+// ── Props — server se data aata hai, koi useEffect fetch nahi ─────────────────
+interface ProjectClientProps {
+  project: any | null
+  slug: string
+}
 
-  const [project, setProject] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+// ── Main Client Component ─────────────────────────────────────────────────────
+export default function ProjectClient({ project, slug }: ProjectClientProps) {
   const [activeTab, setActiveTab] = useState(0)
 
-  useEffect(() => { setActiveTab(0) }, [slug])
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const found = await getProjectBySlug(slug)
-        setProject(found ?? null)
-      } catch {
-        const found = projects.find((p: any) => p.slug === slug)
-        setProject(found ?? null)
-      } finally {
-        setLoading(false)
-      }
-    }
-    load()
-  }, [slug])
-
-  if (loading) return (
-    <main className="min-h-screen bg-black flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-    </main>
-  )
+  // ✅ useEffect + useParams + loading state — sab hata diya
+  // Server se project directly aa raha hai prop mein
 
   if (!project) return notFound()
 
