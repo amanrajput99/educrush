@@ -45,9 +45,9 @@ export const metadata: Metadata = {
 
   // ─── Canonical ───────────────────────────────────────────
   // Sirf homepage ka canonical yahan — baaki pages apna khud set karenge
-  alternates: {
-    canonical: BASE_URL,
-  },
+  // alternates: {
+  //   canonical: BASE_URL,
+  // },
 
   // ─── Open Graph ──────────────────────────────────────────
   // WhatsApp, Facebook, LinkedIn share pe yahi dikhta hai
