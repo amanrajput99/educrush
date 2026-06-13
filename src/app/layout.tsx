@@ -6,6 +6,7 @@ import CTA from '@/components/home/CTA'
 import AiButton from '@/components/ui/AiButton'
 import { WebsiteJsonLd, OrganizationJsonLd } from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/Googleanalytics'
+import Script from 'next/script'
 
 const BASE_URL = 'https://educrush.in'
 
@@ -45,15 +46,11 @@ export const metadata: Metadata = {
 
   // ─── Canonical ───────────────────────────────────────────
   // Sirf homepage ka canonical yahan — baaki pages apna khud set karenge
-<<<<<<< HEAD
+// <<<<<<< HEAD
   // alternates: {
   //   canonical: BASE_URL,
   // },
-=======
-//  alternates: {
-//   canonical: BASE_URL,
-// },
->>>>>>> 078f83e265471958c08a64f217d1c97d7744f77e
+// =======
 
   // ─── Open Graph ──────────────────────────────────────────
   // WhatsApp, Facebook, LinkedIn share pe yahi dikhta hai
@@ -149,6 +146,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <GoogleAnalytics />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6151740459717471"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <WebsiteJsonLd />
         <OrganizationJsonLd />
         <Navbar />
