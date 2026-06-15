@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import { NavAuthButton, MobileNavAuthButton } from '@/components/NavAuthButton'
 
 type NoteResult = { title: string; subject: string; link: string; course?: string; year?: string }
 type ProjectResult = { name: string; slug: string; tags?: string[] }
@@ -19,7 +20,7 @@ function SearchDropdown({ query, results, loading, onClose }: {
       {loading ? (
         <div className="flex items-center justify-center gap-2 px-4 py-5 text-sm text-zinc-400">
           <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 12a9 9 0 1 1-6.219-8.56" strokeLinecap="round"/>
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" strokeLinecap="round" />
           </svg>
           Searching...
         </div>
@@ -34,7 +35,7 @@ function SearchDropdown({ query, results, loading, onClose }: {
                 <Link key={i} href={note.link} onClick={onClose} className="flex items-center gap-3 px-4 py-2.5 hover:bg-zinc-50 transition-colors">
                   <div className="size-8 rounded-lg bg-zinc-100 flex items-center justify-center flex-shrink-0">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
                     </svg>
                   </div>
                   <div className="min-w-0">
@@ -52,7 +53,7 @@ function SearchDropdown({ query, results, loading, onClose }: {
                 <Link key={i} href={`/projects/${project.slug}`} onClick={onClose} className="flex items-center gap-3 px-4 py-2.5 hover:bg-zinc-50 transition-colors">
                   <div className="size-8 rounded-lg bg-zinc-100 flex items-center justify-center flex-shrink-0">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                      <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
                     </svg>
                   </div>
                   <div className="min-w-0">
@@ -66,7 +67,7 @@ function SearchDropdown({ query, results, loading, onClose }: {
           <div className="border-t border-zinc-100 mt-2">
             <Link href={`/notes?q=${encodeURIComponent(query)}`} onClick={onClose} className="flex items-center justify-center gap-2 px-4 py-3 text-sm text-zinc-500 hover:text-zinc-800 font-medium hover:bg-zinc-50 transition-colors">
               View all results for &quot;{query}&quot;
-              <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M.6 4.602h10m-4-4 4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M.6 4.602h10m-4-4 4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
           </div>
         </div>
@@ -130,37 +131,38 @@ const Navbar = () => {
   return (
     <>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap'); *{font-family:"Geist",sans-serif;}`}</style>
-      <nav className="bg-white px-6 md:px-16 lg:px-24 xl:px-32 py-4 flex items-center justify-between relative">
-        <div className="flex items-center gap-20">
-          <a href="https://educrush.in"><span className="text-3xl font-bold text-zinc-900">EduCrush</span></a>
-          <div className="hidden md:flex items-center gap-8">
-            <a href="/notes" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Notes</a>
-            <a href="/projects" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Projects</a>
-            <a href="/blogs" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Blogs</a>
-            <div className="relative group">
-              <button className="flex items-center gap-1.5 text-sm text-zinc-800 cursor-pointer bg-transparent border-0 py-2 font-bold">All Tools<svg className="transition-transform group-hover:rotate-180" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
-              <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-zinc-200 rounded-xl shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                                <a href="/ai" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">EduCrush ai</a>
+      <nav className="bg-white px-6 md:px-8 lg:px-12 xl:px-16 py-4 flex items-center justify-between relative">
 
-                <a href="/editor" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Code Editor</a>
-                <a href="/coding-practice" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Coding Practice</a>
-              </div>
+        {/* Logo — left */}
+        <a href="https://educrush.in" className="flex-shrink-0"><span className="text-3xl font-bold text-zinc-900">EduCrush</span></a>
+
+        {/* Nav links — center */}
+        <div className="hidden md:flex flex-1 items-center gap-8 justify-center">
+          <a href="/notes" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Notes</a>
+          <a href="/projects" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Projects</a>
+          <a href="/blogs" className="text-sm text-zinc-500 hover:text-zinc-800 font-bold">Blogs</a>
+          <div className="relative group">
+            <button className="flex items-center gap-1.5 text-sm text-zinc-800 cursor-pointer bg-transparent border-0 py-2 font-bold">All Tools<svg className="transition-transform group-hover:rotate-180" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
+            <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-zinc-200 rounded-xl shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+              <a href="/ai" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">EduCrush ai</a>
+              <a href="/editor" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Code Editor</a>
+              <a href="/coding-practice" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Coding Practice</a>
             </div>
-            <div className="relative group">
-              <button className="flex items-center gap-1.5 text-sm text-zinc-800 cursor-pointer bg-transparent border-0 py-2 font-bold">All Pages<svg className="transition-transform group-hover:rotate-180" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
-              <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-zinc-200 rounded-xl shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <a href="/careers" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Careers</a>
-                <a href="/about" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">About</a>
-                <a href="/contact" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Contact</a>
-                <a href="/terms" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Terms & Conditions</a>
-                <a href="/privacy-policy" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Privacy Policy</a>
-              </div>
+          </div>
+          <div className="relative group">
+            <button className="flex items-center gap-1.5 text-sm text-zinc-800 cursor-pointer bg-transparent border-0 py-2 font-bold">All Pages<svg className="transition-transform group-hover:rotate-180" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
+            <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-zinc-200 rounded-xl shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+              <a href="/careers" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Careers</a>
+              <a href="/about" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">About</a>
+              <a href="/contact" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Contact</a>
+              <a href="/terms" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Terms & Conditions</a>
+              <a href="/privacy-policy" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Privacy Policy</a>
             </div>
           </div>
         </div>
 
-        {/* Desktop search */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* Desktop search + auth */}
+        <div className="hidden md:flex items-center gap-6 flex-shrink-0">
           <div ref={desktopRef} className="relative w-full max-w-[22rem] lg:max-w-[26rem]">
             <form onSubmit={submit(desktop.query, desktop.close)}>
               <input type="search" placeholder="Search notes, projects..." value={desktop.query}
@@ -171,15 +173,11 @@ const Navbar = () => {
               <button type="submit" className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full bg-zinc-950 text-zinc-50 px-4 py-2 text-sm font-medium hover:bg-zinc-800">Search</button>
             </form>
             {desktop.open && desktop.query.trim() && (
-              <SearchDropdown query={desktop.query} results={desktop.results} loading={desktop.loading} onClose={desktop.close}/>
+              <SearchDropdown query={desktop.query} results={desktop.results} loading={desktop.loading} onClose={desktop.close} />
             )}
           </div>
-          <Link href="/notes" className="hidden md:flex items-center gap-2.5 bg-linear-to-r from-zinc-950 to-zinc-500 text-zinc-50 hover:text-zinc-200 text-sm font-medium pl-5 pr-2 py-2 rounded-full cursor-pointer border-0">
-            Get All Resources
-            <span className="size-7 rounded-full bg-white flex items-center justify-center">
-              <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M.6 4.602h10m-4-4 4 4-4 4" stroke="#3f3f47" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </span>
-          </Link>
+          {/* SIRF YEH BADLA — Get All Resources ki jagah */}
+          <NavAuthButton />
         </div>
 
         {/* Mobile hamburger */}
@@ -202,25 +200,24 @@ const Navbar = () => {
                 <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-zinc-950 text-zinc-50 px-4 py-2 text-sm font-medium hover:bg-zinc-800">Search</button>
               </form>
               {mobile.open && mobile.query.trim() && (
-                <SearchDropdown query={mobile.query} results={mobile.results} loading={mobile.loading} onClose={() => { mobile.close(); setMenuOpen(false) }}/>
+                <SearchDropdown query={mobile.query} results={mobile.results} loading={mobile.loading} onClose={() => { mobile.close(); setMenuOpen(false) }} />
               )}
             </div>
             <a href="/notes" className="px-4 font-bold py-2.5 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Notes</a>
             <a href="/projects" className="px-4 font-bold py-2.5 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Projects</a>
             <a href="/blogs" className="px-4 font-bold py-2.5 rounded-lg text-sm text-zinc-500 hover:bg-zinc-50">Blogs</a>
             <button onClick={() => setDropdownOpen1(!dropdownOpen1)} className="flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm text-zinc-800 hover:bg-zinc-50 bg-transparent border-0 cursor-pointer font-bold">
-              All Tools<svg className={`transition-transform ${dropdownOpen1 ? 'rotate-180' : ''}`} width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              All Tools<svg className={`transition-transform ${dropdownOpen1 ? 'rotate-180' : ''}`} width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
             {dropdownOpen1 && (
               <div className="flex flex-col pl-4">
-                                <a href="/editor" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">EduCrush ai</a>
-
+                <a href="/ai" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">EduCrush ai</a>
                 <a href="/editor" className="block px-4 py-2 font-bold text-sm text-zinc-600 hover:bg-zinc-50">Code Editor</a>
                 <a href="/coding-practice" className="block px-4 py-2 font-bold text-sm text-zinc-500 hover:bg-zinc-50">Coding Practice</a>
               </div>
             )}
             <button onClick={() => setDropdownOpen2(!dropdownOpen2)} className="flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm text-zinc-800 hover:bg-zinc-50 bg-transparent border-0 cursor-pointer font-bold">
-              All Pages<svg className={`transition-transform ${dropdownOpen2 ? 'rotate-180' : ''}`} width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              All Pages<svg className={`transition-transform ${dropdownOpen2 ? 'rotate-180' : ''}`} width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="m1 1 4 4 4-4" stroke="#71717b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
             {dropdownOpen2 && (
               <div className="flex flex-col pl-4">
@@ -231,9 +228,8 @@ const Navbar = () => {
                 <a href="/privacy-policy" className="block px-4 py-2 font-bold text-sm text-zinc-500 hover:bg-zinc-50">Privacy Policy</a>
               </div>
             )}
-            <Link href="/notes" className="flex items-center justify-center gap-2.5 bg-linear-to-r from-zinc-950 to-zinc-500 text-zinc-50 text-sm font-medium px-5 py-2.5 rounded-full cursor-pointer border-0 mt-3 w-fit">
-              Get All Resources<span className="size-7 rounded-full bg-white flex items-center justify-center"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M.6 4.602h10m-4-4 4 4-4 4" stroke="#3f3f47" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
-            </Link>
+            {/* SIRF YEH BADLA — Get All Resources ki jagah */}
+            <MobileNavAuthButton />
           </div>
         )}
       </nav>
