@@ -1,5 +1,5 @@
-// src/app/login/page.tsx
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import LoginClient from './LoginClient'
 
 export const metadata: Metadata = {
@@ -9,5 +9,9 @@ export const metadata: Metadata = {
 }
 
 export default function LoginPage() {
-  return <LoginClient />
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#000' }} />}>
+      <LoginClient />
+    </Suspense>
+  )
 }
