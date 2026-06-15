@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { NavAuthButton, MobileNavAuthButton } from '@/components/NavAuthButton'
 
 type NoteResult = { title: string; subject: string; link: string; course?: string; year?: string }
@@ -114,6 +115,14 @@ const Navbar = () => {
   const desktopRef = useRef<HTMLDivElement>(null)
   const mobileRef = useRef<HTMLDivElement>(null)
 
+  // ── FIX: Route change hone par menu band karo ──
+  const pathname = usePathname()
+  useEffect(() => {
+    setMenuOpen(false)
+    setDropdownOpen1(false)
+    setDropdownOpen2(false)
+  }, [pathname])
+
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (desktopRef.current && !desktopRef.current.contains(e.target as Node)) desktop.setOpen(false)
@@ -176,7 +185,6 @@ const Navbar = () => {
               <SearchDropdown query={desktop.query} results={desktop.results} loading={desktop.loading} onClose={desktop.close} />
             )}
           </div>
-          {/* SIRF YEH BADLA — Get All Resources ki jagah */}
           <NavAuthButton />
         </div>
 
@@ -228,7 +236,6 @@ const Navbar = () => {
                 <a href="/privacy-policy" className="block px-4 py-2 font-bold text-sm text-zinc-500 hover:bg-zinc-50">Privacy Policy</a>
               </div>
             )}
-            {/* SIRF YEH BADLA — Get All Resources ki jagah */}
             <MobileNavAuthButton />
           </div>
         )}
