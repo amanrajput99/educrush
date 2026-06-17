@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Note, COURSES, COURSE_YEARS } from '@/data/Notes'
+import SaveNoteButton from '@/components/auth/SaveNoteButton'
 
 const SUBJECT_COLORS: Record<string, { bg: string; dot: string }> = {
   Physics:            { bg: '#1a1f2e', dot: '#6fa3ef' },
@@ -58,11 +59,7 @@ const NoteCard = ({ note }: { note: Note }) => {
           <span className="bg-[#c8fa45] text-[#111] text-[11px] font-bold px-3 py-[3px] rounded-full truncate max-w-[120px]">
             {note.subject}
           </span>
-          <div className="w-7 h-7 min-w-[28px] rounded-full border border-[#2e2e2e] bg-[#1a1a1a] flex items-center justify-center group-hover:border-[#c8fa45] transition-colors">
-            <svg width="10" height="12" viewBox="0 0 9 11" fill="none">
-              <path d="M7.357.5c.303 0 .594.117.808.325s.335.491.335.786v8.334a.54.54 0 0 1-.076.277.584.584 0 0 1-.779.205L5.067 8.995a1.17 1.17 0 0 0-1.134 0l-2.578 1.432a.584.584 0 0 1-.779-.205.54.54 0 0 1-.076-.277V1.61c0-.295.12-.577.335-.786A1.16 1.16 0 0 1 1.643.5z" stroke="#666" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
+          <SaveNoteButton noteLink={note.link} noteTitle={note.title} noteSubject={note.subject} />
         </div>
 
         <div className="w-full h-[120px] rounded-xl overflow-hidden flex items-center justify-center mb-3 relative" style={{ background: colors.bg }}>
