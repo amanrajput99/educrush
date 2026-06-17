@@ -1,7 +1,11 @@
 'use client'
 import Image from "next/image";
+import { useChromeHidden } from '@/lib/useChromeVisibility'
 
 const Footer = () => {
+    const chromeHidden = useChromeHidden()
+    if (chromeHidden) return null
+
     return (
         <>
             <style>

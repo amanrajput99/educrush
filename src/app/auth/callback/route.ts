@@ -8,9 +8,6 @@ export async function GET(request: NextRequest) {
   const code = requestUrl.searchParams.get('code')
   const origin = requestUrl.origin
 
-  console.log('CALLBACK:', request.url)
-  console.log('code:', code)
-
   if (code) {
     const cookieStore = await cookies()
     const supabase = createServerClient(
@@ -29,18 +26,18 @@ export async function GET(request: NextRequest) {
     )
 
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
-    console.log('error:', error?.message)
-    console.log('user:', data?.user?.email)
 
     if (!error && data.user) {
       const { data: profile } = await supabase
         .from('profiles')
         .select('onboarding_done')
         .eq('id', data.user.id)
-        .single()
+        .maybeSingle()
 
       if (!profile) {
-        await supabase.from('profiles').insert({
+        // upsert + ignoreDuplicates so this can't collide with the
+        // client-callback fallback trying to insert the same row
+        await supabase.from('profiles').upsert({
           id: data.user.id,
           email: data.user.email!,
           full_name: data.user.user_metadata?.full_name ?? data.user.user_metadata?.name ?? null,
@@ -49,7 +46,7 @@ export async function GET(request: NextRequest) {
           last_active: new Date().toISOString(),
           profile_completed: 10,
           onboarding_done: false,
-        })
+        }, { onConflict: 'id', ignoreDuplicates: true })
         return NextResponse.redirect(`${origin}/onboarding`)
       }
 

@@ -37,7 +37,7 @@ export default function LoginClient() {
   const handleMagicLink = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email.trim() || !email.includes('@')) {
-      setEmailError('Valid email address daalo')
+      setEmailError('Please enter a valid email address')
       return
     }
     setEmailError('')
@@ -46,7 +46,7 @@ export default function LoginClient() {
       await signInWithMagicLink(email)
       setMagicSent(true)
     } catch {
-      setEmailError('Kuch galat hua — dobara try karo')
+      setEmailError('Something went wrong — please try again')
     } finally {
       setLoading(null)
     }
@@ -244,7 +244,7 @@ export default function LoginClient() {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                 </svg>
-                Login mein problem aayi — dobara try karo
+                Something went wrong signing you in — please try again
               </div>
             )}
 
@@ -310,7 +310,7 @@ export default function LoginClient() {
                   <button type="submit" className="send-btn" disabled={!!loading}>
                     {loading === 'magic' ? (
                       <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <span className="spinner" /> Bhej raha...
+                        <span className="spinner" /> Sending...
                       </span>
                     ) : 'Send Magic Link'}
                   </button>
@@ -326,11 +326,14 @@ export default function LoginClient() {
               }}>
                 <div style={{ fontSize: 36, marginBottom: 10 }}>📬</div>
                 <h3 style={{ color: '#4ade80', fontWeight: 600, fontSize: 15, marginBottom: 6 }}>
-                  Magic Link Bhej Diya!
+                  Magic Link Sent!
                 </h3>
                 <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, lineHeight: 1.6 }}>
-                  <strong style={{ color: '#e2e8f0' }}>{email}</strong> pe ek link gaya hai.
-                  <br />Click karo — seedha andar aa jao, no password!
+                  We sent a link to <strong style={{ color: '#e2e8f0' }}>{email}</strong>.
+                  <br />Click it to sign in — no password needed!
+                </p>
+                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11.5, marginTop: 10, lineHeight: 1.5 }}>
+                  Don&apos;t see it? Check your spam or promotions folder.
                 </p>
                 <button
                   onClick={() => { setMagicSent(false); setEmail('') }}
@@ -341,7 +344,7 @@ export default function LoginClient() {
                     fontFamily: '"Sora", sans-serif',
                   }}
                 >
-                  Doosra email use karna hai?
+                  Use a different email?
                 </button>
               </div>
             )}

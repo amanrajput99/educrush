@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { NavAuthButton, MobileNavAuthButton } from '@/components/NavAuthButton'
+import { useChromeHidden } from '@/lib/useChromeVisibility'
 
 type NoteResult = { title: string; subject: string; link: string; course?: string; year?: string }
 type ProjectResult = { name: string; slug: string; tags?: string[] }
@@ -117,6 +118,7 @@ const Navbar = () => {
 
   // ── FIX: Route change hone par menu band karo ──
   const pathname = usePathname()
+  const chromeHidden = useChromeHidden()
   useEffect(() => {
     setMenuOpen(false)
     setDropdownOpen1(false)
@@ -136,6 +138,9 @@ const Navbar = () => {
     e.preventDefault()
     if (q.trim()) { window.location.href = `/notes?q=${encodeURIComponent(q.trim())}`; closeFn(); setMenuOpen(false) }
   }
+
+  // Login/onboarding apna full-screen design hai — global navbar yahan nahi chahiye
+  if (chromeHidden) return null
 
   return (
     <>

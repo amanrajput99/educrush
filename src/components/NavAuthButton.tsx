@@ -39,7 +39,7 @@ async function fetchUser(): Promise<UserData | null> {
     .from('profiles')
     .select('full_name, avatar_url, streak_count, last_active')
     .eq('id', session.user.id)
-    .single()
+    .maybeSingle()
 
   if (p) {
     const today = new Date().toDateString()

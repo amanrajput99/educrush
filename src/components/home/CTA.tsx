@@ -1,7 +1,11 @@
 'use client'
 import Link from "next/link";
+import { useChromeHidden } from '@/lib/useChromeVisibility'
 
 export default function CTA() {
+  const chromeHidden = useChromeHidden()
+  if (chromeHidden) return null
+
   return (
     <>
       <style>{`

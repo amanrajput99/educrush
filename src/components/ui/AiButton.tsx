@@ -1,11 +1,13 @@
 'use client'
 import { usePathname } from 'next/navigation';
+import { useChromeHidden } from '@/lib/useChromeVisibility'
 
 export default function AIButton() {
   const pathname = usePathname();
+  const chromeHidden = useChromeHidden()
 
-  // /ai page pr button nahi dikhega
-  if (pathname === '/ai') return null;
+  // /ai page pr button nahi dikhega, login/onboarding pe bhi nahi
+  if (pathname === '/ai' || chromeHidden) return null;
 
   return (
     <>

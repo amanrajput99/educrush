@@ -14,10 +14,12 @@ export default function ClientCallback() {
         .from('profiles')
         .select('onboarding_done')
         .eq('id', session.user.id)
-        .single()
+        .maybeSingle()
 
       if (!profile) {
-        await supabase.from('profiles').insert({
+        // upsert + ignoreDuplicates so this can't collide with the
+        // server-side auth/callback route inserting the same row
+        await supabase.from('profiles').upsert({
           id: session.user.id,
           email: session.user.email!,
           full_name: session.user.user_metadata?.full_name ?? null,
@@ -26,7 +28,7 @@ export default function ClientCallback() {
           last_active: new Date().toISOString(),
           profile_completed: 10,
           onboarding_done: false,
-        })
+        }, { onConflict: 'id', ignoreDuplicates: true })
         router.replace('/onboarding')
         return
       }

@@ -63,7 +63,7 @@ export async function getOrCreateProfile(userId: string, userData: {
     .from('profiles')
     .select('*')
     .eq('id', userId)
-    .single()
+    .maybeSingle()
 
   if (existing) {
     // Streak update karo — agar aaj login nahi kiya tha
@@ -166,7 +166,7 @@ export async function toggleSaveNote(userId: string, note: {
     .select('id')
     .eq('user_id', userId)
     .eq('note_link', note.link)
-    .single()
+    .maybeSingle()
 
   if (existing) {
     // Unsave
@@ -203,7 +203,7 @@ export async function saveCodingProgress(userId: string, problemSlug: string, la
     .select('id')
     .eq('user_id', userId)
     .eq('problem_slug', problemSlug)
-    .single()
+    .maybeSingle()
 
   if (existing) return  // already saved
 

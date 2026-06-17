@@ -38,7 +38,7 @@ export async function generateMetadata({
 
   if (!note) {
     return {
-      title: 'Note Not Found | EduCrush',
+      title: 'Note Not Found',
       description: 'This note does not exist on EduCrush.',
       robots: { index: false },
     }
@@ -52,8 +52,8 @@ export async function generateMetadata({
   // Example: "DSA Handwritten Notes — Free BTech PDF | EduCrush" = 51 chars ✅
   const courseStr = note.course ? `${note.course} ` : ''
   const yearStr = note.year ? `${note.year} ` : ''
-  const title = `${note.title} — Free ${courseStr}${yearStr}PDF | EduCrush`
-
+  const title = `${note.title} — Free ${courseStr}${yearStr}PDF`
+//i  am removing | educrush becouse it is present in layout.tsx
   // ── Smart Description — 145-155 chars target ─────────────────────────────
   // Clean first sentence of description — professional, no emojis, no topic lists
   const firstSentence = note.description
