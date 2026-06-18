@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase'
 import { getSavedNotes, getCodingProgress } from '@/lib/auth'
 import type { UserProfile, SavedNote, CodingProgress } from '@/types/auth'
 
-// ── Inline icons (no external deps, theme-matched stroke icons) ───────────────
+// ── Inline icons ────────────────────────────────────────────────────────────
 const Icon = {
   Notes: () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
@@ -22,11 +22,6 @@ const Icon = {
   Bot: () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/>
-    </svg>
-  ),
-  Flame: () => (
-    <svg width="14" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2c0 4-4 6-4 11a4 4 0 0 0 8 0c0-1.5-1-2.5-1-4 1.5 1 2 3 2 4a6 6 0 1 1-12 0c0-5.5 5-7 5-9 0-1-.5-2-2-2 2 0 4 1 4 4z"/>
     </svg>
   ),
   Bookmark: () => (
@@ -56,7 +51,7 @@ const Icon = {
 function Ring({ pct }: { pct: number }) {
   const r = 24, c = 2 * Math.PI * r
   return (
-    <svg width="60" height="60" viewBox="0 0 60 60" style={{ flexShrink: 0 }}>
+    <svg width="52" height="52" viewBox="0 0 60 60" style={{ flexShrink: 0 }}>
       <circle cx="30" cy="30" r={r} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="4" />
       <circle cx="30" cy="30" r={r} fill="none" stroke="#34d399" strokeWidth="4"
         strokeDasharray={`${(pct / 100) * c} ${c}`} strokeLinecap="round"
@@ -70,12 +65,12 @@ function Ring({ pct }: { pct: number }) {
 // ── Stat card ─────────────────────────────────────────────────────────────────
 function Stat({ label, value, accent }: { label: string; value: string | number; accent?: string }) {
   return (
-    <div style={{
+    <div className="stat-card" style={{
       background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
-      borderRadius: 14, padding: '18px 20px', flex: 1, minWidth: 130,
+      borderRadius: 14, padding: '16px 18px',
     }}>
-      <p style={{ fontSize: 24, fontWeight: 600, color: accent ?? '#fff', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</p>
-      <p style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.4)', marginTop: 6 }}>{label}</p>
+      <p style={{ fontSize: 22, fontWeight: 600, color: accent ?? '#fff', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</p>
+      <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 6 }}>{label}</p>
     </div>
   )
 }
@@ -84,11 +79,11 @@ function Stat({ label, value, accent }: { label: string; value: string | number;
 function Tab({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
     <button onClick={onClick} style={{
-      padding: '7px 18px', borderRadius: 9, fontSize: 13, fontWeight: 500,
-      cursor: 'pointer', border: 'none', transition: 'all 0.15s',
+      padding: '7px 16px', borderRadius: 9, fontSize: 13, fontWeight: 500,
+      cursor: 'pointer', border: 'none', transition: 'all 0.15s', whiteSpace: 'nowrap',
       background: active ? 'rgba(52,211,153,0.12)' : 'transparent',
       color: active ? '#6ee7b7' : 'rgba(255,255,255,0.45)',
-      fontFamily: 'Poppins, sans-serif',
+      fontFamily: 'Poppins, sans-serif', flexShrink: 0,
     }}>
       {label}
     </button>
@@ -150,13 +145,33 @@ export default function DashboardClient() {
         .ql-row:hover { background: rgba(255,255,255,0.05) !important; }
         .nt-row:hover { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.13) !important; }
         .lp-link:hover { color: #6ee7b7 !important; }
+
+        .dash-wrap { max-width: 920px; margin: 0 auto; padding: 40px 20px 60px; }
+        .dash-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+        .completion-card { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+        .tabs-row { display: flex; gap: 4px; margin-bottom: 22px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .tabs-row::-webkit-scrollbar { display: none; }
+        .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        @media (max-width: 640px) {
+          .dash-wrap { padding: 24px 14px 48px; }
+          .dash-header { flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: 22px; }
+          .dash-header h1 { font-size: 21px !important; }
+          .dash-header button { align-self: flex-start; }
+          .completion-card { flex-wrap: wrap; padding: 14px 16px !important; }
+          .completion-card > div:nth-child(2) { min-width: 100%; order: 3; }
+          .completion-card button { margin-left: auto; }
+          .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+          .overview-grid { grid-template-columns: 1fr; gap: 14px; }
+        }
       `}</style>
 
       <div style={{ minHeight: '100vh', background: '#000', color: '#fff' }}>
-        <div style={{ maxWidth: 920, margin: '0 auto', padding: '40px 20px 60px' }}>
+        <div className="dash-wrap">
 
           {/* Header */}
-          <div style={{ marginBottom: 28, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+          <div className="dash-header">
             <div>
               <h1 style={{ fontSize: 25, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em', marginBottom: 5 }}>
                 Welcome back, {firstName}
@@ -182,13 +197,12 @@ export default function DashboardClient() {
 
           {/* Profile completion */}
           {completion < 100 && (
-            <div style={{
+            <div className="completion-card" style={{
               background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.08)',
               borderRadius: 14, padding: '16px 20px',
-              display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20,
             }}>
               <Ring pct={completion} />
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: 1, minWidth: 140 }}>
                 <p style={{ fontWeight: 500, fontSize: 14, color: '#fff', marginBottom: 3 }}>
                   Profile {completion}% complete
                 </p>
@@ -208,7 +222,7 @@ export default function DashboardClient() {
           )}
 
           {/* Stats */}
-          <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
+          <div className="stats-row">
             <Stat label="Saved notes" value={savedNotes.length} />
             <Stat label="Problems solved" value={progress.length} accent="#6ee7b7" />
             <Stat label="Day streak" value={streak} accent="#fb923c" />
@@ -216,10 +230,9 @@ export default function DashboardClient() {
           </div>
 
           {/* Tabs */}
-          <div style={{
-            display: 'flex', gap: 4, marginBottom: 22,
+          <div className="tabs-row" style={{
             background: 'rgba(255,255,255,0.025)', borderRadius: 11, padding: 4,
-            width: 'fit-content', border: '1px solid rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.06)', width: 'fit-content',
           }}>
             {(['overview', 'notes', 'coding', 'profile'] as const).map(t => (
               <Tab key={t} label={t.charAt(0).toUpperCase() + t.slice(1)} active={tab === t} onClick={() => setTab(t)} />
@@ -231,7 +244,7 @@ export default function DashboardClient() {
 
             {/* Overview */}
             {tab === 'overview' && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <div className="overview-grid">
                 {/* Quick access */}
                 <div style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: 18 }}>
                   <p style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12 }}>
@@ -258,7 +271,7 @@ export default function DashboardClient() {
                         <p style={{ fontSize: 13.5, fontWeight: 500, color: '#fff' }}>{l.label}</p>
                         <p style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.3)' }}>{l.desc}</p>
                       </div>
-                      <span style={{ color: 'rgba(255,255,255,0.25)' }}><Icon.ArrowRight /></span>
+                      <span style={{ color: 'rgba(255,255,255,0.25)', flexShrink: 0 }}><Icon.ArrowRight /></span>
                     </Link>
                   ))}
                 </div>
@@ -334,7 +347,7 @@ export default function DashboardClient() {
                       <p style={{ fontSize: 14, fontWeight: 500, color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.note_title}</p>
                       <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>{n.note_subject} · {new Date(n.saved_at).toLocaleDateString('en-IN')}</p>
                     </div>
-                    <span style={{ color: 'rgba(255,255,255,0.25)' }}><Icon.ArrowRight /></span>
+                    <span style={{ color: 'rgba(255,255,255,0.25)', flexShrink: 0 }}><Icon.ArrowRight /></span>
                   </Link>
                 ))}
               </div>
@@ -381,7 +394,7 @@ export default function DashboardClient() {
                           background: 'rgba(52,211,153,0.12)', color: '#6ee7b7',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}><Icon.Check /></span>
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, minWidth: 0 }}>
                           <p style={{ fontSize: 13.5, fontWeight: 500, color: '#fff', textTransform: 'capitalize' }}>{p.problem_slug.replace(/-/g, ' ')}</p>
                           <p style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.3)' }}>{p.lang} · {new Date(p.solved_at).toLocaleDateString('en-IN')}</p>
                         </div>
@@ -425,8 +438,12 @@ function ProfileEditor({ profile }: { profile: UserProfile | null }) {
 
   return (
     <div style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: 24 }}>
+      <style>{`
+        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+        @media (max-width: 640px) { .profile-grid { grid-template-columns: 1fr; } }
+      `}</style>
       <h3 style={{ fontSize: 16, fontWeight: 500, color: '#fff', marginBottom: 20 }}>Edit profile</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 16 }}>
+      <div className="profile-grid">
         <div>
           <label style={labelStyle}>Full name</label>
           <input style={inputStyle} value={name} onChange={e => setName(e.target.value)} placeholder="Your name" />
@@ -444,7 +461,7 @@ function ProfileEditor({ profile }: { profile: UserProfile | null }) {
           <input style={inputStyle} value={college} onChange={e => setCollege(e.target.value)} placeholder="Your college" />
         </div>
       </div>
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
         <button onClick={handleSave} disabled={saving} style={{
           padding: '10px 22px', borderRadius: 10,
           background: 'linear-gradient(135deg, #059669, #0D542B)', border: 'none',
