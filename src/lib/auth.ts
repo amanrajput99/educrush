@@ -5,35 +5,46 @@ import { supabase } from '@/lib/supabase'
 import type { UserProfile } from '@/types/auth'
 
 // ── Google OAuth login ────────────────────────────────────────────────────────
-export async function signInWithGoogle() {
+export async function signInWithGoogle(next?: string) {
+  const redirectTo = next
+    ? `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`
+    : `${window.location.origin}/auth/callback`
+
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
-      skipBrowserRedirect: false,
+      redirectTo,
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'consent',
+      },
     },
   })
   if (error) throw error
 }
 
 // ── GitHub OAuth login ────────────────────────────────────────────────────────
-export async function signInWithGitHub() {
+export async function signInWithGitHub(next?: string) {
+  const redirectTo = next
+    ? `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`
+    : `${window.location.origin}/auth/callback`
+
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'github',
-    options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
-    },
+    options: { redirectTo },
   })
   if (error) throw error
 }
 
 // ── Magic Link (email, no password) ──────────────────────────────────────────
-export async function signInWithMagicLink(email: string) {
+export async function signInWithMagicLink(email: string, next?: string) {
+  const emailRedirectTo = next
+    ? `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`
+    : `${window.location.origin}/auth/callback`
+
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: {
-      emailRedirectTo: `${window.location.origin}/auth/callback`,
-    },
+    options: { emailRedirectTo },
   })
   if (error) throw error
 }
@@ -63,7 +74,7 @@ export async function getOrCreateProfile(userId: string, userData: {
     .from('profiles')
     .select('*')
     .eq('id', userId)
-    .maybeSingle()
+    .single()
 
   if (existing) {
     // Streak update karo — agar aaj login nahi kiya tha
@@ -166,7 +177,7 @@ export async function toggleSaveNote(userId: string, note: {
     .select('id')
     .eq('user_id', userId)
     .eq('note_link', note.link)
-    .maybeSingle()
+    .single()
 
   if (existing) {
     // Unsave
@@ -203,7 +214,7 @@ export async function saveCodingProgress(userId: string, problemSlug: string, la
     .select('id')
     .eq('user_id', userId)
     .eq('problem_slug', problemSlug)
-    .maybeSingle()
+    .single()
 
   if (existing) return  // already saved
 

@@ -1,10 +1,12 @@
 'use client'
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 export default function ClientCallback() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const next = searchParams.get('next')
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
@@ -29,13 +31,18 @@ export default function ClientCallback() {
           profile_completed: 10,
           onboarding_done: false,
         }, { onConflict: 'id', ignoreDuplicates: true })
-        router.replace('/onboarding')
+        router.replace(next ? `/onboarding?next=${encodeURIComponent(next)}` : '/onboarding')
         return
       }
 
-      router.replace(profile.onboarding_done ? '/dashboard' : '/onboarding')
+      if (!profile.onboarding_done) {
+        router.replace(next ? `/onboarding?next=${encodeURIComponent(next)}` : '/onboarding')
+        return
+      }
+
+      router.replace(next ?? '/dashboard')
     })
-  }, [router])
+  }, [router, next])
 
   return (
     <div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: 'Poppins, sans-serif' }}>

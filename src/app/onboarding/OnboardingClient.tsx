@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams} from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { updateProfile } from '@/lib/auth'
 import {
@@ -9,6 +9,7 @@ import {
   Code2, Globe, Brain, Smartphone, Trophy, Database, Network, Cloud,
   Briefcase, BookOpen, Landmark, Sparkles, SkipForward,
 } from 'lucide-react'
+
 
 const COURSES = ['BTech', 'BCA', 'Diploma', 'Class 11', 'Class 12', 'MCA', 'BSc', 'MBA']
 const YEARS: Record<string, string[]> = {
@@ -45,6 +46,8 @@ type Stage = 'choice' | 1 | 2 | 3
 
 export default function OnboardingClient() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+const next = searchParams.get('next')
   const [stage, setStage] = useState<Stage>('choice')
   const [userId, setUserId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -79,7 +82,7 @@ export default function OnboardingClient() {
         interests: interests.length > 0 ? interests : null,
         onboarding_done: true,
       })
-      router.replace('/dashboard')
+      router.replace(next ?? '/dashboard')
     } catch {
       setLoading(false)
     }
@@ -89,7 +92,7 @@ export default function OnboardingClient() {
     if (!userId) return
     setSkipping(true)
     await supabase.from('profiles').update({ onboarding_done: true }).eq('id', userId)
-    router.replace('/dashboard')
+    router.replace(next ?? '/dashboard')
   }
 
   const years = course ? YEARS[course] ?? [] : []

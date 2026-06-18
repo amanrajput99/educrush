@@ -7,6 +7,7 @@ export async function GET(request: NextRequest) {
   const code = requestUrl.searchParams.get('code')
   const token_hash = requestUrl.searchParams.get('token_hash')
   const type = requestUrl.searchParams.get('type') as 'email' | 'magiclink' | null
+  const next = requestUrl.searchParams.get('next')
   const origin = requestUrl.origin
 
   const cookieStore = await cookies()
@@ -59,14 +60,30 @@ export async function GET(request: NextRequest) {
         profile_completed: 10,
         onboarding_done: false,
       }, { onConflict: 'id', ignoreDuplicates: true })
-      return NextResponse.redirect(`${origin}/onboarding`)
+
+      // First-time user — still go through onboarding, but remember
+      // where they wanted to go (carried as a query param)
+      const onboardingUrl = next
+        ? `${origin}/onboarding?next=${encodeURIComponent(next)}`
+        : `${origin}/onboarding`
+      return NextResponse.redirect(onboardingUrl)
     }
 
-    return NextResponse.redirect(
-      profile.onboarding_done ? `${origin}/dashboard` : `${origin}/onboarding`
-    )
+    if (!profile.onboarding_done) {
+      const onboardingUrl = next
+        ? `${origin}/onboarding?next=${encodeURIComponent(next)}`
+        : `${origin}/onboarding`
+      return NextResponse.redirect(onboardingUrl)
+    }
+
+    // Returning user with completed profile — send back to where
+    // they came from (e.g. the coding problem they were solving)
+    return NextResponse.redirect(next ? `${origin}${next}` : `${origin}/dashboard`)
   }
 
   // Neither code nor token_hash worked — fall back to client-side session check
-  return NextResponse.redirect(`${origin}/auth/client-callback`)
+  const clientCallbackUrl = next
+    ? `${origin}/auth/client-callback?next=${encodeURIComponent(next)}`
+    : `${origin}/auth/client-callback`
+  return NextResponse.redirect(clientCallbackUrl)
 }

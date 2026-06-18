@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getProblemBySlug, getLanguages } from '@/lib/codingPracticeService'
 import { runCode } from '@/lib/codeRunner'
 import { supabase } from '@/lib/supabase'
 import { saveCodingProgress } from '@/lib/auth'
+import LoginRequiredModal from '@/components/auth/LoginRequiredModal'
 import type { CodingProblem, CodingLanguage } from '@/data/codingPractice'
 import { DIFFICULTY_CONFIG, LANGUAGE_CONFIG } from '@/data/codingPractice'
 
@@ -110,6 +111,63 @@ const OutputPanel = ({ output, status, time, running }: {
   )
 }
 
+// ── Test Case Results Panel ────────────────────────────────────────────────────
+type TestCaseResult = { input: string; expected: string; actual: string; passed: boolean }
+
+const TestResultsPanel = ({ results, checking }: { results: TestCaseResult[] | null; checking: boolean }) => {
+  if (!checking && !results) return null
+
+  const passedCount = results?.filter(r => r.passed).length ?? 0
+  const total = results?.length ?? 0
+  const allPassed = total > 0 && passedCount === total
+
+  return (
+    <div
+      className="rounded-xl border overflow-hidden"
+      style={{
+        borderColor: checking ? '#1e293b' : allPassed ? '#166534' : '#991b1b',
+        background: checking ? '#0a0a0a' : allPassed ? '#052e16' : '#1c0000',
+      }}
+    >
+      <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: checking ? '#1e293b' : allPassed ? '#166534' : '#991b1b' }}>
+        <div className="flex items-center gap-2">
+          {checking ? (
+            <svg className="animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5">
+              <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+            </svg>
+          ) : (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={allPassed ? '#4ade80' : '#f87171'} strokeWidth="2.5">
+              {allPassed ? <polyline points="20 6 9 17 4 12"/> : <><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></>}
+            </svg>
+          )}
+          <span className="text-xs font-medium" style={{ color: checking ? '#94a3b8' : allPassed ? '#4ade80' : '#f87171' }}>
+            {checking ? 'Checking your solution...' : allPassed ? 'All test cases passed' : `${passedCount}/${total} test cases passed`}
+          </span>
+        </div>
+      </div>
+
+      {!checking && results && (
+        <div className="p-3 space-y-2">
+          {results.map((r, i) => (
+            <div key={i} className="rounded-lg border p-3 text-xs font-mono"
+              style={{ borderColor: r.passed ? '#166534' : '#991b1b', background: r.passed ? 'rgba(5,46,22,0.4)' : 'rgba(28,0,0,0.4)' }}>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-slate-500">Test case {i + 1}</span>
+                <span style={{ color: r.passed ? '#4ade80' : '#f87171' }}>{r.passed ? 'Passed' : 'Failed'}</span>
+              </div>
+              <div className="space-y-1 text-slate-400">
+                <div><span className="text-slate-600">Input: </span>{r.input}</div>
+                <div><span className="text-slate-600">Expected: </span><span className="text-blue-400">{r.expected}</span></div>
+                {!r.passed && <div><span className="text-slate-600">Got: </span><span className="text-red-400">{r.actual || '(empty)'}</span></div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Hint Card ─────────────────────────────────────────────────────────────────
 const HintCard = ({ hint, index, revealed, onReveal }: {
   hint: string; index: number; revealed: boolean; onReveal: () => void
@@ -150,6 +208,7 @@ type Tab = 'problem' | 'hints' | 'solution'
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function ProblemDetailPage() {
   const params      = useParams()
+  const pathname    = usePathname()
   const langSlug    = params?.lang as string
   const problemSlug = params?.slug as string
 
@@ -165,13 +224,17 @@ export default function ProblemDetailPage() {
   const [showSolution, setShowSolution]     = useState(false)
   const [solved, setSolved]                 = useState(false)
   const [copied, setCopied]                 = useState(false)
-  const [savingProgress, setSavingProgress] = useState(false)
 
-  // Run state
+  // Run state (manual "Run Code" button — just shows output, no verification)
   const [running, setRunning]   = useState(false)
   const [runOutput, setRunOutput] = useState('')
   const [runStatus, setRunStatus] = useState<'success' | 'error' | 'timeout' | null>(null)
   const [runTime, setRunTime]   = useState<string | undefined>()
+
+  // Verification state (triggered by "Submit / Mark Solved")
+  const [checking, setChecking] = useState(false)
+  const [testResults, setTestResults] = useState<TestCaseResult[] | null>(null)
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
   useEffect(() => {
     if (!langSlug || !problemSlug) return
@@ -194,7 +257,7 @@ export default function ProblemDetailPage() {
     return () => clearTimeout(t)
   }, [code, problemSlug])
 
-  // ── Run code ──────────────────────────────────────────────────────────────
+  // ── Run code (manual, just for seeing output) ───────────────────────────────
   const handleRun = async () => {
     if (running) return
     setRunning(true)
@@ -208,23 +271,60 @@ export default function ProblemDetailPage() {
     setRunning(false)
   }
 
-  // ── Mark solved — localStorage (always) + Supabase (if logged in) ──────────
-  const markSolved = async () => {
+  // ── Submit & Verify — runs every test case, only marks solved if all pass ──
+  const handleSubmit = async () => {
+    if (!problem || checking) return
+
+    // 1. Must be logged in to even attempt verification + saving progress
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      setShowLoginModal(true)
+      return
+    }
+
+    const testCases = (problem as any).test_cases as { input: string; expected_output: string }[] | undefined
+
+    // No test cases configured for this problem — fall back to trusting the
+    // student (legacy problems). Still requires login.
+    if (!testCases || testCases.length === 0) {
+      await finalizeSolved(session.user.id)
+      return
+    }
+
+    setChecking(true)
+    setTestResults(null)
+
+    const results: TestCaseResult[] = []
+    for (const tc of testCases) {
+      const result = await runCode(code, langSlug, tc.input)
+      const actual = (result.output ?? '').trim()
+      const expected = tc.expected_output.trim()
+      results.push({
+        input: tc.input,
+        expected: tc.expected_output,
+        actual: result.output ?? '',
+        passed: actual === expected,
+      })
+    }
+
+    setTestResults(results)
+    setChecking(false)
+
+    const allPassed = results.every(r => r.passed)
+    if (allPassed) {
+      await finalizeSolved(session.user.id)
+    }
+  }
+
+  // ── Once verified correct, persist solved state locally + in Supabase ──────
+  const finalizeSolved = async (userId: string) => {
     setSolved(true)
     localStorage.setItem(`solved:${problemSlug}`, 'true')
-
-    setSavingProgress(true)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        await saveCodingProgress(session.user.id, problemSlug, langSlug)
-      }
-      // Not logged in — solved state still works locally,
-      // it just won't show up on the dashboard until they sign in.
+      await saveCodingProgress(userId, problemSlug, langSlug)
     } catch {
-      // Silently ignore — local solved state is already saved above
-    } finally {
-      setSavingProgress(false)
+      // Local solved-state already set; DB save can be retried by the
+      // dashboard if needed. Don't block the UI on this.
     }
   }
 
@@ -232,6 +332,7 @@ export default function ProblemDetailPage() {
     if (!problem) return
     setCode(problem.starter_code ?? LANGUAGE_CONFIG[langSlug]?.defaultCode ?? '')
     localStorage.removeItem(`code:${problemSlug}`)
+    setTestResults(null)
   }
 
   const copyCode = async () => {
@@ -274,6 +375,12 @@ export default function ProblemDetailPage() {
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
+      <LoginRequiredModal
+        open={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        redirectTo={pathname}
+      />
+
       <div className="bg-black min-h-screen text-white">
         <div className="fixed inset-0 pointer-events-none z-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[180px]"
@@ -313,15 +420,6 @@ export default function ProblemDetailPage() {
               )}
             </div>
             <h1 className="text-2xl sm:text-3xl font-medium tracking-tight w-full sm:w-auto">{problem.title}</h1>
-            <div className="sm:ml-auto flex gap-2">
-              {!solved && (
-                <button onClick={markSolved} disabled={savingProgress}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs border border-gray-800 text-slate-500 hover:border-green-800/60 hover:text-green-400 transition-all disabled:opacity-60">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  {savingProgress ? 'Saving...' : 'Mark Solved'}
-                </button>
-              )}
-            </div>
           </div>
 
           {/* ── Split Layout ── */}
@@ -351,7 +449,6 @@ export default function ProblemDetailPage() {
               {/* Tab content */}
               <AnimatePresence mode="wait">
 
-                {/* Problem */}
                 {activeTab === 'problem' && (
                   <motion.div key="prob"
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
@@ -398,14 +495,13 @@ export default function ProblemDetailPage() {
                   </motion.div>
                 )}
 
-                {/* Hints */}
                 {activeTab === 'hints' && (
                   <motion.div key="hints"
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
                     className="space-y-2"
                   >
-                    <p className="text-xs text-slate-600 px-1 mb-3">Pehle khud try karo — hints tab mein hain jab zarurat ho.</p>
+                    <p className="text-xs text-slate-600 px-1 mb-3">Try it yourself first — hints are here if you get stuck.</p>
                     {problem.hints?.length > 0
                       ? problem.hints.map((hint, i) => (
                           <HintCard key={i} hint={hint} index={i}
@@ -418,7 +514,6 @@ export default function ProblemDetailPage() {
                   </motion.div>
                 )}
 
-                {/* Solution */}
                 {activeTab === 'solution' && (
                   <motion.div key="sol"
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
@@ -433,7 +528,7 @@ export default function ProblemDetailPage() {
                           </svg>
                         </div>
                         <h3 className="text-white font-medium mb-2">Solution is locked</h3>
-                        <p className="text-slate-500 text-sm mb-5 max-w-xs mx-auto">Pehle khud try karo. Hints available hain.</p>
+                        <p className="text-slate-500 text-sm mb-5 max-w-xs mx-auto">Try it yourself first. Hints are available.</p>
                         <button onClick={() => setShowSolution(true)}
                           className="px-6 py-2 rounded-xl text-sm font-medium border border-emerald-800/50 bg-[#0D542B]/20 text-green-400 hover:bg-[#0D542B]/30 transition-all">
                           Show Solution Anyway
@@ -458,7 +553,6 @@ export default function ProblemDetailPage() {
             {/* ══ RIGHT: Editor + Run ══ */}
             <div className="flex flex-col gap-3">
 
-              {/* Editor toolbar */}
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <div className="px-3 py-1 rounded-lg text-xs font-medium border flex items-center gap-1.5"
@@ -493,7 +587,6 @@ export default function ProblemDetailPage() {
                 </div>
               </div>
 
-              {/* Stdin input */}
               <AnimatePresence>
                 {showStdin && (
                   <motion.div
@@ -517,38 +610,63 @@ export default function ProblemDetailPage() {
                 )}
               </AnimatePresence>
 
-              {/* Code editor */}
               <CodeEditor value={code} onChange={setCode} language={langSlug} minHeight="320px" />
 
-              {/* ── RUN BUTTON ── */}
-              <button
-                onClick={handleRun}
-                disabled={running}
-                className="w-full flex items-center justify-center gap-2.5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 disabled:opacity-70"
-                style={{
-                  background: running ? '#0D542B' : 'linear-gradient(135deg, #0D542B, #16a34a)',
-                  color: '#fff',
-                  boxShadow: running ? 'none' : '0 0 20px rgba(22,163,74,0.25)',
-                }}
-              >
-                {running ? (
-                  <>
-                    <svg className="animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                      <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-                    </svg>
-                    Running...
-                  </>
-                ) : (
-                  <>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="white">
-                      <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    Run Code
-                  </>
-                )}
-              </button>
+              {/* Run + Submit buttons side by side */}
+              <div className="flex gap-2">
+                <button
+                  onClick={handleRun}
+                  disabled={running || checking}
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium border border-gray-800 text-slate-300 hover:border-gray-600 transition-all disabled:opacity-60"
+                >
+                  {running ? (
+                    <>
+                      <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                      </svg>
+                      Running...
+                    </>
+                  ) : (
+                    <>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                      </svg>
+                      Run Code
+                    </>
+                  )}
+                </button>
 
-              {/* Output panel */}
+                {!solved && (
+                  <button
+                    onClick={handleSubmit}
+                    disabled={running || checking}
+                    className="flex-1 flex items-center justify-center gap-2.5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 disabled:opacity-70"
+                    style={{
+                      background: checking ? '#0D542B' : 'linear-gradient(135deg, #0D542B, #16a34a)',
+                      color: '#fff',
+                      boxShadow: checking ? 'none' : '0 0 20px rgba(22,163,74,0.25)',
+                    }}
+                  >
+                    {checking ? (
+                      <>
+                        <svg className="animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                          <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                        </svg>
+                        Checking...
+                      </>
+                    ) : (
+                      <>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Submit
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+
+              {/* Output panel — manual "Run Code" output */}
               <OutputPanel
                 output={runOutput}
                 status={runStatus}
@@ -556,20 +674,15 @@ export default function ProblemDetailPage() {
                 running={running}
               />
 
-              {/* Bottom nav */}
+              {/* Test results — only shown after Submit */}
+              <TestResultsPanel results={testResults} checking={checking} />
+
               <div className="flex items-center justify-between pt-1">
                 <Link href={`/coding-practice/${langSlug}`}
                   className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-white transition-colors">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6"/></svg>
                   All Problems
                 </Link>
-                {!solved && (
-                  <button onClick={markSolved} disabled={savingProgress}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium bg-[#0D542B]/20 border border-emerald-800/40 text-green-400 hover:bg-[#0D542B]/35 transition-all disabled:opacity-60">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    {savingProgress ? 'Saving...' : 'Mark as Solved'}
-                  </button>
-                )}
               </div>
             </div>
           </div>
