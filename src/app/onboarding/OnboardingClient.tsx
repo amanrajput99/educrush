@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams} from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { updateProfile } from '@/lib/auth'
@@ -44,7 +44,7 @@ const INTERESTS = [
 // 'choice' = welcome/choice screen, 1-3 = the actual form, shown only if "personalize" chosen
 type Stage = 'choice' | 1 | 2 | 3
 
-export default function OnboardingClient() {
+function OnboardingClientInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
 const next = searchParams.get('next')
@@ -461,5 +461,13 @@ const next = searchParams.get('next')
         </div>
       </div>
     </>
+  )
+}
+
+export default function OnboardingClient() {
+  return (
+    <Suspense fallback={null}>
+      <OnboardingClientInner />
+    </Suspense>
   )
 }

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
@@ -19,8 +19,6 @@ function ClientCallbackInner() {
         .maybeSingle()
 
       if (!profile) {
-        // upsert + ignoreDuplicates so this can't collide with the
-        // server-side auth/callback route inserting the same row
         await supabase.from('profiles').upsert({
           id: session.user.id,
           email: session.user.email!,
@@ -57,11 +55,7 @@ function ClientCallbackInner() {
 
 export default function ClientCallback() {
   return (
-    <Suspense fallback={
-      <div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-        <p style={{ color: 'rgba(255,255,255,0.5)' }}>Loading...</p>
-      </div>
-    }>
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#000' }} />}>
       <ClientCallbackInner />
     </Suspense>
   )
