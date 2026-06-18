@@ -1,9 +1,9 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
-export default function ClientCallback() {
+function ClientCallbackInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const next = searchParams.get('next')
@@ -52,5 +52,17 @@ export default function ClientCallback() {
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
+  )
+}
+
+export default function ClientCallback() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+        <p style={{ color: 'rgba(255,255,255,0.5)' }}>Loading...</p>
+      </div>
+    }>
+      <ClientCallbackInner />
+    </Suspense>
   )
 }
