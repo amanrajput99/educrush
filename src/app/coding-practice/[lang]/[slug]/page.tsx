@@ -6,6 +6,8 @@ import { useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getProblemBySlug, getLanguages } from '@/lib/codingPracticeService'
 import { runCode } from '@/lib/codeRunner'
+import { supabase } from '@/lib/supabase'
+import { saveCodingProgress } from '@/lib/auth'
 import type { CodingProblem, CodingLanguage } from '@/data/codingPractice'
 import { DIFFICULTY_CONFIG, LANGUAGE_CONFIG } from '@/data/codingPractice'
 
@@ -163,6 +165,7 @@ export default function ProblemDetailPage() {
   const [showSolution, setShowSolution]     = useState(false)
   const [solved, setSolved]                 = useState(false)
   const [copied, setCopied]                 = useState(false)
+  const [savingProgress, setSavingProgress] = useState(false)
 
   // Run state
   const [running, setRunning]   = useState(false)
@@ -205,9 +208,24 @@ export default function ProblemDetailPage() {
     setRunning(false)
   }
 
-  const markSolved = () => {
+  // ── Mark solved — localStorage (always) + Supabase (if logged in) ──────────
+  const markSolved = async () => {
     setSolved(true)
     localStorage.setItem(`solved:${problemSlug}`, 'true')
+
+    setSavingProgress(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        await saveCodingProgress(session.user.id, problemSlug, langSlug)
+      }
+      // Not logged in — solved state still works locally,
+      // it just won't show up on the dashboard until they sign in.
+    } catch {
+      // Silently ignore — local solved state is already saved above
+    } finally {
+      setSavingProgress(false)
+    }
   }
 
   const resetCode = () => {
@@ -297,10 +315,10 @@ export default function ProblemDetailPage() {
             <h1 className="text-2xl sm:text-3xl font-medium tracking-tight w-full sm:w-auto">{problem.title}</h1>
             <div className="sm:ml-auto flex gap-2">
               {!solved && (
-                <button onClick={markSolved}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs border border-gray-800 text-slate-500 hover:border-green-800/60 hover:text-green-400 transition-all">
+                <button onClick={markSolved} disabled={savingProgress}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs border border-gray-800 text-slate-500 hover:border-green-800/60 hover:text-green-400 transition-all disabled:opacity-60">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  Mark Solved
+                  {savingProgress ? 'Saving...' : 'Mark Solved'}
                 </button>
               )}
             </div>
@@ -546,10 +564,10 @@ export default function ProblemDetailPage() {
                   All Problems
                 </Link>
                 {!solved && (
-                  <button onClick={markSolved}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium bg-[#0D542B]/20 border border-emerald-800/40 text-green-400 hover:bg-[#0D542B]/35 transition-all">
+                  <button onClick={markSolved} disabled={savingProgress}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium bg-[#0D542B]/20 border border-emerald-800/40 text-green-400 hover:bg-[#0D542B]/35 transition-all disabled:opacity-60">
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    Mark as Solved
+                    {savingProgress ? 'Saving...' : 'Mark as Solved'}
                   </button>
                 )}
               </div>
