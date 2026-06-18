@@ -70,11 +70,13 @@ export async function getOrCreateProfile(userId: string, userData: {
   avatar_url?: string | null
 }): Promise<UserProfile | null> {
   // Pehle check karo existing profile
+  // FIX: maybeSingle() — single() naye user ke liye throw karta tha
+  // (jab profile row abhi exist hi nahi karta)
   const { data: existing } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', userId)
-    .single()
+    .maybeSingle()
 
   if (existing) {
     // Streak update karo — agar aaj login nahi kiya tha
@@ -108,8 +110,18 @@ export async function getOrCreateProfile(userId: string, userData: {
 
 // ── Update profile ────────────────────────────────────────────────────────────
 export async function updateProfile(userId: string, updates: Partial<UserProfile>) {
-  // Profile completion % calculate karo
-  const completion = calculateCompletion(updates)
+  // FIX: Existing profile fetch karo — completion poore profile (DB + naye
+  // updates ka merge) se calculate hona chahiye, sirf is call mein bheje gaye
+  // fields se nahi. Warna agar koi sirf "college" update kare, to pehle se
+  // saved goals/interests bhi "missing" maan liye jaate the aur % galat girta tha.
+  const { data: existing } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .maybeSingle()
+
+  const merged = { ...(existing ?? {}), ...updates }
+  const completion = calculateCompletion(merged)
 
   const { data, error } = await supabase
     .from('profiles')
@@ -172,12 +184,14 @@ export async function toggleSaveNote(userId: string, note: {
   subject?: string
 }) {
   // Already saved hai?
+  // FIX: maybeSingle() — most notes aren't saved yet, single() threw on that
+  // common case instead of just returning null
   const { data: existing } = await supabase
     .from('saved_notes')
     .select('id')
     .eq('user_id', userId)
     .eq('note_link', note.link)
-    .single()
+    .maybeSingle()
 
   if (existing) {
     // Unsave
@@ -209,12 +223,14 @@ export async function getSavedNotes(userId: string) {
 // ── Save coding progress ──────────────────────────────────────────────────────
 export async function saveCodingProgress(userId: string, problemSlug: string, lang: string) {
   // Duplicate check
+  // FIX: maybeSingle() — first-time solves are the common case, single()
+  // threw instead of returning null
   const { data: existing } = await supabase
     .from('coding_progress')
     .select('id')
     .eq('user_id', userId)
     .eq('problem_slug', problemSlug)
-    .single()
+    .maybeSingle()
 
   if (existing) return  // already saved
 
