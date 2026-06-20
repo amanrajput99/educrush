@@ -51,9 +51,15 @@ const Icon = {
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
     </svg>
   ),
+  Trophy: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/>
+      <path d="M17 5h2a2 2 0 0 1 2 2 4 4 0 0 1-4 4M7 5H5a2 2 0 0 0-2 2 4 4 0 0 0 4 4"/>
+    </svg>
+  ),
 }
 
-// ── Progress ring ─────────────────────────────────────────────────────────────
+// ── Progress ring (used for the small "complete profile" card) ─────────────
 function Ring({ pct }: { pct: number }) {
   const r = 24, c = 2 * Math.PI * r
   return (
@@ -69,14 +75,12 @@ function Ring({ pct }: { pct: number }) {
 }
 
 // ── Stat card ─────────────────────────────────────────────────────────────────
-function Stat({ label, value, accent }: { label: string; value: string | number; accent?: string }) {
+function Stat({ icon, label, value, accent }: { icon?: React.ReactNode; label: string; value: string | number; accent?: string }) {
   return (
-    <div className="stat-card" style={{
-      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
-      borderRadius: 14, padding: '16px 18px',
-    }}>
-      <p style={{ fontSize: 22, fontWeight: 600, color: accent ?? '#fff', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</p>
-      <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 6 }}>{label}</p>
+    <div className="stat-card" style={{ ['--stat-accent' as string]: accent ?? '#34d399' } as React.CSSProperties}>
+      {icon && <span className="stat-icon" style={{ color: accent ?? '#6ee7b7' }}>{icon}</span>}
+      <p className="stat-value" style={{ color: accent ?? '#fff' }}>{value}</p>
+      <p className="stat-label">{label}</p>
     </div>
   )
 }
@@ -97,6 +101,18 @@ function Tab({ label, active, onClick }: { label: string; active: boolean; onCli
   )
 }
 
+// ── Personalized "kick" message under the hero — encodes real progress data,
+// not decoration. Priority: streak > problems solved > notes saved > default.
+function getKickMessage(streak: number, solved: number, notesCount: number): { emoji: string; text: string } {
+  if (streak >= 7) return { emoji: '🔥', text: `${streak}-day streak — you're unstoppable. Keep it going!` }
+  if (streak >= 3) return { emoji: '🔥', text: `${streak}-day streak going strong. Don't break it today.` }
+  if (solved >= 10) return { emoji: '🚀', text: `${solved} problems solved — you're crushing it. Next one?` }
+  if (solved > 0) return { emoji: '💪', text: `${solved} problem${solved > 1 ? 's' : ''} solved. Let's build that streak!` }
+  if (notesCount > 0) return { emoji: '📚', text: 'Nice start! Solve your first problem to begin a streak.' }
+  return { emoji: '👋', text: 'Welcome to EduCrush! Explore notes & problems to get started.' }
+}
+
+type AmbStats = { rank: number | null; points: number; referrals: number }
 type DashTab = 'overview' | 'notes' | 'coding' | 'ambassador' | 'profile'
 
 export default function DashboardClient() {
@@ -104,6 +120,7 @@ export default function DashboardClient() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [savedNotes, setSavedNotes] = useState<SavedNote[]>([])
   const [progress, setProgress] = useState<CodingProgress[]>([])
+  const [ambStats, setAmbStats] = useState<AmbStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState<DashTab>('overview')
 
@@ -123,6 +140,24 @@ export default function DashboardClient() {
       setProfile(prof as UserProfile)
       setSavedNotes(notes as SavedNote[])
       setProgress(code as CodingProgress[])
+
+      // Ambassadors get their rank/points/referrals pulled up front so it's
+      // visible on the main Overview tab — no need to open the Ambassador
+      // tab just to see "where do I stand".
+      if ((prof as UserProfile).role === 'ambassador') {
+        const { data: board } = await supabase
+          .from('ambassador_leaderboard')
+          .select('id, referral_count, total_points')
+          .order('total_points', { ascending: false })
+
+        const idx = board?.findIndex(r => r.id === user.id) ?? -1
+        setAmbStats({
+          rank: idx >= 0 ? idx + 1 : null,
+          points: idx >= 0 ? (board![idx].total_points ?? 0) : 0,
+          referrals: idx >= 0 ? (board![idx].referral_count ?? 0) : 0,
+        })
+      }
+
       setLoading(false)
     }
     init()
@@ -139,6 +174,7 @@ export default function DashboardClient() {
 
   const name = profile?.full_name ?? profile?.email?.split('@')[0] ?? 'Student'
   const firstName = name.split(' ')[0]
+  const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
   const completion = profile?.profile_completed ?? 0
   const streak = profile?.streak_count ?? 0
   const langMap: Record<string, number> = {}
@@ -149,74 +185,185 @@ export default function DashboardClient() {
     ? ['overview', 'notes', 'coding', 'ambassador', 'profile']
     : ['overview', 'notes', 'coding', 'profile']
 
+  const kick = getKickMessage(streak, progress.length, savedNotes.length)
+  const ringR = 27, ringC = 2 * Math.PI * ringR
+
+  // Switches to the Ambassador tab AND scrolls it into view — without the
+  // scroll, the tab content swaps below the fold and the click can feel
+  // like it "did nothing" if the person doesn't notice the tab bar change.
+  const openAmbassadorHub = () => {
+    setTab('ambassador')
+    requestAnimationFrame(() => {
+      document.getElementById('dash-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
+
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         * { font-family: 'Poppins', sans-serif; box-sizing: border-box; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bubblePop { from { opacity: 0; transform: translateY(6px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes breathe { 0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.9; } 50% { transform: translateX(-50%) scale(1.08); opacity: 1; } }
         .dash-fade { animation: fadeUp 0.3s ease both; }
         .ql-row:hover { background: rgba(255,255,255,0.05) !important; }
         .nt-row:hover { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.13) !important; }
         .lp-link:hover { color: #6ee7b7 !important; }
 
-        .dash-wrap { max-width: 920px; margin: 0 auto; padding: 40px 20px 60px; }
-        .dash-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+        .dash-wrap { max-width: 920px; margin: 0 auto; padding: 36px 20px 60px; }
+
+        /* ── Hero ── */
+        .dash-hero { position: relative; text-align: center; padding: 18px 16px 26px; margin-bottom: 22px; }
+        .hero-glow {
+          position: absolute; top: -40px; left: 50%; width: 320px; height: 320px;
+          background: radial-gradient(circle, rgba(52,211,153,0.16), transparent 70%);
+          filter: blur(6px); pointer-events: none; z-index: 0;
+          animation: breathe 7s ease-in-out infinite;
+        }
+        .logout-btn {
+          position: absolute; top: 0; right: 0; z-index: 2;
+          background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 9px; padding: 7px 14px; color: rgba(255,255,255,0.5);
+          font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap;
+          font-family: 'Poppins', sans-serif; transition: all 0.15s;
+        }
+        .logout-btn:hover { color: #fca5a5; border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.06); }
+
+        .hero-avatar-wrap { position: relative; width: 100px; height: 100px; margin: 0 auto 16px; z-index: 1; }
+        .hero-avatar-ring { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+        .hero-avatar {
+          position: absolute; inset: 9px; border-radius: 50%; overflow: hidden;
+          background: linear-gradient(135deg, #0d542b, #064e3b);
+          display: flex; align-items: center; justify-content: center;
+          font-size: 26px; font-weight: 600; color: #6ee7b7;
+          box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 10px 30px rgba(0,0,0,0.55);
+        }
+        .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .hero-name { font-size: 26px; font-weight: 600; color: #fff; letter-spacing: -0.01em; margin-bottom: 5px; position: relative; z-index: 1; }
+        .hero-sub { color: rgba(255,255,255,0.4); font-size: 13.5px; position: relative; z-index: 1; }
+        .hero-badge {
+          display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; vertical-align: middle;
+          font-size: 11px; font-weight: 600; color: #fbbf24;
+          background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.25);
+          border-radius: 20px; padding: 3px 10px;
+        }
+
+        .kick-bubble {
+          position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px;
+          margin-top: 16px; padding: 9px 16px; max-width: 100%;
+          background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.09);
+          border-radius: 10px;
+          font-size: 12.5px; color: rgba(255,255,255,0.65); text-align: left;
+          animation: bubblePop 0.4s ease 0.15s both;
+        }
+        .kick-emoji { font-size: 14px; flex-shrink: 0; opacity: 0.9; }
+
         .completion-card { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
-        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+        .stat-card {
+          position: relative; overflow: hidden;
+          background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 14px; padding: 16px 18px;
+          transition: transform 0.18s ease, border-color 0.18s ease;
+        }
+        .stat-card::before {
+          content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+          background: var(--stat-accent, #34d399); opacity: 0.45;
+        }
+        .stat-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.16); }
+        .stat-icon { display: inline-flex; margin-bottom: 8px; opacity: 0.7; }
+        .stat-value { font-size: 22px; font-weight: 600; line-height: 1; letter-spacing: -0.01em; }
+        .stat-label { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 6px; }
+
+        .amb-snapshot {
+          background: rgba(255,255,255,0.025); border: 1px solid rgba(251,191,36,0.18);
+          border-radius: 14px; padding: 18px 20px; margin-bottom: 18px;
+        }
+        .amb-snapshot-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+        .amb-snapshot-icon {
+          width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+          background: rgba(251,191,36,0.1); color: #fbbf24;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .amb-snapshot-title { font-size: 14px; font-weight: 600; color: #fff; }
+        .amb-snapshot-sub { font-size: 11.5px; color: rgba(255,255,255,0.4); margin-top: 1px; }
+        .amb-snapshot-btn {
+          margin-left: auto; background: rgba(255,255,255,0.04); border: 1px solid rgba(251,191,36,0.25);
+          color: #fbbf24; border-radius: 9px; padding: 8px 16px; font-size: 12.5px; font-weight: 500;
+          cursor: pointer; font-family: 'Poppins', sans-serif; white-space: nowrap; transition: all 0.15s;
+        }
+        .amb-snapshot-btn:hover { background: rgba(251,191,36,0.1); }
+        .amb-snapshot-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: center; }
+        .amb-snapshot-stats > div { background: rgba(0,0,0,0.22); border-radius: 10px; padding: 12px 8px; }
+        .amb-snap-num { font-size: 19px; font-weight: 600; line-height: 1; }
+        .amb-snap-lbl { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 6px; }
+
         .tabs-row { display: flex; gap: 4px; margin-bottom: 22px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .tabs-row::-webkit-scrollbar { display: none; }
         .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
         @media (max-width: 640px) {
-          .dash-wrap { padding: 24px 14px 48px; }
-          .dash-header { flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: 22px; }
-          .dash-header h1 { font-size: 21px !important; }
-          .dash-header button { align-self: flex-start; }
+          .dash-wrap { padding: 22px 14px 48px; }
+          .dash-hero { padding: 32px 10px 22px; }
+          .logout-btn { padding: 6px 12px; font-size: 11.5px; }
+          .hero-avatar-wrap { width: 84px; height: 84px; }
+          .hero-name { font-size: 21px; }
+          .kick-bubble { font-size: 12.5px; padding: 9px 14px 9px 12px; }
           .completion-card { flex-wrap: wrap; padding: 14px 16px !important; }
           .completion-card > div:nth-child(2) { min-width: 100%; order: 3; }
           .completion-card button { margin-left: auto; }
           .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+          .amb-snapshot-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+          .amb-snap-num { font-size: 16px; }
+          .amb-snapshot-btn { width: 100%; margin-left: 0; }
           .overview-grid { grid-template-columns: 1fr; gap: 14px; }
         }
       `}</style>
 
-      <div style={{ minHeight: '100vh', background: '#000', color: '#fff' }}>
+      <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse 700px 400px at 50% 0%, rgba(52,211,153,0.06), transparent), #000', color: '#fff' }}>
         <div className="dash-wrap">
 
-          {/* Header */}
-          <div className="dash-header">
-            <div>
-              <h1 style={{ fontSize: 25, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em', marginBottom: 5, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                Welcome back, {firstName}
-                {isAmbassador && (
-                  <span style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 4,
-                    fontSize: 11, fontWeight: 600, color: '#fbbf24',
-                    background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.25)',
-                    borderRadius: 20, padding: '3px 10px',
-                  }}>
-                    <Icon.Star /> Ambassador
-                  </span>
-                )}
-              </h1>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13.5 }}>
-                {profile?.course
-                  ? `${profile.course}${profile.year ? ` · ${profile.year}` : ''}${profile.college ? ` · ${profile.college}` : ''}`
-                  : 'Complete your profile to personalize your dashboard'}
-              </p>
-            </div>
-            <button
-              onClick={async () => { await supabase.auth.signOut(); window.location.href = '/' }}
-              style={{
-                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: 9, padding: '8px 16px', color: 'rgba(255,255,255,0.5)',
-                fontSize: 12.5, fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap',
-                fontFamily: 'Poppins, sans-serif', flexShrink: 0,
-              }}
-            >
+          {/* ── Hero ── */}
+          <div className="dash-hero">
+            <div className="hero-glow" />
+            <button className="logout-btn" onClick={async () => { await supabase.auth.signOut(); window.location.href = '/' }}>
               Log out
             </button>
+
+            <div className="hero-avatar-wrap">
+              <svg className="hero-avatar-ring" viewBox="0 0 60 60" preserveAspectRatio="xMidYMid meet">
+                <circle cx="30" cy="30" r={ringR} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="2.4" />
+                <circle cx="30" cy="30" r={ringR} fill="none" stroke="url(#heroRingGrad)" strokeWidth="2.4"
+                  strokeDasharray={`${(completion / 100) * ringC} ${ringC}`} strokeLinecap="round"
+                  transform="rotate(-90 30 30)" style={{ transition: 'stroke-dasharray 0.8s ease' }} />
+                <defs>
+                  <linearGradient id="heroRingGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#6ee7b7" />
+                    <stop offset="100%" stopColor="#059669" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div className="hero-avatar">
+                {profile?.avatar_url ? <img src={profile.avatar_url} alt={name} /> : <span>{initials}</span>}
+              </div>
+            </div>
+
+            <h1 className="hero-name">
+              Welcome back, {firstName}
+              {isAmbassador && <span className="hero-badge"><Icon.Star /> Ambassador</span>}
+            </h1>
+            <p className="hero-sub">
+              {profile?.course
+                ? `${profile.course}${profile.year ? ` · ${profile.year}` : ''}${profile.college ? ` · ${profile.college}` : ''}`
+                : 'Complete your profile to personalize your dashboard'}
+            </p>
+
+            <div className="kick-bubble">
+              <span className="kick-emoji">{kick.emoji}</span>
+              <span>{kick.text}</span>
+            </div>
           </div>
 
           {/* Profile completion */}
@@ -247,14 +394,44 @@ export default function DashboardClient() {
 
           {/* Stats */}
           <div className="stats-row">
-            <Stat label="Saved notes" value={savedNotes.length} />
-            <Stat label="Problems solved" value={progress.length} accent="#6ee7b7" />
-            <Stat label="Day streak" value={streak} accent="#fb923c" />
-            <Stat label="Profile score" value={`${completion}%`} accent="#fbbf24" />
+            <Stat icon={<Icon.Bookmark />} label="Saved notes" value={savedNotes.length} accent="#a78bfa" />
+            <Stat icon={<Icon.Code />} label="Problems solved" value={progress.length} accent="#34d399" />
+            <Stat icon={<span style={{ fontSize: 16 }}>🔥</span>} label="Day streak" value={streak} accent="#fb923c" />
+            <Stat icon={<Icon.Check />} label="Profile score" value={`${completion}%`} accent="#fbbf24" />
           </div>
 
+          {/* Ambassador snapshot — visible right on Overview, no extra clicks */}
+          {isAmbassador && ambStats && (
+            <div className="amb-snapshot">
+              <div className="amb-snapshot-head">
+                <span className="amb-snapshot-icon"><Icon.Trophy /></span>
+                <div>
+                  <p className="amb-snapshot-title">Ambassador Hub</p>
+                  <p className="amb-snapshot-sub">Your referrals & points at a glance</p>
+                </div>
+                <button className="amb-snapshot-btn" onClick={openAmbassadorHub}>
+                  Open hub →
+                </button>
+              </div>
+              <div className="amb-snapshot-stats">
+                <div>
+                  <p className="amb-snap-num" style={{ color: '#fff' }}>{ambStats.rank ? `#${ambStats.rank}` : '—'}</p>
+                  <p className="amb-snap-lbl">Leaderboard rank</p>
+                </div>
+                <div>
+                  <p className="amb-snap-num" style={{ color: '#fbbf24' }}>{ambStats.points}</p>
+                  <p className="amb-snap-lbl">Total points</p>
+                </div>
+                <div>
+                  <p className="amb-snap-num" style={{ color: '#6ee7b7' }}>{ambStats.referrals}</p>
+                  <p className="amb-snap-lbl">Referrals</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Tabs */}
-          <div className="tabs-row" style={{
+          <div id="dash-tabs" className="tabs-row" style={{
             background: 'rgba(255,255,255,0.025)', borderRadius: 11, padding: 4,
             border: '1px solid rgba(255,255,255,0.06)', width: 'fit-content',
           }}>
