@@ -62,20 +62,17 @@ export async function GET(request: NextRequest) {
       }, { onConflict: 'id', ignoreDuplicates: true })
 
       // ── Attribute referral if a code was captured before signup ──────────
+      // Same reasoning as client-callback: this needs to go through a
+      // SECURITY DEFINER DB function, not a direct client-side lookup,
+      // because RLS blocks looking up someone else's profile by referral_code.
       const refCode = cookieStore.get(REFERRAL_COOKIE)?.value
       if (refCode) {
-        const { data: ambassador } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('referral_code', refCode)
-          .maybeSingle()
-
-        if (ambassador && ambassador.id !== user.id) {
-          await supabase.from('ambassador_referrals').insert({
-            ambassador_id: ambassador.id,
-            referred_user_id: user.id,
-            referred_email: user.email,
-          })
+        const { error: refError } = await supabase.rpc('attribute_referral', {
+          p_referral_code: refCode,
+          p_referred_email: user.email,
+        })
+        if (refError) {
+          console.error('Referral attribution failed:', refError)
         }
         cookieStore.delete(REFERRAL_COOKIE)
       }

@@ -5,25 +5,27 @@ import { supabase } from '@/lib/supabase'
 import { getPendingReferralCode, clearPendingReferralCode } from '@/components/ReferralCapture'
 
 // ── Attribute a referral once, right after profile creation ────────────────
-async function attributeReferral(newUserId: string, newUserEmail: string) {
+// NOTE: this calls a SECURITY DEFINER Postgres function (attribute_referral)
+// instead of doing the profiles-by-referral_code lookup + insert directly
+// from the client. Reason: with normal RLS, a brand-new user is only allowed
+// to SELECT their own profiles row, so a client-side lookup of *someone
+// else's* profile by referral_code returns nothing and the referral never
+// gets attributed (silently). The DB function runs with elevated privileges
+// so it can do the lookup + insert safely without opening up the profiles
+// table to everyone. See the SQL migration for the function definition.
+async function attributeReferral(newUserEmail: string) {
   const code = getPendingReferralCode()
   if (!code) return
 
-  // Find the ambassador who owns this code
-  const { data: ambassador } = await supabase
-    .from('profiles')
-    .select('id')
-    .eq('referral_code', code)
-    .maybeSingle()
+  const { error } = await supabase.rpc('attribute_referral', {
+    p_referral_code: code,
+    p_referred_email: newUserEmail,
+  })
 
-  // Don't let someone "refer" themselves, and don't fail silently-loud
-  // if the code doesn't match anyone (typo, expired link, etc.)
-  if (ambassador && ambassador.id !== newUserId) {
-    await supabase.from('ambassador_referrals').insert({
-      ambassador_id: ambassador.id,
-      referred_user_id: newUserId,
-      referred_email: newUserEmail,
-    })
+  if (error) {
+    // Don't block onboarding on this, but make sure it's visible — this is
+    // exactly the kind of failure that was silent before.
+    console.error('Referral attribution failed:', error)
   }
 
   clearPendingReferralCode()
@@ -57,7 +59,7 @@ function ClientCallbackInner() {
         }, { onConflict: 'id', ignoreDuplicates: true })
 
         // First time this profile exists — attribute any pending referral
-        await attributeReferral(session.user.id, session.user.email!)
+        await attributeReferral(session.user.email!)
 
         router.replace(next ? `/onboarding?next=${encodeURIComponent(next)}` : '/onboarding')
         return
