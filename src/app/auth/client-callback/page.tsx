@@ -2,6 +2,32 @@
 import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { getPendingReferralCode, clearPendingReferralCode } from '@/components/ReferralCapture'
+
+// ── Attribute a referral once, right after profile creation ────────────────
+async function attributeReferral(newUserId: string, newUserEmail: string) {
+  const code = getPendingReferralCode()
+  if (!code) return
+
+  // Find the ambassador who owns this code
+  const { data: ambassador } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('referral_code', code)
+    .maybeSingle()
+
+  // Don't let someone "refer" themselves, and don't fail silently-loud
+  // if the code doesn't match anyone (typo, expired link, etc.)
+  if (ambassador && ambassador.id !== newUserId) {
+    await supabase.from('ambassador_referrals').insert({
+      ambassador_id: ambassador.id,
+      referred_user_id: newUserId,
+      referred_email: newUserEmail,
+    })
+  }
+
+  clearPendingReferralCode()
+}
 
 function ClientCallbackInner() {
   const router = useRouter()
@@ -29,6 +55,10 @@ function ClientCallbackInner() {
           profile_completed: 10,
           onboarding_done: false,
         }, { onConflict: 'id', ignoreDuplicates: true })
+
+        // First time this profile exists — attribute any pending referral
+        await attributeReferral(session.user.id, session.user.email!)
+
         router.replace(next ? `/onboarding?next=${encodeURIComponent(next)}` : '/onboarding')
         return
       }

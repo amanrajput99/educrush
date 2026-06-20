@@ -14,6 +14,9 @@ export type UserProfile = {
   last_active: string | null
   profile_completed: number      // 0–100
   onboarding_done: boolean
+  role: string                   // 'user' | 'admin' | 'ambassador'
+  referral_code: string | null
+  ambassador_status: string      // 'none' | 'pending' | 'ambassador' | 'rejected'
   created_at: string
 }
 

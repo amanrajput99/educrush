@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { motion } from 'framer-motion'
 
@@ -26,6 +26,8 @@ const Divider = () => (
 
 // ── Inner form (uses useSearchParams — must be inside Suspense) ───────────────
 function CareersForm() {
+  const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const roleParam = searchParams.get('role')
 
@@ -34,6 +36,46 @@ function CareersForm() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
+  // ── Auth gate ────────────────────────────────────────────────────────────
+  const [authChecked, setAuthChecked] = useState(false)
+  const [user, setUser] = useState<{ id: string; email: string; full_name: string | null } | null>(null)
+  const [alreadyApplied, setAlreadyApplied] = useState<{ status: string; role: string } | null>(null)
+
+  useEffect(() => {
+    const check = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { setAuthChecked(true); return }
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', session.user.id)
+        .maybeSingle()
+
+      setUser({
+        id: session.user.id,
+        email: session.user.email!,
+        full_name: profile?.full_name ?? null,
+      })
+
+      // Check if this user already has a pending/accepted application
+      const { data: existing } = await supabase
+        .from('careers_interest')
+        .select('status, role')
+        .eq('user_id', session.user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (existing && existing.status !== 'rejected') {
+        setAlreadyApplied(existing)
+      }
+
+      setAuthChecked(true)
+    }
+    check()
+  }, [])
+
   useEffect(() => {
     if (roleParam === 'volunteer') setRole('Volunteer / Contributor')
     else if (roleParam === 'ambassador') setRole('Student Ambassador')
@@ -41,6 +83,7 @@ function CareersForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (!user) return // shouldn't happen — gated below
     setLoading(true)
     setError('')
 
@@ -52,11 +95,11 @@ function CareersForm() {
     const course       = (form.elements.namedItem('course')       as HTMLInputElement).value
     const year         = (form.elements.namedItem('year')         as HTMLSelectElement).value
     const contribution = (form.elements.namedItem('contribution') as HTMLInputElement).value
-    const message      = (form.elements.namedItem('message')      as HTMLTextAreaElement).value
+    const message       = (form.elements.namedItem('message')      as HTMLTextAreaElement).value
 
     const { error: dbError } = await supabase
       .from('careers_interest')
-      .insert([{ name, email, mobile, college, course, year, role, contribution, message }])
+      .insert([{ name, email, mobile, college, course, year, role, contribution, message, user_id: user.id, status: 'new' }])
 
     if (dbError) {
       setError('Something went wrong. Please try again or reach us at educrushofficial@gmail.com.')
@@ -69,6 +112,62 @@ function CareersForm() {
   const inputClass = 'w-full bg-[#00A63E]/5 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/40 placeholder:text-sm focus:outline-none focus:border-green-600 transition text-sm'
   const labelClass = 'block text-white text-sm mb-2'
 
+  // ── Not logged in — gate the form ───────────────────────────────────────
+  if (authChecked && !user) {
+    return (
+      <div className="w-full max-w-lg backdrop-blur-sm border border-white/10 rounded-2xl p-8">
+        <div className="flex flex-col items-center justify-center py-14 text-center">
+          <div className="w-14 h-14 rounded-full bg-green-950 border border-green-700/50 flex items-center justify-center mb-5">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <h3 className="text-white text-lg font-semibold mb-2">Sign in to apply</h3>
+          <p className="text-slate-400 text-sm mb-7 max-w-xs">
+            We link applications to your EduCrush account so we can verify you and, once approved, set up your Ambassador dashboard.
+          </p>
+          <button
+            onClick={() => router.push(`/login?next=${encodeURIComponent(pathname + '?role=' + (role === 'Volunteer / Contributor' ? 'volunteer' : 'ambassador'))}`)}
+            className="bg-gradient-to-r from-green-950 to-green-600 hover:from-green-600 hover:to-green-950 text-white text-sm px-8 py-3 rounded-full transition duration-300 font-medium"
+          >
+            Sign in to continue
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Already applied ──────────────────────────────────────────────────────
+  if (authChecked && user && alreadyApplied) {
+    const statusLabel = alreadyApplied.status === 'accepted' ? 'Accepted' : alreadyApplied.status === 'reviewed' ? 'Under review' : 'Submitted'
+    return (
+      <div className="w-full max-w-lg backdrop-blur-sm border border-white/10 rounded-2xl p-8">
+        <div className="flex flex-col items-center justify-center py-14 text-center">
+          <div className="w-14 h-14 rounded-full bg-green-950 border border-green-700/50 flex items-center justify-center mb-5">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/>
+            </svg>
+          </div>
+          <h3 className="text-white text-lg font-semibold mb-2">You've already applied</h3>
+          <p className="text-slate-400 text-sm mb-1">Role: <span className="text-white">{alreadyApplied.role}</span></p>
+          <p className="text-slate-400 text-sm mb-7">Status: <span className="text-green-400">{statusLabel}</span></p>
+          <Link href="/dashboard"
+            className="flex items-center gap-2 border border-white/15 hover:border-green-700/60 bg-white/5 text-white px-6 py-2.5 rounded-full text-sm font-medium transition duration-300">
+            Go to dashboard
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  if (!authChecked) {
+    return (
+      <div className="w-full max-w-lg border border-white/10 rounded-2xl p-8 flex items-center justify-center min-h-[400px]">
+        <p className="text-slate-500 text-sm">Loading...</p>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full max-w-lg backdrop-blur-sm border border-white/10 rounded-2xl p-8">
       {success ? (
@@ -78,15 +177,15 @@ function CareersForm() {
               <path d="m9 12 2 2 4-4" /><circle cx="12" cy="12" r="10" />
             </svg>
           </div>
-          <h3 className="text-white text-xl font-semibold mb-2">Application Received! 🎉</h3>
+          <h3 className="text-white text-xl font-semibold mb-2">Application received</h3>
           <p className="text-slate-400 text-sm mb-1">
             Thank you for your interest in joining the{' '}
             <span className="text-green-400 font-medium">EduCrush team</span>.
           </p>
           <p className="text-slate-500 text-xs mb-8">We will get back to you within 3–5 business days via email.</p>
-          <Link href="/careers"
+          <Link href="/dashboard"
             className="flex items-center gap-2 border border-white/15 hover:border-green-700/60 bg-white/5 text-white px-6 py-2.5 rounded-full text-sm font-medium transition duration-300">
-            ← Back to Careers
+            Go to dashboard
           </Link>
         </div>
       ) : (
@@ -105,7 +204,6 @@ function CareersForm() {
                       : 'border-white/20 bg-white/5 text-slate-400 hover:border-white/40'
                   }`}
                 >
-                  {r === 'Student Ambassador' ? '⭐ ' : '🤝 '}
                   {r}
                 </button>
               ))}
@@ -115,11 +213,11 @@ function CareersForm() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className={labelClass}>Full Name *</label>
-              <input name="name" type="text" required placeholder="Aman Kumar Singh" className={inputClass} />
+              <input name="name" type="text" required defaultValue={user?.full_name ?? ''} placeholder="Aman Kumar Singh" className={inputClass} />
             </div>
             <div>
               <label className={labelClass}>Email Address *</label>
-              <input name="email" type="email" required placeholder="you@example.com" className={inputClass} />
+              <input name="email" type="email" required defaultValue={user?.email ?? ''} readOnly placeholder="you@example.com" className={inputClass + ' opacity-60 cursor-not-allowed'} />
             </div>
           </div>
 

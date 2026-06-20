@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
+const REFERRAL_COOKIE = 'edu_ref'
+
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
@@ -48,8 +50,6 @@ export async function GET(request: NextRequest) {
       .maybeSingle()
 
     if (!profile) {
-      // upsert + ignoreDuplicates so this can't collide with the
-      // client-callback fallback trying to insert the same row
       await supabase.from('profiles').upsert({
         id: user.id,
         email: user.email!,
@@ -61,8 +61,25 @@ export async function GET(request: NextRequest) {
         onboarding_done: false,
       }, { onConflict: 'id', ignoreDuplicates: true })
 
-      // First-time user — still go through onboarding, but remember
-      // where they wanted to go (carried as a query param)
+      // ── Attribute referral if a code was captured before signup ──────────
+      const refCode = cookieStore.get(REFERRAL_COOKIE)?.value
+      if (refCode) {
+        const { data: ambassador } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('referral_code', refCode)
+          .maybeSingle()
+
+        if (ambassador && ambassador.id !== user.id) {
+          await supabase.from('ambassador_referrals').insert({
+            ambassador_id: ambassador.id,
+            referred_user_id: user.id,
+            referred_email: user.email,
+          })
+        }
+        cookieStore.delete(REFERRAL_COOKIE)
+      }
+
       const onboardingUrl = next
         ? `${origin}/onboarding?next=${encodeURIComponent(next)}`
         : `${origin}/onboarding`
@@ -76,12 +93,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(onboardingUrl)
     }
 
-    // Returning user with completed profile — send back to where
-    // they came from (e.g. the coding problem they were solving)
     return NextResponse.redirect(next ? `${origin}${next}` : `${origin}/dashboard`)
   }
 
-  // Neither code nor token_hash worked — fall back to client-side session check
   const clientCallbackUrl = next
     ? `${origin}/auth/client-callback?next=${encodeURIComponent(next)}`
     : `${origin}/auth/client-callback`

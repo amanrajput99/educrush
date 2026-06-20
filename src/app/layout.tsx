@@ -8,6 +8,10 @@ import { WebsiteJsonLd, OrganizationJsonLd } from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/Googleanalytics'
 import Script from 'next/script'
 
+// 1. Top pe import add karo:
+import { Suspense } from 'react'
+import ReferralCapture from '@/components/ReferralCapture'
+
 const BASE_URL = 'https://educrush.in'
 
 export const viewport: Viewport = {
@@ -46,11 +50,11 @@ export const metadata: Metadata = {
 
   // ─── Canonical ───────────────────────────────────────────
   // Sirf homepage ka canonical yahan — baaki pages apna khud set karenge
-// <<<<<<< HEAD
+  // <<<<<<< HEAD
   // alternates: {
   //   canonical: BASE_URL,
   // },
-// =======
+  // =======
 
   // ─── Open Graph ──────────────────────────────────────────
   // WhatsApp, Facebook, LinkedIn share pe yahi dikhta hai
@@ -145,6 +149,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-title" content="EduCrush" />
       </head>
       <body>
+
+        <Suspense fallback={null}>
+          <ReferralCapture />
+        </Suspense>
         <GoogleAnalytics />
         <Script
           async

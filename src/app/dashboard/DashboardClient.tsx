@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { getSavedNotes, getCodingProgress } from '@/lib/auth'
+import AmbassadorTab from '@/components/dashboard/AmbassadorTab'
 import type { UserProfile, SavedNote, CodingProgress } from '@/types/auth'
 
 // ── Inline icons ────────────────────────────────────────────────────────────
@@ -43,6 +44,11 @@ const Icon = {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
       <line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/>
+    </svg>
+  ),
+  Star: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
     </svg>
   ),
 }
@@ -84,11 +90,14 @@ function Tab({ label, active, onClick }: { label: string; active: boolean; onCli
       background: active ? 'rgba(52,211,153,0.12)' : 'transparent',
       color: active ? '#6ee7b7' : 'rgba(255,255,255,0.45)',
       fontFamily: 'Poppins, sans-serif', flexShrink: 0,
+      display: 'flex', alignItems: 'center', gap: 5,
     }}>
       {label}
     </button>
   )
 }
+
+type DashTab = 'overview' | 'notes' | 'coding' | 'ambassador' | 'profile'
 
 export default function DashboardClient() {
   const router = useRouter()
@@ -96,7 +105,7 @@ export default function DashboardClient() {
   const [savedNotes, setSavedNotes] = useState<SavedNote[]>([])
   const [progress, setProgress] = useState<CodingProgress[]>([])
   const [loading, setLoading] = useState(true)
-  const [tab, setTab] = useState<'overview' | 'notes' | 'coding' | 'profile'>('overview')
+  const [tab, setTab] = useState<DashTab>('overview')
 
   useEffect(() => {
     const init = async () => {
@@ -134,6 +143,11 @@ export default function DashboardClient() {
   const streak = profile?.streak_count ?? 0
   const langMap: Record<string, number> = {}
   progress.forEach(p => { langMap[p.lang] = (langMap[p.lang] ?? 0) + 1 })
+
+  const isAmbassador = profile?.role === 'ambassador'
+  const visibleTabs: DashTab[] = isAmbassador
+    ? ['overview', 'notes', 'coding', 'ambassador', 'profile']
+    : ['overview', 'notes', 'coding', 'profile']
 
   return (
     <>
@@ -173,8 +187,18 @@ export default function DashboardClient() {
           {/* Header */}
           <div className="dash-header">
             <div>
-              <h1 style={{ fontSize: 25, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em', marginBottom: 5 }}>
+              <h1 style={{ fontSize: 25, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em', marginBottom: 5, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                 Welcome back, {firstName}
+                {isAmbassador && (
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                    fontSize: 11, fontWeight: 600, color: '#fbbf24',
+                    background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.25)',
+                    borderRadius: 20, padding: '3px 10px',
+                  }}>
+                    <Icon.Star /> Ambassador
+                  </span>
+                )}
               </h1>
               <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13.5 }}>
                 {profile?.course
@@ -234,8 +258,13 @@ export default function DashboardClient() {
             background: 'rgba(255,255,255,0.025)', borderRadius: 11, padding: 4,
             border: '1px solid rgba(255,255,255,0.06)', width: 'fit-content',
           }}>
-            {(['overview', 'notes', 'coding', 'profile'] as const).map(t => (
-              <Tab key={t} label={t.charAt(0).toUpperCase() + t.slice(1)} active={tab === t} onClick={() => setTab(t)} />
+            {visibleTabs.map(t => (
+              <Tab
+                key={t}
+                label={t === 'ambassador' ? 'Ambassador' : t.charAt(0).toUpperCase() + t.slice(1)}
+                active={tab === t}
+                onClick={() => setTab(t)}
+              />
             ))}
           </div>
 
@@ -403,6 +432,11 @@ export default function DashboardClient() {
                   </>
                 )}
               </div>
+            )}
+
+            {/* Ambassador */}
+            {tab === 'ambassador' && profile && (
+              <AmbassadorTab userId={profile.id} />
             )}
 
             {/* Profile */}
