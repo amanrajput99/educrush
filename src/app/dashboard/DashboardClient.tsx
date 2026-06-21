@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { getSavedNotes, getCodingProgress } from '@/lib/auth'
 import AmbassadorTab from '@/components/dashboard/AmbassadorTab'
+import { downloadAmbassadorCertificate } from '@/lib/certificate'
 import type { UserProfile, SavedNote, CodingProgress } from '@/types/auth'
 
 // ── Inline icons ────────────────────────────────────────────────────────────
@@ -55,6 +56,16 @@ const Icon = {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
       <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/>
       <path d="M17 5h2a2 2 0 0 1 2 2 4 4 0 0 1-4 4M7 5H5a2 2 0 0 0-2 2 4 4 0 0 0 4 4"/>
+    </svg>
+  ),
+  Award: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8" r="6"/><path d="M9 14.5 7 22l5-3 5 3-2-7.5"/>
+    </svg>
+  ),
+  Lock: () => (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>
     </svg>
   ),
 }
@@ -112,7 +123,7 @@ function getKickMessage(streak: number, solved: number, notesCount: number): { e
   return { emoji: '👋', text: 'Welcome to EduCrush! Explore notes & problems to get started.' }
 }
 
-type AmbStats = { rank: number | null; points: number; referrals: number }
+type AmbStats = { rank: number | null; points: number; referrals: number; certMinPoints: number }
 type DashTab = 'overview' | 'notes' | 'coding' | 'ambassador' | 'profile'
 
 export default function DashboardClient() {
@@ -121,6 +132,7 @@ export default function DashboardClient() {
   const [savedNotes, setSavedNotes] = useState<SavedNote[]>([])
   const [progress, setProgress] = useState<CodingProgress[]>([])
   const [ambStats, setAmbStats] = useState<AmbStats | null>(null)
+  const [certGenerating, setCertGenerating] = useState(false)
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState<DashTab>('overview')
 
@@ -145,16 +157,24 @@ export default function DashboardClient() {
       // visible on the main Overview tab — no need to open the Ambassador
       // tab just to see "where do I stand".
       if ((prof as UserProfile).role === 'ambassador') {
-        const { data: board } = await supabase
-          .from('ambassador_leaderboard')
-          .select('id, referral_count, total_points')
-          .order('total_points', { ascending: false })
+        const [{ data: board }, { data: configRow }] = await Promise.all([
+          supabase
+            .from('ambassador_leaderboard')
+            .select('id, referral_count, total_points')
+            .order('total_points', { ascending: false }),
+          supabase
+            .from('ambassador_config')
+            .select('value')
+            .eq('key', 'certificate_min_points')
+            .maybeSingle(),
+        ])
 
         const idx = board?.findIndex(r => r.id === user.id) ?? -1
         setAmbStats({
           rank: idx >= 0 ? idx + 1 : null,
           points: idx >= 0 ? (board![idx].total_points ?? 0) : 0,
           referrals: idx >= 0 ? (board![idx].referral_count ?? 0) : 0,
+          certMinPoints: configRow?.value ?? 50,
         })
       }
 
@@ -211,12 +231,17 @@ export default function DashboardClient() {
         .nt-row:hover { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.13) !important; }
         .lp-link:hover { color: #6ee7b7 !important; }
 
+        .dash-page {
+          min-height: 100vh; min-height: 100dvh;
+          background: radial-gradient(ellipse 700px 400px at 50% 0%, rgba(52,211,153,0.06), transparent), #000;
+          color: #fff;
+        }
         .dash-wrap { max-width: 920px; margin: 0 auto; padding: 36px 20px 60px; }
 
         /* ── Hero ── */
         .dash-hero { position: relative; text-align: center; padding: 18px 16px 26px; margin-bottom: 22px; }
         .hero-glow {
-          position: absolute; top: -40px; left: 50%; width: 320px; height: 320px;
+          position: absolute; top: -40px; left: 50%; width: min(320px, 85vw); height: min(320px, 85vw);
           background: radial-gradient(circle, rgba(52,211,153,0.16), transparent 70%);
           filter: blur(6px); pointer-events: none; z-index: 0;
           animation: breathe 7s ease-in-out infinite;
@@ -241,14 +266,20 @@ export default function DashboardClient() {
         }
         .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
+        .hero-avatar-seal {
+          position: absolute; bottom: -2px; right: -2px; z-index: 2;
+          width: 26px; height: 26px; border-radius: 50%;
+          background: linear-gradient(135deg, #fcd34d, #d97706);
+          display: flex; align-items: center; justify-content: center;
+          color: #1a1306; box-shadow: 0 0 0 3px #000, 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .hero-eyebrow {
+          position: relative; z-index: 1; font-size: 10.5px; font-weight: 600; color: #fbbf24;
+          text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 6px;
+        }
+
         .hero-name { font-size: 26px; font-weight: 600; color: #fff; letter-spacing: -0.01em; margin-bottom: 5px; position: relative; z-index: 1; }
         .hero-sub { color: rgba(255,255,255,0.4); font-size: 13.5px; position: relative; z-index: 1; }
-        .hero-badge {
-          display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; vertical-align: middle;
-          font-size: 11px; font-weight: 600; color: #fbbf24;
-          background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.25);
-          border-radius: 20px; padding: 3px 10px;
-        }
 
         .kick-bubble {
           position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px;
@@ -300,6 +331,25 @@ export default function DashboardClient() {
         .amb-snap-num { font-size: 19px; font-weight: 600; line-height: 1; }
         .amb-snap-lbl { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 6px; }
 
+        .cert-btn {
+          width: 100%; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;
+          padding: 11px; border-radius: 10px; font-size: 13px; font-weight: 600;
+          cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.15s; border: none;
+        }
+        .cert-btn-unlocked {
+          background: linear-gradient(135deg, #fcd34d, #d97706); color: #1a1306;
+          box-shadow: 0 4px 16px rgba(217,119,6,0.25);
+        }
+        .cert-btn-unlocked:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(217,119,6,0.32); }
+        .cert-btn-unlocked:disabled { opacity: 0.6; cursor: wait; transform: none; }
+        .cert-locked { margin-top: 14px; padding: 12px 14px; background: rgba(0,0,0,0.18); border-radius: 10px; }
+        .cert-locked-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        .cert-locked-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5); }
+        .cert-locked-count { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6); }
+        .cert-progress-track { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden; }
+        .cert-progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #d97706, #fbbf24); transition: width 0.6s ease; }
+        .cert-locked-hint { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 8px; }
+
         .tabs-row { display: flex; gap: 4px; margin-bottom: 22px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .tabs-row::-webkit-scrollbar { display: none; }
         .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -309,6 +359,8 @@ export default function DashboardClient() {
           .dash-hero { padding: 32px 10px 22px; }
           .logout-btn { padding: 6px 12px; font-size: 11.5px; }
           .hero-avatar-wrap { width: 84px; height: 84px; }
+          .hero-avatar-seal { width: 22px; height: 22px; }
+          .hero-eyebrow { font-size: 10px; }
           .hero-name { font-size: 21px; }
           .kick-bubble { font-size: 12.5px; padding: 9px 14px 9px 12px; }
           .completion-card { flex-wrap: wrap; padding: 14px 16px !important; }
@@ -322,7 +374,7 @@ export default function DashboardClient() {
         }
       `}</style>
 
-      <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse 700px 400px at 50% 0%, rgba(52,211,153,0.06), transparent), #000', color: '#fff' }}>
+      <div className="dash-page">
         <div className="dash-wrap">
 
           {/* ── Hero ── */}
@@ -348,12 +400,15 @@ export default function DashboardClient() {
               <div className="hero-avatar">
                 {profile?.avatar_url ? <img src={profile.avatar_url} alt={name} /> : <span>{initials}</span>}
               </div>
+              {isAmbassador && (
+                <span className="hero-avatar-seal" title="EduCrush Ambassador">
+                  <Icon.Award />
+                </span>
+              )}
             </div>
 
-            <h1 className="hero-name">
-              Welcome back, {firstName}
-              {isAmbassador && <span className="hero-badge"><Icon.Star /> Ambassador</span>}
-            </h1>
+            {isAmbassador && <p className="hero-eyebrow">EDUCRUSH AMBASSADOR</p>}
+            <h1 className="hero-name">Welcome back, {firstName}</h1>
             <p className="hero-sub">
               {profile?.course
                 ? `${profile.course}${profile.year ? ` · ${profile.year}` : ''}${profile.college ? ` · ${profile.college}` : ''}`
@@ -427,6 +482,43 @@ export default function DashboardClient() {
                   <p className="amb-snap-lbl">Referrals</p>
                 </div>
               </div>
+
+              {/* Certificate — unlocks once the configured point threshold is reached */}
+              {ambStats.points >= ambStats.certMinPoints ? (
+                <button
+                  className="cert-btn cert-btn-unlocked"
+                  disabled={certGenerating}
+                  onClick={async () => {
+                    if (!profile) return
+                    setCertGenerating(true)
+                    try {
+                      await downloadAmbassadorCertificate(name, ambStats.points, ambStats.referrals, profile.id)
+                    } catch (err) {
+                      console.error('Certificate generation failed:', err)
+                    } finally {
+                      setCertGenerating(false)
+                    }
+                  }}
+                >
+                  <Icon.Award />
+                  {certGenerating ? 'Generating…' : 'Download your certificate'}
+                </button>
+              ) : (
+                <div className="cert-locked">
+                  <div className="cert-locked-row">
+                    <span className="cert-locked-label"><Icon.Lock /> Certificate locked</span>
+                    <span className="cert-locked-count">{ambStats.points} / {ambStats.certMinPoints} pts</span>
+                  </div>
+                  <div className="cert-progress-track">
+                    <div className="cert-progress-fill" style={{
+                      width: `${Math.min(100, (ambStats.points / Math.max(1, ambStats.certMinPoints)) * 100)}%`,
+                    }} />
+                  </div>
+                  <p className="cert-locked-hint">
+                    Earn {Math.max(0, ambStats.certMinPoints - ambStats.points)} more point{ambStats.certMinPoints - ambStats.points === 1 ? '' : 's'} to unlock your certificate
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
