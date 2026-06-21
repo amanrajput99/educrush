@@ -2,12 +2,41 @@ import jsPDF from 'jspdf'
 import QRCode from 'qrcode'
 import html2canvas from 'html2canvas'
 import { buildCertificateHtml } from './certificateTemplate'
+import { supabase } from '@/lib/supabase'
+
+// Loads the Google Fonts used by the certificate template (Poppins +
+// Dancing Script for the name/signature) and waits until they're actually
+// usable before we screenshot.
+async function ensureCertificateFontsLoaded() {
+  const linkId = 'ec-certificate-fonts'
+  if (!document.getElementById(linkId)) {
+    const link = document.createElement('link')
+    link.id = linkId
+    link.rel = 'stylesheet'
+    link.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap'
+    document.head.appendChild(link)
+  }
+
+  try {
+    await Promise.all([
+      document.fonts.load('800 46px "Poppins"'),
+      document.fonts.load('700 92px "Dancing Script"'),
+      document.fonts.load('700 38px "Dancing Script"'),
+    ])
+    await document.fonts.ready
+  } catch {
+    // fall back to the fixed delay below if Font Loading API is unavailable
+  }
+}
 
 // Generates and downloads the branded EduCrush Ambassador certificate as a
-// PDF. The certificate is built as real HTML/CSS (matching the brand's
-// designed template), captured at high resolution with html2canvas, then
-// embedded into a PDF sized to the exact same aspect ratio (no white
-// borders / letterboxing).
+// PDF, and records it in `ambassador_certificates` so the QR code's
+// /verify/[certId] link can do an exact DB lookup rather than reconstructing
+// an ID from the user's UUID (which risked collisions between ambassadors).
+//
+// Re-downloading reuses the same cert_id for that person — it doesn't mint
+// a new ID every click — so the QR code on every copy of their certificate
+// always resolves to the same verification record.
 export async function downloadAmbassadorCertificate(
   name: string,
   points: number,
@@ -16,12 +45,38 @@ export async function downloadAmbassadorCertificate(
 ) {
   const displayName = name?.trim() || 'EduCrush Ambassador'
   const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-  const certId = `#EC-${new Date().getFullYear()}-${userId.replace(/-/g, '').slice(0, 5).toUpperCase()}`
-  const verifyUrl = `https://educrush.in/verify/${encodeURIComponent(certId.replace('#', ''))}`
 
-  // QR is generated fully client-side (no network call), so it always works
-  // even if the verify page doesn't exist yet — it just won't resolve until
-  // that page ships.
+  let certId: string
+
+  const { data: existing } = await supabase
+    .from('ambassador_certificates')
+    .select('cert_id')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  if (existing) {
+    certId = existing.cert_id
+    await supabase
+      .from('ambassador_certificates')
+      .update({ full_name: displayName, points, referrals })
+      .eq('user_id', userId)
+  } else {
+    certId = `EC-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`
+    const { error: insertErr } = await supabase
+      .from('ambassador_certificates')
+      .insert({ cert_id: certId, user_id: userId, full_name: displayName, points, referrals })
+
+    // Extremely unlikely random collision on the suffix — retry once
+    if (insertErr) {
+      certId = `EC-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`
+      await supabase
+        .from('ambassador_certificates')
+        .insert({ cert_id: certId, user_id: userId, full_name: displayName, points, referrals })
+    }
+  }
+
+  const verifyUrl = `https://educrush.in/verify/${certId}`
+
   const qrDataUrl = await QRCode.toDataURL(verifyUrl, {
     width: 300,
     margin: 0,
@@ -33,12 +88,10 @@ export async function downloadAmbassadorCertificate(
     points,
     referrals,
     dateStr,
-    certId,
+    certId: `#${certId}`,
     qrDataUrl,
   })
 
-  // Mount off-screen at the template's native design size so html2canvas
-  // captures it pixel-for-pixel regardless of the visible viewport size.
   const container = document.createElement('div')
   container.style.position = 'fixed'
   container.style.top = '0'
@@ -49,11 +102,7 @@ export async function downloadAmbassadorCertificate(
   document.body.appendChild(container)
 
   try {
-    // Make sure web fonts (Poppins / Caveat) are actually painted before
-    // the screenshot, otherwise the capture can fall back to a system font.
-    if (document.fonts?.ready) {
-      await document.fonts.ready
-    }
+    await ensureCertificateFontsLoaded()
     await new Promise(resolve => setTimeout(resolve, 150))
 
     const target = container.querySelector('#ec-cert-root') as HTMLElement
@@ -65,11 +114,6 @@ export async function downloadAmbassadorCertificate(
 
     const imgData = canvas.toDataURL('image/png', 1.0)
 
-    // Custom page size matching the 1500x1000 (3:2) design canvas exactly —
-    // no white margins or letterboxing. orientation must be set explicitly:
-    // jsPDF defaults to portrait and silently swaps a [300,200] array to
-    // 200x300 otherwise, which clips the image on the right and leaves a
-    // large blank strip at the bottom.
     const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: [300, 200] })
     doc.addImage(imgData, 'PNG', 0, 0, 300, 200, undefined, 'FAST')
     doc.save(`EduCrush-Ambassador-Certificate-${displayName.replace(/\s+/g, '-')}.pdf`)
