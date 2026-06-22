@@ -162,10 +162,10 @@ export default function CodingPracticePage() {
         {/* Glow */}
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-[700px] h-[700px] bg-green-500/[0.1] rounded-full blur-[200px] z-0" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-28 pb-24">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-24">
 
           {/* Divider top */}
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-700/30 to-transparent mb-10" />
+          {/* <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-700/30 to-transparent mb-10" /> */}
 
           {/* Header */}
           <FadeUp>

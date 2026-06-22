@@ -31,11 +31,11 @@ export type CertificateData = {
 // stay large and impactful, and long names still fit on one line.
 function nameFontSizeFor(name: string): number {
   const len = name.length
-  if (len > 26) return 28
-  if (len > 21) return 32
-  if (len > 16) return 38
-  if (len > 11) return 44
-  return 52
+  if (len > 26) return 36
+  if (len > 21) return 42
+  if (len > 16) return 50
+  if (len > 11) return 58
+  return 66
 }
 
 export function buildCertificateHtml(data: CertificateData): string {
@@ -102,7 +102,7 @@ export function buildCertificateHtml(data: CertificateData): string {
   }
 
   #ec-cert-root .presented-to { color: #16a34a; font-weight: 600; font-size: 18px; letter-spacing: 0.3em; margin-bottom: 18px; }
-  #ec-cert-root .name2 { font-family: 'Dancing Script', cursive; font-weight: 700; color: #14150f; line-height: 1.15; max-width: 800px; text-align: center; }
+  #ec-cert-root .name2 { font-family: 'Dancing Script', cursive; font-weight: 700; color: #14150f; line-height: 1.15; max-width: 740px; text-align: center; white-space: nowrap; }
   #ec-cert-root .name2-underline { width: 420px; max-width: 80%; height: 1.5px; background: #16a34a; margin: 14px 0 28px; }
 
   #ec-cert-root .for-text { font-size: 19px; color: #6b7280; margin-bottom: 10px; }

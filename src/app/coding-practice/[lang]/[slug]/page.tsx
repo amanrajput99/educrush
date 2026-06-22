@@ -387,7 +387,7 @@ export default function ProblemDetailPage() {
             style={{ background: (language?.color ?? '#4ade80') + '07' }} />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-20">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-20">
 
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs text-slate-600 mb-5 flex-wrap">

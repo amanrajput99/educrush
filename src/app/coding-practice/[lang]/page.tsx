@@ -166,7 +166,7 @@ export default function LanguageProblemsPage() {
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-[600px] h-[600px] rounded-full blur-[180px] z-0"
           style={{ background: language.color + '0a' }} />
 
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pt-28 pb-24">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pt-8 pb-24">
 
           {/* Breadcrumb */}
           <motion.nav

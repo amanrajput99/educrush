@@ -303,7 +303,7 @@ export default function CareersContactPage() {
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-[700px] h-[700px] bg-green-500/[0.12] rounded-full blur-[200px] z-0" />
 
         {/* ── HERO + FORM ── */}
-        <section className="relative z-10 flex flex-col md:flex-row justify-center px-4 pt-36 pb-20 gap-14 max-w-6xl mx-auto">
+        <section className="relative z-10 flex flex-col md:flex-row justify-center px-4 pt-6 pb-20 gap-14 max-w-6xl mx-auto">
 
           {/* Left: Info */}
           <div className="md:text-left mt-4 max-w-md">

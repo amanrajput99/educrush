@@ -156,11 +156,11 @@ export default function TermsPage() {
         {/* Background glow */}
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-[600px] h-[600px] bg-green-500/15 rounded-full blur-[180px]" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-28 pb-24">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-24">
 
           {/* ── Header ── */}
           <div className="mb-12 fade-up">
-            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-700/40 to-transparent mb-10" />
+            {/* <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-700/40 to-transparent mb-10" /> */}
 
             <button className="px-4 h-8 border border-gray-800 text-slate-200 text-xs rounded-lg mb-5">
               Legal

@@ -139,7 +139,7 @@ export default function ContactPage() {
             <MessageCircle className='text-green-400 mb-3' size={28} />
             <h3 className='text-white font-semibold mb-1'>WhatsApp Community</h3>
             <p className='text-slate-400 text-sm mb-3'>Connect with fellow students for quick help</p>
-            <a href="https://whatsapp.com/channel/0029VakxxxxxxxxxxxxxxEdu" target="_blank" rel="noreferrer" className='text-green-400 text-sm hover:text-green-300 transition'>
+            <a href="https://whatsapp.com/channel/0029Vb7RZWoAInPnYGijTE3N" target="_blank" rel="noreferrer" className='text-green-400 text-sm hover:text-green-300 transition'>
               Join Community
             </a>
           </div>
