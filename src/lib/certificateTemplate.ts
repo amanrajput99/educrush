@@ -77,9 +77,10 @@ export function buildCertificateHtml(data: CertificateData): string {
      the card (x 440 → 1250), clear of the badge on the right edge.
   ──────────────────────────────────────────────────────────────────────── */
   #ec-cert-root #ov-name {
+ 
   left:   400px;
   top:    110px;
-  width:  600px;
+  width:  800px;
   height: 150px;
   display: flex;
   align-items: center;
@@ -87,13 +88,15 @@ export function buildCertificateHtml(data: CertificateData): string {
 }
   #ec-cert-root #name-txt {
     font-family: 'Dancing Script', cursive;
-    font-weight: 600;
+    font-weight: 500;
     color: #111;
     text-align: center;
     line-height: 1;
     white-space: nowrap;
     display: block;
-    width: 100%;
+  width: fit-content;   /* ← 100% ki jagah — yahi fix hai */
+    max-width: 100%;      /* ← container se bahar na jaye */
+
   }
 
   /* ── DATE VALUE ────────────────────────────────────────────────────────
