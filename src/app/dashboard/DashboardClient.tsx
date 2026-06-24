@@ -492,7 +492,7 @@ export default function DashboardClient() {
                     if (!profile) return
                     setCertGenerating(true)
                     try {
-                      await downloadAmbassadorCertificate(name, ambStats.points, ambStats.referrals, profile.id)
+                      await downloadAmbassadorCertificate(name, ambStats.points, ambStats.referrals, profile.id, '/certificate-template.png')
                     } catch (err) {
                       console.error('Certificate generation failed:', err)
                     } finally {

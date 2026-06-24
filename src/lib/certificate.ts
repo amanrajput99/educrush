@@ -1,51 +1,44 @@
-import jsPDF from 'jspdf'
 import QRCode from 'qrcode'
 import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 import { buildCertificateHtml } from './certificateTemplate'
 import { supabase } from '@/lib/supabase'
 
-// Loads the Google Fonts used by the certificate template (Poppins +
-// Dancing Script for the name/signature) and waits until they're actually
-// usable before we screenshot.
-async function ensureCertificateFontsLoaded() {
+async function ensureCertFontsLoaded(): Promise<void> {
   const linkId = 'ec-certificate-fonts'
   if (!document.getElementById(linkId)) {
     const link = document.createElement('link')
-    link.id = linkId
-    link.rel = 'stylesheet'
-    link.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap'
+    link.id   = linkId
+    link.rel  = 'stylesheet'
+    link.href = 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@700&display=swap'
     document.head.appendChild(link)
   }
-
   try {
     await Promise.all([
-      document.fonts.load('800 46px "Poppins"'),
-      document.fonts.load('700 92px "Dancing Script"'),
-      document.fonts.load('700 38px "Dancing Script"'),
+      document.fonts.load('700 16px "Montserrat"'),
+      document.fonts.load('700 80px "Dancing Script"'),
+      document.fonts.load('600 80px "Dancing Script"'),
     ])
     await document.fonts.ready
   } catch {
-    // fall back to the fixed delay below if Font Loading API is unavailable
+    // Font Loading API unavailable — fall through to delay
   }
+  await new Promise(resolve => setTimeout(resolve, 200))
 }
 
-// Generates and downloads the branded EduCrush Ambassador certificate as a
-// PDF, and records it in `ambassador_certificates` so the QR code's
-// /verify/[certId] link can do an exact DB lookup rather than reconstructing
-// an ID from the user's UUID (which risked collisions between ambassadors).
-//
-// Re-downloading reuses the same cert_id for that person — it doesn't mint
-// a new ID every click — so the QR code on every copy of their certificate
-// always resolves to the same verification record.
 export async function downloadAmbassadorCertificate(
   name: string,
   points: number,
   referrals: number,
   userId: string,
-) {
+  backgroundImage: string,
+): Promise<void> {
   const displayName = name?.trim() || 'EduCrush Ambassador'
-  const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+  const dateStr = new Date().toLocaleDateString('en-IN', {
+    day: '2-digit', month: 'short', year: 'numeric',
+  })
 
+  // ── 1. Resolve cert ID ───────────────────────────────────────────────────
   let certId: string
 
   const { data: existing } = await supabase
@@ -61,62 +54,69 @@ export async function downloadAmbassadorCertificate(
       .update({ full_name: displayName, points, referrals })
       .eq('user_id', userId)
   } else {
-    certId = `EC-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`
+    certId = `EC-SA-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`
     const { error: insertErr } = await supabase
       .from('ambassador_certificates')
       .insert({ cert_id: certId, user_id: userId, full_name: displayName, points, referrals })
 
-    // Extremely unlikely random collision on the suffix — retry once
     if (insertErr) {
-      certId = `EC-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`
+      certId = `EC-SA-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`
       await supabase
         .from('ambassador_certificates')
         .insert({ cert_id: certId, user_id: userId, full_name: displayName, points, referrals })
     }
   }
 
+  // ── 2. Generate QR ───────────────────────────────────────────────────────
   const verifyUrl = `https://educrush.in/verify/${certId}`
-
   const qrDataUrl = await QRCode.toDataURL(verifyUrl, {
-    width: 300,
-    margin: 0,
-    color: { dark: '#0a0a0a', light: '#ffffff' },
+    width: 300, margin: 1,
+    color: { dark: '#1a5e20', light: '#ffffff' },
   })
 
+  // ── 3. Build HTML ────────────────────────────────────────────────────────
   const html = buildCertificateHtml({
     name: displayName,
-    points,
-    referrals,
     dateStr,
-    certId: `#${certId}`,
+    certId,
     qrDataUrl,
+    backgroundBase64: backgroundImage,
   })
 
+  // ── 4. Mount off-screen ──────────────────────────────────────────────────
   const container = document.createElement('div')
-  container.style.position = 'fixed'
-  container.style.top = '0'
-  container.style.left = '-99999px'
-  container.style.width = '1500px'
-  container.style.height = '1000px'
+  container.style.cssText = 'position:fixed;top:0;left:-99999px;width:1491px;height:1055px;overflow:hidden;'
   container.innerHTML = html
   document.body.appendChild(container)
 
   try {
-    await ensureCertificateFontsLoaded()
-    await new Promise(resolve => setTimeout(resolve, 150))
+    await ensureCertFontsLoaded()
 
     const target = container.querySelector('#ec-cert-root') as HTMLElement
+
+    // ── 5. Screenshot ────────────────────────────────────────────────────
     const canvas = await html2canvas(target, {
       scale: 2,
-      backgroundColor: null,
       useCORS: true,
+      allowTaint: false,
+      backgroundColor: null,
+      width: 1491,
+      height: 1055,
+      logging: false,
     })
 
-    const imgData = canvas.toDataURL('image/png', 1.0)
+    // ── 6. Download PDF ──────────────────────────────────────────────────
+    const imgData = canvas.toDataURL('image/jpeg', 1.0)
 
-    const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: [300, 200] })
-    doc.addImage(imgData, 'PNG', 0, 0, 300, 200, undefined, 'FAST')
-    doc.save(`EduCrush-Ambassador-Certificate-${displayName.replace(/\s+/g, '-')}.pdf`)
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'px',
+      format: [1491, 1055],
+    })
+
+    pdf.addImage(imgData, 'JPEG', 0, 0, 1491, 1055)
+    pdf.save(`EduCrush-Ambassador-${displayName.replace(/\s+/g, '-')}.pdf`)
+
   } finally {
     document.body.removeChild(container)
   }
