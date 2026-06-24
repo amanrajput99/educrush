@@ -233,9 +233,6 @@ export default function DashboardClient() {
 
         .dash-page {
           min-height: 100vh; min-height: 100dvh;
-            height: 100dvh;           /* ← add karo */
- overflow-y: auto;         /* ← yahi fix hai — scroll enable */
-  -webkit-overflow-scrolling: touch;  /* ← iOS smooth scroll */
           background: radial-gradient(ellipse 700px 400px at 50% 0%, rgba(52,211,153,0.06), transparent), #000;
           color: #fff;
         }
@@ -358,7 +355,7 @@ export default function DashboardClient() {
         .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
         @media (max-width: 640px) {
-          .dash-wrap { padding: 22px 14px 80px; }
+          .dash-wrap { padding: 22px 14px 48px; }
           .dash-hero { padding: 32px 10px 22px; }
           .logout-btn { padding: 6px 12px; font-size: 11.5px; }
           .hero-avatar-wrap { width: 84px; height: 84px; }
@@ -528,7 +525,7 @@ export default function DashboardClient() {
           {/* Tabs */}
           <div id="dash-tabs" className="tabs-row" style={{
             background: 'rgba(255,255,255,0.025)', borderRadius: 11, padding: 4,
-            border: '1px solid rgba(255,255,255,0.06)', width: 'fit-content',
+            border: '1px solid rgba(255,255,255,0.06)', width: '100%',
           }}>
             {visibleTabs.map(t => (
               <Tab
