@@ -6,7 +6,7 @@ import CTA from '@/components/home/CTA'
 import AiButton from '@/components/ui/AiButton'
 import { WebsiteJsonLd, OrganizationJsonLd } from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/Googleanalytics'
-import Script from 'next/script'
+// import Script from 'next/script'
 
 // 1. Top pe import add karo:
 import { Suspense } from 'react'
@@ -147,19 +147,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="EduCrush" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6151740459717471"
+          crossOrigin="anonymous"
+        />
       </head>
+
+
       <body>
 
         <Suspense fallback={null}>
           <ReferralCapture />
         </Suspense>
         <GoogleAnalytics />
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6151740459717471"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+
         <WebsiteJsonLd />
         <OrganizationJsonLd />
         <Navbar />

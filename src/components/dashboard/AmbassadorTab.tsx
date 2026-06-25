@@ -39,7 +39,7 @@ type SubTab = typeof TABS[number]
 
 // How many referrals are needed (alongside all tasks) to unlock the certificate.
 // Change this single number to adjust the requirement.
-const MIN_REFERRALS_FOR_CERTIFICATE = 3
+const MIN_REFERRALS_FOR_CERTIFICATE = 10
 
 // ── Proof submission modal ───────────────────────────────────────────────────
 function ProofModal({ task, onClose, onSubmit }: {

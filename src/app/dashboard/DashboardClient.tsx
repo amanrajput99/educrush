@@ -174,7 +174,7 @@ export default function DashboardClient() {
           rank: idx >= 0 ? idx + 1 : null,
           points: idx >= 0 ? (board![idx].total_points ?? 0) : 0,
           referrals: idx >= 0 ? (board![idx].referral_count ?? 0) : 0,
-          certMinPoints: configRow?.value ?? 50,
+          certMinPoints: configRow?.value ?? 100,
         })
       }
 
