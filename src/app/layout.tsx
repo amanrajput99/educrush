@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import CTA from '@/components/home/CTA'
 import AiButton from '@/components/ui/AiButton'
-import { WebsiteJsonLd, OrganizationJsonLd } from '@/components/seo/JsonLd'
+import { WebsiteJsonLd, OrganizationJsonLd, FounderPersonJsonLd } from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/Googleanalytics'
 // import Script from 'next/script'
 
@@ -164,6 +164,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <WebsiteJsonLd />
         <OrganizationJsonLd />
+        <FounderPersonJsonLd />
         <Navbar />
         <main>{children}</main>
         <CTA />
